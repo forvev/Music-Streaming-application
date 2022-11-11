@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.dashboard;
+package com.example.musicfun.ui.my_music;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.databinding.FragmentDashboardBinding;
 
-public class DashboardFragment extends Fragment {
+public class MyMusicFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        MyMusicViewModel dashboardViewModel =
+                new ViewModelProvider(this).get(MyMusicViewModel.class);
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
