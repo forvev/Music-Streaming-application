@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.notifications;
+package com.example.musicfun.ui.friends;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.databinding.FragmentNotificationsBinding;
 
-public class NotificationsFragment extends Fragment {
+public class FriendsFragment extends Fragment {
 
     private FragmentNotificationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        FriendsViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(FriendsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
