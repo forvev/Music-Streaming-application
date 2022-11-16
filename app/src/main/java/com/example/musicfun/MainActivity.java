@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +33,9 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private ActivityMainBinding binding;
+    private boolean playing;
     String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
 //    The sendMsg() works with the following string:
 //    String url = "https://reqres.in/api/users?page=2";
@@ -44,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //finding different UI, R - resources
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -55,12 +62,30 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
     }
 
     // TODO: This function should be placed somewhere else instead of MainActivity
     // TODO: Stop playing the music by pressing the button again
     public void playFile(View v){
+
+        // changing an icon
+        ImageView my_icon = findViewById(R.id.play_button);
+        my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
+
+        if(playing == false)  {
+            my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
+            playing = true;
+        }
+        else {
+            my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+            playing = false;
+        }
+
+
+
         MediaPlayer mediaPlayer = new MediaPlayer();
+
         try{
 //             Is .mp3 a must?
             mediaPlayer.setDataSource("https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3");
@@ -68,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
+
                 }
             });
             mediaPlayer.prepareAsync();
@@ -94,4 +120,6 @@ public class MainActivity extends AppCompatActivity {
         });
         ExampleRequestQueue.add(ExampleRequest);
     }
+
+
 }
