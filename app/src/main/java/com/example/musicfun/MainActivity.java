@@ -13,9 +13,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.musicfun.ui.discovery.DiscoveryFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,6 +50,28 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        replaceFragment(new SimpleDiscoveryFragment());
+
+        binding.navView.setOnItemSelectedListener(item -> {
+
+            switch (item.getItemId()){
+                case R.id.discovery:
+                    replaceFragment(new SimpleDiscoveryFragment());
+                    break;
+                case R.id.friends:
+                    replaceFragment(new SimpleFriendsFragment());
+                    break;
+                case R.id.my_music:
+                    replaceFragment(new SimpleMyMusicFragment());
+                    break;
+            }
+
+
+
+
+            return true;
+        });
+        /*
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -55,8 +81,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        */
     }
 
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentsframeLayout,fragment);
+        fragmentTransaction.commit();
+    }
     // TODO: This function should be placed somewhere else instead of MainActivity
     // TODO: Stop playing the music by pressing the button again
     public void playFile(View v){
