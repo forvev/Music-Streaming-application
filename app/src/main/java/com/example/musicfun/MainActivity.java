@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,12 +32,19 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import com.google.android.exoplayer2.ExoPlayer;
+
+
 public class MainActivity extends AppCompatActivity {
 
 
     private ActivityMainBinding binding;
     private boolean playing;
     String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
+    //playing stuff
+    ExoPlayer player;
+    MediaItem mediaItem;
+    //--------
 //    The sendMsg() works with the following string:
 //    String url = "https://reqres.in/api/users?page=2";
 
@@ -69,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
     // TODO: Stop playing the music by pressing the button again
     public void playFile(View v){
 
+        //creating desired descenation
+
+
         // changing an icon
         ImageView my_icon = findViewById(R.id.play_button);
         my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
@@ -76,15 +87,28 @@ public class MainActivity extends AppCompatActivity {
         if(playing == false)  {
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
             playing = true;
+
+            String url = "https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3";
+            player = new ExoPlayer.Builder(this).build();
+
+            MediaItem mediaItem = MediaItem.fromUri(url);
+
+            player.setMediaItem(mediaItem);
+            player.prepare();
+
+            player.play();
         }
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
             playing = false;
+            player.pause();
         }
 
 
 
-        MediaPlayer mediaPlayer = new MediaPlayer();
+
+        /*MediaPlayer mediaPlayer = new MediaPlayer();
+
 
         try{
 //             Is .mp3 a must?
@@ -98,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             });
             mediaPlayer.prepareAsync();
         }catch (IOException e){
-        }
+        }*/
     }
 
     // establish connection to server
