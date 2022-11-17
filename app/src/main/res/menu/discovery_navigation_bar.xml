@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="New Releases"
+        android:icon="@drawable/ic_baseline_new_releases_24"
+        android:id="@+id/new_releases"/>
+    <item android:title="friends popular"
+        android:icon="@drawable/ic_baseline_mobile_friendly_24"
+        android:id="@+id/most_heard"/>
+    <item android:title="Musicfun Charts"
+        android:icon="@drawable/ic_baseline_show_chart_24"
+        android:id="@+id/charts"/>
+    <item android:title="You might like"
+        android:icon="@drawable/ic_baseline_recommend_24"
+        android:id="@+id/may_like"/>
+</menu>

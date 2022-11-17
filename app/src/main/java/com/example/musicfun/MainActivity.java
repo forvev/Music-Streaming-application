@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.discovery:
-                    replaceFragment(new SimpleDiscoveryFragment());
+                    replaceFragment(new Discovery_Decision_Fragment());
                     break;
                 case R.id.friends:
                     replaceFragment(new SimpleFriendsFragment());
