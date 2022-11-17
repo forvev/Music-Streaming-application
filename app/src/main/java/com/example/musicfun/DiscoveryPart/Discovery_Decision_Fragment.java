@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.DiscoveryPart;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.databinding.FragmentDiscoveryDecisionBinding;
 

@@ -3,15 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_200"
-    tools:context=".DiscoveryMostHeardFragment">
+    android:background="#F44336"
+    tools:context=".DiscoveryPart.DiscoveryMostHeardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:layout_gravity="center"
-        android:text="Most Heard" />
-
+    <ListView
+        android:id="@+id/lvdiscovery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>

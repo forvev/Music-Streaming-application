@@ -13,19 +13,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.musicfun.ui.discovery.DiscoveryFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.musicfun.DiscoveryPart.Discovery_Decision_Fragment;
+import com.example.musicfun.DiscoveryPart.SimpleDiscoveryFragment;
+import com.example.musicfun.databinding.ActivityMainBinding;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.musicfun.databinding.ActivityMainBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new SimpleDiscoveryFragment());
+        replaceFragment(new Discovery_Decision_Fragment());
 
         binding.navView.setOnItemSelectedListener(item -> {
 

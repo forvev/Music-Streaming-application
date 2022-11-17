@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.DiscoveryPart;
 
 import android.os.Bundle;
 
@@ -14,15 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.musicfun.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SimpleDiscoveryFragment#newInstance} factory method to
+ * Use the {@link DiscoveryMostHeardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class DiscoveryMostHeardFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     ListView lvDiscovery;
-    //String[] songs;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +33,7 @@ public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnI
     private String mParam1;
     private String mParam2;
 
-    public SimpleDiscoveryFragment() {
+    public DiscoveryMostHeardFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +43,11 @@ public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnI
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SimpleDiscoveryFragment.
+     * @return A new instance of fragment DiscoveryMostHeardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SimpleDiscoveryFragment newInstance(String param1, String param2) {
-        SimpleDiscoveryFragment fragment = new SimpleDiscoveryFragment();
+    public static DiscoveryMostHeardFragment newInstance(String param1, String param2) {
+        DiscoveryMostHeardFragment fragment = new DiscoveryMostHeardFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,14 +62,13 @@ public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnI
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_simple_discovery, container, false);
+        View view = inflater.inflate(R.layout.fragment_discovery_most_heard, container, false);
         return view;
     }
 
@@ -76,11 +76,11 @@ public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnI
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String[] songs = {"Sweet Child O' Mine", "Kickstart My Heart","The Final Countdown",
-                "Eye of the Tiger", "Crazy Train", "Hells Bells", "Poison", "Back in Black",
-                "Paradise City", "Summer of '69", "Ace of Spades", "Welcome to the Jungle",
-                "Personal Jesus", "Panama", "Africa", "Don't stop believin'", "The Boys of Summer",
-                "Black Betty", "T.N.T", "Paranoid", "Sweet Home Alabama", "Highway to Hell"};
+        String[] songs = {"The A Team", "Hollaback Girl","Die Young",
+                "Complicated", "Because of you", "Sk8er Boi", "Halo",
+                "Billionaire", "Hey, Soul Sister", "Fireflies", "Since U Been Gone",
+                "Dancing Queen", "Waterloo", "Take A Chance On Me", "Torn", "Thrift Shop",
+                "Wonderwall", "Chasing Cars", "Poker Face", "Born This Way", "Applause"};
 
         ListView listView = (ListView)view.findViewById(R.id.lvdiscovery);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1,songs);
