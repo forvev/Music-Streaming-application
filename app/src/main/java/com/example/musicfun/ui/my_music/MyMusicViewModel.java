@@ -10,7 +10,7 @@ public class MyMusicViewModel extends ViewModel {
 
     public MyMusicViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("This is my music fragment");
     }
 
     public LiveData<String> getText() {

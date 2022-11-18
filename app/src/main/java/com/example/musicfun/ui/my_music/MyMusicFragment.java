@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.musicfun.databinding.FragmentDashboardBinding;
+import com.example.musicfun.databinding.FragmentMymusicBinding;
 
 public class MyMusicFragment extends Fragment {
 
-    private FragmentDashboardBinding binding;
+    private FragmentMymusicBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         MyMusicViewModel dashboardViewModel =
                 new ViewModelProvider(this).get(MyMusicViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentMymusicBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textDashboard;
