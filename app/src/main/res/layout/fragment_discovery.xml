@@ -6,21 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.discovery.DiscoveryFragment">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <RelativeLayout
+        android:id="@+id/rl_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -38,6 +25,27 @@
             android:id="@+id/search_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:background="@color/theme_purple_light"
             android:layout_below="@+id/search_view" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/DiscoveryNav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_view"
+            android:paddingTop="20dp"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/discovery_navigation_bar">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <FrameLayout
+            android:id="@+id/discovery_childFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/DiscoveryNav">
+
+        </FrameLayout>
     </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
