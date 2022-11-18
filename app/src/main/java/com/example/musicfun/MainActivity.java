@@ -1,11 +1,18 @@
 package com.example.musicfun;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,26 +20,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.musicfun.DiscoveryPart.Discovery_Decision_Fragment;
-import com.example.musicfun.DiscoveryPart.SimpleDiscoveryFragment;
 import com.example.musicfun.databinding.ActivityMainBinding;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import com.example.musicfun.interfaces.PassDataInterface;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
-    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
-//    The sendMsg() works with the following string:
-//    String url = "https://reqres.in/api/users?page=2";
+    private static final String TAG = "MainActivity";
+    String url = "http://10.0.2.2:3000/testconnection";
+    private boolean playing;
+//    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
+    //playing stuff
+    ExoPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,31 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new Discovery_Decision_Fragment());
-
-        binding.navView.setOnItemSelectedListener(item -> {
-
-            switch (item.getItemId()){
-                case R.id.discovery:
-                    replaceFragment(new Discovery_Decision_Fragment());
-                    break;
-                case R.id.friends:
-                    replaceFragment(new SimpleFriendsFragment());
-                    break;
-                case R.id.my_music:
-                    replaceFragment(new SimpleMyMusicFragment());
-                    break;
-            }
-
-
-
-
-            return true;
-        });
-        /*
+        //finding different UI, R - resources
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.discovery, R.id.my_music, R.id.friends)
                 .build();
@@ -86,20 +69,32 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
     // TODO: This function should be placed somewhere else instead of MainActivity
-    // TODO: Stop playing the music by pressing the button again
+    // TODO: Continue playing the song after pressing the stop button
     public void playFile(View v){
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        try{
-//             Is .mp3 a must?
-            mediaPlayer.setDataSource("https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3");
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
-            mediaPlayer.prepareAsync();
-        }catch (IOException e){
+
+        //creating desired descenation
+        // changing an icon
+        ImageView my_icon = findViewById(R.id.play_button);
+        my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
+
+        if(playing == false)  {
+            my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
+            playing = true;
+
+            String url = "https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3";
+            player = new ExoPlayer.Builder(this).build();
+
+            MediaItem mediaItem = MediaItem.fromUri(url);
+
+            player.setMediaItem(mediaItem);
+            player.prepare();
+
+            player.play();
+        }
+        else {
+            my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+            playing = false;
+            player.pause();
         }
     }
 
@@ -112,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest ExampleRequest = new JsonObjectRequest(Request.Method.GET, url, item, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                // TODO: handle response from server
                 textView.setText("Response is " + response.toString());
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
@@ -121,5 +117,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         ExampleRequestQueue.add(ExampleRequest);
+    }
+
+    @Override
+    public void sendInput(String data) {
+        Log.d(TAG, "sendInput: got the input " + data);
     }
 }

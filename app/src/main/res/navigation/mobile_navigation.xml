@@ -9,17 +9,17 @@
         android:id="@+id/discovery"
         android:name="com.example.musicfun.ui.discovery.DiscoveryFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_discovery" />
 
     <fragment
         android:id="@+id/my_music"
         android:name="com.example.musicfun.ui.my_music.MyMusicFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_mymusic" />
 
     <fragment
         android:id="@+id/friends"
         android:name="com.example.musicfun.ui.friends.FriendsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_friends" />
 </navigation>
