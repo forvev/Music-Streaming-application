@@ -11,6 +11,10 @@
     <ListView
         android:id="@+id/lvdiscovery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/songs_custom_view"
+        android:divider="@color/black"
+        android:dividerHeight="2dp"
+        />
 
 </FrameLayout>

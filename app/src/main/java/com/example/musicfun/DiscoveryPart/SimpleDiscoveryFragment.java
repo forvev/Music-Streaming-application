@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.musicfun.CustomViewAdapter;
 import com.example.musicfun.R;
 
 /**
@@ -23,10 +24,9 @@ import com.example.musicfun.R;
  */
 
 //this is Releases class
-public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class SimpleDiscoveryFragment extends Fragment {
 
-    ListView lvDiscovery;
-
+    ListView listView;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,15 +86,21 @@ public class SimpleDiscoveryFragment extends Fragment implements AdapterView.OnI
                 "Personal Jesus", "Panama", "Africa", "Don't stop believin'", "The Boys of Summer",
                 "Black Betty", "T.N.T", "Paranoid", "Sweet Home Alabama", "Highway to Hell"};
 
-        ListView listView = (ListView)view.findViewById(R.id.lvdiscovery);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1,songs);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-    }
+        String[] artists = {"Artist 1", "Artist 2","Artist 3",
+                "Artist 4", "Artist 5", "Artist 6", "Artist 7", "Artist 8",
+                "Artist 9", "Artist 10", "Artist 11", "Artist 12",
+                "Artist 13", "Artist 14", "Artist 15", "Artist 16", "Artist 17",
+                "Artist 18", "Artist 19", "Artist 20", "Artist 21", "Artist 22"};
 
+        listView = (ListView)view.findViewById(R.id.lvdiscovery);
+        CustomViewAdapter customViewAdapter = new CustomViewAdapter(getActivity(),songs, artists);
+        listView.setAdapter(customViewAdapter);
+        //listView.setOnItemClickListener(this);
+    }
+/*
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String song = adapterView.getItemAtPosition(i).toString();
         Toast.makeText(getActivity(), "Clicked: "+ song, Toast.LENGTH_SHORT).show();
-    }
+    } */
 }
