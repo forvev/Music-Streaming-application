@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,11 +44,11 @@ public class CustomViewAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.songs_custom_view,null);
-        TextView songTitle = (TextView) view.findViewById(R.id.custom_view_songtitle);
-        songTitle.setOnClickListener(title -> playSong());
+        RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
+        clickField.setOnClickListener(click -> playSong());
 
+        TextView songTitle = (TextView) view.findViewById(R.id.custom_view_songtitle);
         TextView songArtist = (TextView) view.findViewById(R.id.custom_view_songartist);
-        songArtist.setOnClickListener(artist -> playSong());
 
         ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);
         songShare.setOnClickListener(share -> shareSong());

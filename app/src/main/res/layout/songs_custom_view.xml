@@ -4,49 +4,73 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dip"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/custom_view_songtitle"
-            android:layout_width="0dip"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dip"
-            android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            tools:text="Title of the Song" />
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/custom_view_songshare"
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="20dip"
-            android:src="@drawable/ic_baseline_share_24" />
+            <RelativeLayout
+                android:id="@+id/song_and_artist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
 
-        <ImageView
-            android:id="@+id/custom_view_songadd"
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_stars_24" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/custom_view_songtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dip"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        tools:text="Title of the Song" />
+
+                    <TextView
+                        android:id="@+id/custom_view_songartist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        tools:text="Artists Name"
+                        android:textColor="@color/black"
+                        android:textSize="14dip"/>
 
 
-    </LinearLayout>
+            </LinearLayout>
+            </RelativeLayout>
 
-    <TextView
-        android:id="@+id/custom_view_songartist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        tools:text="Artists Name"
-        android:textColor="@color/black"
-        android:textSize="14dip"/>
+            <ImageView
+                android:id="@+id/custom_view_songshare"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="20dip"
+                android:src="@drawable/ic_baseline_share_24" />
+
+            <ImageView
+                android:id="@+id/custom_view_songadd"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_baseline_stars_24" />
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
 </LinearLayout>
