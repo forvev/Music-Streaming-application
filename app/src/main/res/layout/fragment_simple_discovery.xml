@@ -7,7 +7,7 @@
     tools:context=".DiscoveryPart.SimpleDiscoveryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <!---tools:listitem="@layout/songs_custom_view" with baseadapterVersion (SongsCustomView and CustomViewAdapter)-->
     <ListView
         android:id="@+id/lvdiscovery"
         android:layout_width="match_parent"
@@ -15,6 +15,10 @@
         tools:listitem="@layout/songs_custom_view"
         android:divider="@color/black"
         android:dividerHeight="2dp"
-        />
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:listSelector="@android:color/transparent"
+    />
 
 </FrameLayout>
