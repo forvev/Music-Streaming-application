@@ -1,48 +1,57 @@
 package com.example.musicfun.ui.discovery;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.musicfun.Database;
+import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.search.Songs;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DiscoveryViewModel extends ViewModel {
+public class DiscoveryViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<String> mText;
     MutableLiveData<ArrayList<Songs>> songNames;
-    ArrayList<Songs> songsArrayList = new ArrayList<>();
+    private ArrayList<Songs> songsArrayList;
+    Application application;
+    Database db;
 
-    public DiscoveryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is discovery fragment");
-
+    public DiscoveryViewModel(Application application) throws JSONException{
+        super(application);
         songNames = new MutableLiveData<>();
-        init();
+        this.application = application;
+        db = new Database(application.getApplicationContext());
+        songsArrayList = new ArrayList<>();
+        songNames.setValue(songsArrayList);
     }
-
     public MutableLiveData<ArrayList<Songs>> getSongNames(){
         return songNames;
     }
 
-    // TODO: fetch data from database
-    public void init(){
-        populateList();
-        songNames.setValue(songsArrayList);
+    public void init() {
+        songsArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray songTitles = (JSONArray) response.get("All songs");
+                    for (int i = 0; i < songTitles.length(); i++) {
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("id"));
+                        songsArrayList.add(s);
+                    }
+                    songNames.setValue(songsArrayList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
-    // TODO: fetch data from database
-    public void populateList(){
-        String[] temp = new String[]{"AAAAAA", "BBBBBBB", "C", "D","a", "b", "c", "d","aa", "bb", "cc", "dd","A", "B", "C", "D","A", "B", "C", "D","A", "B", "C", "D","A", "B", "C", "D"};
-        for (int i = 0; i < temp.length; i++) {
-            Songs songs = new Songs(temp[i]);
-            // Binds all strings into an array
-            songsArrayList.add(songs);
-        }
-    }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
 }
