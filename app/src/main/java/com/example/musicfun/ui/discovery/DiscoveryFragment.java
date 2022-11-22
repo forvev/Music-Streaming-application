@@ -35,7 +35,7 @@ import com.example.musicfun.search.Songs;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class DiscoveryFragment extends Fragment {
 
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
@@ -121,10 +121,22 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
                     @Override
                     public void onChanged(@Nullable final ArrayList<Songs> newName) {
                         adapter = new SearchResultAdapter(getActivity(), newName);
+                        // binds the Adapter to the ListView
                         listView.setAdapter(adapter);
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                String text = newText;
+                                adapter.filter(text);
+                                return true;
+                            }
+                        });
                     }
                 });
-                // binds the Adapter to the ListView
                 listView.setOnTouchListener(new View.OnTouchListener() {
                     // hide soft keyboard if a user is scrolling the result list
                     @Override
@@ -149,7 +161,6 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
                 });
             }
         });
-        searchView.setOnQueryTextListener(this);
 
         // link to other song list fragments
         insertNestedFragment(new SimpleDiscoveryFragment());
@@ -170,18 +181,6 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
             }
             return true;
         });
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        adapter.filter(text);
-        return true;
     }
 
     private Boolean isNetworkAvailable(Application application) {
