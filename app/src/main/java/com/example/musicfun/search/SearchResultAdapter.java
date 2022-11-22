@@ -67,7 +67,6 @@ public class SearchResultAdapter extends BaseAdapter {
 
     // find the item matches the given search text
     public void filter(String charText) {
-//        System.out.println("wp in filter = " + charText);
         charText = charText.toLowerCase(Locale.getDefault());
         songsList.clear();
         if (charText.length() == 0) {

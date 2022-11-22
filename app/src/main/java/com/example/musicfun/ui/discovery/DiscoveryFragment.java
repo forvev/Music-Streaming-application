@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +17,10 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.DiscoveryPart.DiscoveryChartsFragment;
@@ -31,6 +32,8 @@ import com.example.musicfun.databinding.FragmentDiscoveryBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.search.SearchResultAdapter;
 import com.example.musicfun.search.Songs;
+
+import java.util.ArrayList;
 
 public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTextListener {
 
@@ -98,47 +101,52 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
             System.out.println("network not connected!!");
             return;
         }
-        // locate the ListView in fragment_discovery.xml
-        listView = binding.searchList;
-        // pass results to ListViewAdapter Class
-        adapter = new SearchResultAdapter(getActivity(), discoveryViewModel.songsArrayList);
-        // binds the Adapter to the ListView
-        listView.setAdapter(adapter);
-        listView.setVisibility(View.INVISIBLE);
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            // hide soft keyboard if a user is scrolling the result list
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                closeKeyboard(v);
-                return false;
-            }
-        });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                closeKeyboard(view);
-                Songs s = (Songs) listView.getItemAtPosition(i);
-                int id = s.getSongId();
-                // TODO: send the song ID back to main activity instead of the song title
-                mOnInputListner.sendInput(Integer.toString(id));
-                searchView.setQuery("", false);
-                searchView.clearFocus();
-                listView.setVisibility(View.INVISIBLE);
-                binding.DiscoveryNav.setVisibility(View.VISIBLE);
-                binding.discoveryChildFragment.setVisibility((View.VISIBLE));
-            }
-        });
         // locate the SearchView in fragment_discovery.xml
         searchView = binding.searchView;
         // search result list appears only if a user start searching
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-//                discoveryViewModel.startMyTask();
-                listView.setVisibility(View.VISIBLE);
+                if(listView != null){
+                    listView.setVisibility(View.VISIBLE);
+                }
+                discoveryViewModel.init();
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
 
+                // locate the ListView in fragment_discovery.xml
+                listView = binding.searchList;
+                // pass results to ListViewAdapter Class
+                discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
+                    @Override
+                    public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                        adapter = new SearchResultAdapter(getActivity(), newName);
+                        listView.setAdapter(adapter);
+                    }
+                });
+                // binds the Adapter to the ListView
+                listView.setOnTouchListener(new View.OnTouchListener() {
+                    // hide soft keyboard if a user is scrolling the result list
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        closeKeyboard(v);
+                        return false;
+                    }
+                });
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        closeKeyboard(view);
+                        Songs s = (Songs) listView.getItemAtPosition(i);
+                        int id = s.getSongId();
+                        mOnInputListner.sendInput(Integer.toString(id));
+                        searchView.setQuery("", false);
+                        searchView.clearFocus();
+                        listView.setVisibility(View.INVISIBLE);
+                        binding.DiscoveryNav.setVisibility(View.VISIBLE);
+                        binding.discoveryChildFragment.setVisibility((View.VISIBLE));
+                    }
+                });
             }
         });
         searchView.setOnQueryTextListener(this);
@@ -173,12 +181,6 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
     public boolean onQueryTextChange(String newText) {
         String text = newText;
         adapter.filter(text);
-        if(TextUtils.isEmpty(text)){
-            listView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            listView.setVisibility(View.VISIBLE);
-        }
         return true;
     }
 

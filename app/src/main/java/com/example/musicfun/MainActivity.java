@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,20 +13,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -35,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private static final String TAG = "MainActivity";
 //    String url = "http://10.0.2.2:3000/songs/stream/?id=0";
     String url = "http://10.0.2.2:3000//songs/stream/?id=";
+    String data = "";
     private boolean playing;
     ExoPlayer player;
 
@@ -74,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             playing = true;
             player = new ExoPlayer.Builder(this).build();
 
-            MediaItem mediaItem = MediaItem.fromUri(url);
+            MediaItem mediaItem = MediaItem.fromUri(appendURL(url, data));
 
             player.setMediaItem(mediaItem);
             player.prepare();
@@ -88,11 +79,15 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
+    private String appendURL (String url, String id){
+        return url + id;
+    }
+
     // TODO: wrong url for playing the song
     @Override
     public void sendInput(String data) {
 //        Log.d(TAG, "sendInput: got the input " + data);
-        url = url + data;
-        Log.d(TAG, "sendInput: got the input " + url);
+        this.data = data;
+        Log.d(TAG, "sendInput: got the input " + appendURL(url, data));
     }
 }
