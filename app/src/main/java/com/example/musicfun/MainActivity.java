@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
 //    String url = "http://10.0.2.2:3000/songs/stream/?id=0";
-    String url = "http://10.0.2.2:3000//songs/stream/?id=";
+    String url = "http://10.0.2.2:3000/songs/stream/?id=";
     String data = "";
     private boolean playing;
     ExoPlayer player;
