@@ -1,6 +1,10 @@
 package com.example.musicfun.ui.discovery;
 
+import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,7 +38,7 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
     private static final String TAG = "DiscoveryFragment";
     ListView listView;
     SearchResultAdapter adapter;
-    SearchView editsearch;
+    SearchView searchView;
     DiscoveryViewModel discoveryViewModel;
     public PassDataInterface mOnInputListner;
 
@@ -87,6 +91,13 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+
+        // check internet connection
+        boolean temp = isNetworkAvailable(getActivity().getApplication());
+        if (!temp){
+            System.out.println("network not connected!!");
+            return;
+        }
         // locate the ListView in fragment_discovery.xml
         listView = binding.searchList;
         // pass results to ListViewAdapter Class
@@ -98,34 +109,39 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
             // hide soft keyboard if a user is scrolling the result list
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                closeKeyboard();
+                closeKeyboard(v);
                 return false;
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                closeKeyboard();
+                closeKeyboard(view);
                 Songs s = (Songs) listView.getItemAtPosition(i);
-                String input = s.getSongName();
-                mOnInputListner.sendInput(input);
+                int id = s.getSongId();
+                // TODO: send the song ID back to main activity instead of the song title
+                mOnInputListner.sendInput(Integer.toString(id));
+                searchView.setQuery("", false);
+                searchView.clearFocus();
                 listView.setVisibility(View.INVISIBLE);
                 binding.DiscoveryNav.setVisibility(View.VISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.VISIBLE));
             }
         });
         // locate the SearchView in fragment_discovery.xml
-        editsearch = binding.searchView;
+        searchView = binding.searchView;
         // search result list appears only if a user start searching
-        editsearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+//                discoveryViewModel.startMyTask();
                 listView.setVisibility(View.VISIBLE);
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
+
             }
         });
-        editsearch.setOnQueryTextListener(this);
+        searchView.setOnQueryTextListener(this);
 
         // link to other song list fragments
         insertNestedFragment(new SimpleDiscoveryFragment());
@@ -166,9 +182,16 @@ public class DiscoveryFragment extends Fragment implements SearchView.OnQueryTex
         return true;
     }
 
-    private void closeKeyboard() {
+    private Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+    }
+
+    private void closeKeyboard(View view) {
         // this will give us the view which is currently focus in this layout
-        View view = getActivity().getCurrentFocus();
         // if nothing is currently focus then this will protect the app from crash
         if (view != null) {
             // assign the system service to InputMethodManager

@@ -29,6 +29,7 @@ public class SearchResultAdapter extends BaseAdapter {
 
     public class ViewHolder {
         TextView name;
+        TextView artist;
     }
 
     @Override
@@ -53,22 +54,26 @@ public class SearchResultAdapter extends BaseAdapter {
             // Locate the TextViews in song_search_result_lv.xml
             view = inflater.inflate(R.layout.song_search_result_lv, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
+            holder.artist = (TextView) view.findViewById(R.id.artist);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         // set the results into TextViews
         holder.name.setText(songsList.get(position).getSongName());
+        holder.artist.setText(songsList.get(position).getArtist());
         return view;
     }
 
     // find the item matches the given search text
     public void filter(String charText) {
+//        System.out.println("wp in filter = " + charText);
         charText = charText.toLowerCase(Locale.getDefault());
         songsList.clear();
         if (charText.length() == 0) {
             songsList.addAll(arraylist);
         } else {
+//            System.out.println("arraylist length = " + arraylist.size());
             for (Songs wp : arraylist) {
                 if (wp.getSongName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     songsList.add(wp);

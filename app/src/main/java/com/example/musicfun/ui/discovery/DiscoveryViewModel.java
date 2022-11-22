@@ -1,24 +1,40 @@
 package com.example.musicfun.ui.discovery;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
+import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.musicfun.Database;
 import com.example.musicfun.search.Songs;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DiscoveryViewModel extends ViewModel {
+public class DiscoveryViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<String> mText;
     MutableLiveData<ArrayList<Songs>> songNames;
-    ArrayList<Songs> songsArrayList = new ArrayList<>();
+    ArrayList<Songs> songsArrayList;
+    String url = "http://10.0.2.2:3000/getallsongs";
+    Application application;
+    Database db;
 
-    public DiscoveryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is discovery fragment");
-
+    public DiscoveryViewModel(Application application) throws JSONException{
+        super(application);
         songNames = new MutableLiveData<>();
+        this.application = application;
+        db = new Database(application.getApplicationContext());
         init();
     }
 
@@ -26,23 +42,9 @@ public class DiscoveryViewModel extends ViewModel {
         return songNames;
     }
 
-    // TODO: fetch data from database
-    public void init(){
-        populateList();
-        songNames.setValue(songsArrayList);
+    public void init() throws JSONException {
+        songsArrayList = db.sendMsg("song_titles", getApplication().getApplicationContext());
     }
 
-    // TODO: fetch data from database
-    public void populateList(){
-        String[] temp = new String[]{"AAAAAA", "BBBBBBB", "C", "D","a", "b", "c", "d","aa", "bb", "cc", "dd","A", "B", "C", "D","A", "B", "C", "D","A", "B", "C", "D","A", "B", "C", "D"};
-        for (int i = 0; i < temp.length; i++) {
-            Songs songs = new Songs(temp[i]);
-            // Binds all strings into an array
-            songsArrayList.add(songs);
-        }
-    }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
 }
