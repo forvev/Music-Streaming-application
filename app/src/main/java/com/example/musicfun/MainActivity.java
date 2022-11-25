@@ -13,29 +13,20 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
-    String url = "http://10.0.2.2:3000/testconnection";
+//    String url = "http://10.0.2.2:3000/songs/stream/?id=0";
+    String url = "http://10.0.2.2:3000/songs/stream/?id=";
+    String data = "";
     private boolean playing;
-//    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
-    //playing stuff
     ExoPlayer player;
 
     @Override
@@ -58,30 +49,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-//        replaceFragment(new Discovery_Decision_Fragment());
-//        binding.navView.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()){
-//                case R.id.discovery:
-//                    replaceFragment(new Discovery_Decision_Fragment());
-//                    break;
-//                case R.id.friends:
-//                    replaceFragment(new SimpleFriendsFragment());
-//                    break;
-//                case R.id.my_music:
-//                    replaceFragment(new SimpleMyMusicFragment());
-//                    break;
-//            }
-//            return true;
-//        });
     }
-
-//    private void replaceFragment(Fragment fragment){
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragmentsframeLayout,fragment);
-//        fragmentTransaction.commit();
-//    }
 
     // TODO: This function should be placed somewhere else instead of MainActivity
     // TODO: Continue playing the song after pressing the stop button
@@ -95,11 +63,9 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         if(playing == false)  {
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
             playing = true;
-
-            String url = "https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3";
             player = new ExoPlayer.Builder(this).build();
 
-            MediaItem mediaItem = MediaItem.fromUri(url);
+            MediaItem mediaItem = MediaItem.fromUri(appendURL(url, data));
 
             player.setMediaItem(mediaItem);
             player.prepare();
@@ -113,26 +79,15 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
-    // establish connection to server
-    public void sendMsg(View v) throws JSONException {
-        JSONObject item = new JSONObject();
-        item.put("song_name", "o_tannenbaum");
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest ExampleRequest = new JsonObjectRequest(Request.Method.GET, url, item, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // TODO: handle response from server
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        ExampleRequestQueue.add(ExampleRequest);
+    private String appendURL (String url, String id){
+        return url + id;
     }
 
+    // TODO: wrong url for playing the song
     @Override
     public void sendInput(String data) {
-        Log.d(TAG, "sendInput: got the input " + data);
+//        Log.d(TAG, "sendInput: got the input " + data);
+        this.data = data;
+        Log.d(TAG, "sendInput: got the input " + appendURL(url, data));
     }
 }
