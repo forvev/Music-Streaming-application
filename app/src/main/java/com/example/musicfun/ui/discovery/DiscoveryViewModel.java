@@ -40,7 +40,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
-                    JSONArray songTitles = (JSONArray) response.get("All songs");
+                    JSONArray songTitles = (JSONArray) response.get("Songs");
                     for (int i = 0; i < songTitles.length(); i++) {
                         Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("id"));
                         songsArrayList.add(s);
@@ -50,7 +50,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     e.printStackTrace();
                 }
             }
-        });
+        }, "get/allSongs");
     }
 
 

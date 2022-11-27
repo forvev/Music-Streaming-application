@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class Database {
 
-    private String url = "http://10.0.2.2:3000/getallsongs";
+    private String baseUrl = "http://10.0.2.2:3000/";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -53,9 +53,9 @@ public class Database {
 //        return songsArrayList;
 //    }
 
-    public void sendMsg(ServerCallBack callback) {
+    public void sendMsg(ServerCallBack callback, String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,baseUrl + url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);
