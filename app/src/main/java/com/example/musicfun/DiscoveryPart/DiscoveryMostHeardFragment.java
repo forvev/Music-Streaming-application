@@ -1,5 +1,10 @@
 package com.example.musicfun.DiscoveryPart;
 
+import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +17,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.CustomViewAdapter;
 import com.example.musicfun.R;
+import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.search.Songs;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +35,9 @@ import com.example.musicfun.R;
 public class DiscoveryMostHeardFragment extends Fragment {
 
     ListView listView;
+    public PassDataInterface mOnInputListner;
+    DiscoveryFragmentAdapter adapter;
+    DiscoveryMostHeardViewModel discoveryMostHeardViewModel;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,6 +82,7 @@ public class DiscoveryMostHeardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        discoveryMostHeardViewModel = new ViewModelProvider(this).get(DiscoveryMostHeardViewModel.class);
         View view = inflater.inflate(R.layout.fragment_discovery_most_heard, container, false);
         return view;
     }
@@ -76,27 +91,29 @@ public class DiscoveryMostHeardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String[] songs = {"The A Team", "Hollaback Girl","Die Young",
-                "Complicated", "Because of you", "Sk8er Boi", "Halo",
-                "Billionaire", "Hey, Soul Sister", "Fireflies", "Since U Been Gone",
-                "Dancing Queen", "Waterloo", "Take A Chance On Me", "Torn", "Thrift Shop",
-                "Wonderwall", "Chasing Cars", "Poker Face", "Born This Way", "Applause"};
+        boolean temp = isNetworkAvailable(getActivity().getApplication());
+        if(!temp){
+            System.out.println("Network not connected!!!");
+            return;
+        }
 
-        String[] artists = {"Artist 1", "Artist 2","Artist 3",
-                "Artist 4", "Artist 5", "Artist 6", "Artist 7", "Artist 8",
-                "Artist 9", "Artist 10", "Artist 11", "Artist 12",
-                "Artist 13", "Artist 14", "Artist 15", "Artist 16", "Artist 17",
-                "Artist 18", "Artist 19", "Artist 20", "Artist 21", "Artist 22"};
+        discoveryMostHeardViewModel.init();
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
-        CustomViewAdapter customViewAdapter = new CustomViewAdapter(getActivity(),songs, artists);
-        listView.setAdapter(customViewAdapter);
-        //listView.setOnItemClickListener(this);
+
+        discoveryMostHeardViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
+                listView.setAdapter(adapter);
+            }
+        });
     }
-/*
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String song = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(getActivity(), "Clicked: "+ song, Toast.LENGTH_SHORT).show();
-    } */
+    private Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+    }
 }

@@ -1,5 +1,10 @@
 package com.example.musicfun.DiscoveryPart;
 
+import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +17,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.CustomViewAdapter;
 import com.example.musicfun.R;
+import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.search.Songs;
+import com.example.musicfun.ui.discovery.DiscoveryViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +38,10 @@ import com.example.musicfun.R;
 public class SimpleDiscoveryFragment extends Fragment {
 
     ListView listView;
+    public PassDataInterface mOnInputListner;
+    DiscoveryFragmentAdapter adapter;
+    SimpleDiscoveryViewModel simpleDiscoveryViewModel;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,6 +87,7 @@ public class SimpleDiscoveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        simpleDiscoveryViewModel = new ViewModelProvider(this).get(SimpleDiscoveryViewModel.class);
         View view = inflater.inflate(R.layout.fragment_simple_discovery, container, false);
         return view;
     }
@@ -79,27 +96,30 @@ public class SimpleDiscoveryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String[] songs = {"Sweet Child O' Mine", "Kickstart My Heart","The Final Countdown",
-                "Eye of the Tiger", "Crazy Train", "Hells Bells", "Poison", "Back in Black",
-                "Paradise City", "Summer of '69", "Ace of Spades", "Welcome to the Jungle",
-                "Personal Jesus", "Panama", "Africa", "Don't stop believin'", "The Boys of Summer",
-                "Black Betty", "T.N.T", "Paranoid", "Sweet Home Alabama", "Highway to Hell"};
+        boolean temp = isNetworkAvailable(getActivity().getApplication());
+        if(!temp){
+            System.out.println("Network not connected!!!");
+            return;
+        }
 
-        String[] artists = {"Artist 1", "Artist 2","Artist 3",
-                "Artist 4", "Artist 5", "Artist 6", "Artist 7", "Artist 8",
-                "Artist 9", "Artist 10", "Artist 11", "Artist 12",
-                "Artist 13", "Artist 14", "Artist 15", "Artist 16", "Artist 17",
-                "Artist 18", "Artist 19", "Artist 20", "Artist 21", "Artist 22"};
+        simpleDiscoveryViewModel.init();
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
-        CustomViewAdapter customViewAdapter = new CustomViewAdapter(getActivity(),songs, artists);
-        listView.setAdapter(customViewAdapter);
-        //listView.setOnItemClickListener(this);
+
+        simpleDiscoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
+                listView.setAdapter(adapter);
+            }
+        });
+
     }
-/*
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String song = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(getActivity(), "Clicked: "+ song, Toast.LENGTH_SHORT).show();
-    } */
+    private Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+    }
 }
