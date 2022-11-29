@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.discovery;
+package com.example.musicfun.DiscoveryPart;
 
 import android.app.Application;
 
@@ -15,14 +15,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DiscoveryViewModel extends AndroidViewModel {
-
+public class DiscoveryMostHeardViewModel  extends AndroidViewModel {
     MutableLiveData<ArrayList<Songs>> songNames;
     private ArrayList<Songs> songsArrayList;
     Application application;
     Database db;
 
-    public DiscoveryViewModel(Application application) throws JSONException{
+    public DiscoveryMostHeardViewModel(Application application) throws JSONException {
         super(application);
         songNames = new MutableLiveData<>();
         this.application = application;
@@ -50,8 +49,6 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     e.printStackTrace();
                 }
             }
-        }, "get/allSongs");
+        }, "get/popularSongsAmongFriends");
     }
-
-
 }
