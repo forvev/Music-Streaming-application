@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -114,6 +115,7 @@ public class DiscoveryChartsFragment extends Fragment {
                 listView.setAdapter(adapter);
             }
         });
+
     }
 
     private Boolean isNetworkAvailable(Application application) {

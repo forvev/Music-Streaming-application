@@ -1,6 +1,7 @@
 package com.example.musicfun.DiscoveryPart;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
+import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.search.Songs;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
     LayoutInflater inflater;
     private List<Songs> songsList = null;
     private ArrayList<Songs> arrayList;
+    public PassDataInterface mOnInputListner;
+
 
     public DiscoveryFragmentAdapter(Context context, List<Songs> songsList){
         mContext = context;
@@ -29,11 +33,6 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(mContext);
         this.arrayList = new ArrayList<>();
         this.arrayList.addAll(songsList);
-    }
-
-    public class ViewHolder {
-        TextView name;
-        TextView artist;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
 
         RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
         //TODO: Make it play Music
-        clickField.setOnClickListener(click -> playSong());
+        clickField.setOnClickListener(click -> playSong(i));
 
         ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);
         songShare.setOnClickListener(share -> shareSong());
@@ -70,11 +69,17 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
 
         name.setText(songsList.get(i).getSongName());
         artist.setText(songsList.get(i).getArtist());
+
+        mOnInputListner = (PassDataInterface) mContext;
+
         return view;
     }
 
-    private void playSong() {
-        Toast.makeText(inflater.getContext(), "Now music plays", Toast.LENGTH_SHORT).show();
+    private void playSong(int i) {
+        Songs s = songsList.get(i);
+        int id = s.getSongId();
+        mOnInputListner.sendInput(Integer.toString(id));
+        Toast.makeText(inflater.getContext(), s.getSongName() + " is played", Toast.LENGTH_SHORT).show();
     }
 
     private void addSong() {
@@ -84,4 +89,5 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
     private void shareSong() {
         Toast.makeText(inflater.getContext(), "Clicked: Share", Toast.LENGTH_SHORT).show();
     }
+
 }
