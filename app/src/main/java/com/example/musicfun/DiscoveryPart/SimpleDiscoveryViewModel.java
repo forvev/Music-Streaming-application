@@ -1,6 +1,7 @@
-package com.example.musicfun.ui.discovery;
+package com.example.musicfun.DiscoveryPart;
 
 import android.app.Application;
+
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -15,14 +16,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DiscoveryViewModel extends AndroidViewModel {
-
+public class SimpleDiscoveryViewModel extends AndroidViewModel {
     MutableLiveData<ArrayList<Songs>> songNames;
     private ArrayList<Songs> songsArrayList;
     Application application;
     Database db;
 
-    public DiscoveryViewModel(Application application) throws JSONException{
+    public SimpleDiscoveryViewModel(Application application) throws JSONException {
         super(application);
         songNames = new MutableLiveData<>();
         this.application = application;
@@ -50,8 +50,6 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     e.printStackTrace();
                 }
             }
-        }, "get/allSongs");
+        }, "get/recentlyUploadedSongs");
     }
-
-
 }
