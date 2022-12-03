@@ -2,11 +2,13 @@ package com.example.musicfun.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -23,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -37,7 +40,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements PassDataInterface {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
@@ -46,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     ExoPlayer player;
     String url = "http://10.0.2.2:3000/songs/0/output.m3u8";
     int timeStamp = 0;
+    boolean durationSet = false;
+    int progressStatus = 0;
+    private Handler handler = new Handler();
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     // TODO: This function should be placed somewhere else instead of MainActivity
     // TODO: Continue playing the song after pressing the stop button
     public void playFile(View v){
-
         //creating desired descenation
         // changing an icon
         ImageView my_icon = findViewById(R.id.play_button);
         my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
+        progressBar = findViewById(R.id.progress_bar_song);
 
         if(playing == false)  {
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
@@ -114,11 +121,43 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             // Create a HLS media source pointing to a playlist uri.
             HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem);
 
-
             player.setMediaSource(hlsMediaSource);
             player.seekTo(timeStamp);
             player.prepare();
-            player.play();
+            player.addListener(new ExoPlayer.Listener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_READY && !durationSet) {
+                        long realDuration = player.getDuration()/1000;
+                        System.out.println("Real one: "+realDuration);
+                        durationSet = true;
+                        player.play();
+                        // Start long running operation in a background thread
+                        new Thread(new Runnable() {
+                            public void run() {
+                                while (progressStatus < realDuration) {
+                                    progressStatus += 1;
+                                    // Update the progress bar
+                                    handler.post(new Runnable() {
+                                        public void run() {
+                                            progressBar.setProgress(progressStatus);
+                                            System.out.println(progressStatus);
+                                        }
+                                    });
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }).start();
+
+                    }
+
+                }
+            });
+
         }
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
@@ -126,15 +165,17 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
+
+
     }
 
-    @Override
-    public void sendInput(String data) {
-        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
-        System.out.println(url);
-        timeStamp = 0;
-        playFile(null);
-    }
+//    @Override
+//    public void sendInput(String data) {
+//        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
+//        System.out.println(url);
+//        timeStamp = 0;
+//        playFile(null);
+//    }
 
     public boolean isConnectedToServer(String url, int timeout) {
         try{
