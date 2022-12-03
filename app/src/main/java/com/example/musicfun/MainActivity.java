@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 //    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
     //playing stuff
     ExoPlayer player;
+    int timeStamp = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
 
             //DefaultRenderersFactory defaultRenderersFactory = new DefaultRenderersFactory(this).forceDisableMediaCodecAsynchronousQueueing();
-            String url = "http://10.0.2.2:3000/songs/stream/?id=0";
+            String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
             Uri uri = Uri.parse(url);
             player = new ExoPlayer.Builder(this).build();
             MediaItem mediaItem = MediaItem.fromUri(uri);
@@ -125,12 +127,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
             //player.setMediaItem(mediaItem);
             player.setMediaSource(hlsMediaSource);
+            player.seekTo(timeStamp);
             player.prepare();
-            //player.play();
+            player.play();
         }
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
             playing = false;
+            timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
     }
