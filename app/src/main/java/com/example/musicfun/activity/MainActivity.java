@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     ExoPlayer player;
     String url = "http://10.0.2.2:3000/songs/0/output.m3u8";
     int timeStamp = 0;
+    int currentSongID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 //            }
 //            return true;
 //        });
+
+        //TODO: load last heard song id and timestamp from server
     }
 
 //    private void replaceFragment(Fragment fragment){
@@ -93,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 //    }
 
     // TODO: This function should be placed somewhere else instead of MainActivity
-    // TODO: Continue playing the song after pressing the stop button
     public void playFile(View v){
 
         //creating desired descenation
@@ -130,8 +132,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     @Override
     public void sendInput(String data) {
+        //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
+        //if (timeStamp > 30000) -> send id and timestamp to server
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
-        System.out.println(url);
+        currentSongID = Integer.parseInt(data);
+        System.out.println(currentSongID);
         timeStamp = 0;
         playFile(null);
     }
