@@ -41,11 +41,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
-    String url = "http://localhost:3000/testconnection";
     private boolean playing;
-//    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
     //playing stuff
     ExoPlayer player;
+    String url = "http://10.0.2.2:3000/songs/0/output.m3u8";
     int timeStamp = 0;
 
     @Override
@@ -106,13 +105,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
             playing = true;
 
-            //String url = "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8";
-            //String url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-            //String url = "http://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8";
-
-
-            //DefaultRenderersFactory defaultRenderersFactory = new DefaultRenderersFactory(this).forceDisableMediaCodecAsynchronousQueueing();
-            String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
             Uri uri = Uri.parse(url);
             player = new ExoPlayer.Builder(this).build();
             MediaItem mediaItem = MediaItem.fromUri(uri);
@@ -123,10 +115,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem);
 
 
-
-
-
-            //player.setMediaItem(mediaItem);
             player.setMediaSource(hlsMediaSource);
             player.seekTo(timeStamp);
             player.prepare();
@@ -140,31 +128,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
-    // establish connection to server
-    public void sendMsg(View v) throws JSONException {
-        JSONObject item = new JSONObject();
-        item.put("song_name", "o_tannenbaum");
-        System.out.println("Im here");
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest ExampleRequest = new JsonObjectRequest(Request.Method.GET, url, item, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // TODO: handle response from server
-                //JSonObject jsonObject = response.getJSONObject("");
-
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        ExampleRequestQueue.add(ExampleRequest);
-    }
-
     @Override
     public void sendInput(String data) {
-        Log.d(TAG, "sendInput: got the input " + data);
+        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
+        System.out.println(url);
+        timeStamp = 0;
+        playFile(null);
     }
 
     public boolean isConnectedToServer(String url, int timeout) {
