@@ -16,15 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.musicfun.CustomViewAdapter;
 import com.example.musicfun.R;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.search.Songs;
+import com.example.musicfun.datatype.Songs;
 
 import java.util.ArrayList;
 

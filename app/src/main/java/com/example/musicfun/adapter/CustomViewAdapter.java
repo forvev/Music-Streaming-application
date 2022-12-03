@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.musicfun.R;
 
 public class CustomViewAdapter extends BaseAdapter {
 

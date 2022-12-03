@@ -1,4 +1,4 @@
-package com.example.musicfun.search;
+package com.example.musicfun.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.musicfun.R;
+import com.example.musicfun.datatype.Songs;
 
 import java.util.ArrayList;
 import java.util.List;

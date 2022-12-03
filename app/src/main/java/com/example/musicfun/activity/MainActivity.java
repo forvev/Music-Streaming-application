@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.google.android.exoplayer2.ExoPlayer;

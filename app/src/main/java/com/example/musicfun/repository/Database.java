@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.repository;
 
 import android.content.Context;
 
@@ -9,7 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.musicfun.interfaces.ServerCallBack;
-import com.example.musicfun.search.Songs;
+import com.example.musicfun.datatype.Songs;
 
 import org.json.JSONObject;
 
