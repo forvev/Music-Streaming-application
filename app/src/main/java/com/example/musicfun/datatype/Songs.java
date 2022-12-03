@@ -1,4 +1,4 @@
-package com.example.musicfun.search;
+package com.example.musicfun.datatype;
 
 public class Songs {
     private String songName;

@@ -6,9 +6,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.musicfun.Database;
+import com.example.musicfun.repository.Database;
 import com.example.musicfun.interfaces.ServerCallBack;
-import com.example.musicfun.search.Songs;
+import com.example.musicfun.datatype.Songs;
 
 import org.json.JSONArray;
 import org.json.JSONException;

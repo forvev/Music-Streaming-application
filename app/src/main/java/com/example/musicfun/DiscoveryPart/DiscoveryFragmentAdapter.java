@@ -1,7 +1,6 @@
 package com.example.musicfun.DiscoveryPart;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,10 @@ import android.widget.Toast;
 
 import com.example.musicfun.R;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.search.Songs;
+import com.example.musicfun.datatype.Songs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class DiscoveryFragmentAdapter extends BaseAdapter {
     Context mContext;

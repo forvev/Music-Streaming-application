@@ -30,8 +30,8 @@ import com.example.musicfun.DiscoveryPart.SimpleDiscoveryFragment;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.FragmentDiscoveryBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.search.SearchResultAdapter;
-import com.example.musicfun.search.Songs;
+import com.example.musicfun.adapter.SearchResultAdapter;
+import com.example.musicfun.datatype.Songs;
 
 import java.util.ArrayList;
 
