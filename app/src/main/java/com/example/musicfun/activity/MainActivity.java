@@ -77,22 +77,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-//        replaceFragment(new Discovery_Decision_Fragment());
-//        binding.navView.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()){
-//                case R.id.discovery:
-//                    replaceFragment(new Discovery_Decision_Fragment());
-//                    break;
-//                case R.id.friends:
-//                    replaceFragment(new SimpleFriendsFragment());
-//                    break;
-//                case R.id.my_music:
-//                    replaceFragment(new SimpleMyMusicFragment());
-//                    break;
-//            }
-//            return true;
-//        });
-
         //TODO: load last heard song id and timestamp from server
     }
 
