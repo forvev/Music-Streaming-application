@@ -40,7 +40,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     int progressStatus = 0;
     private Handler handler = new Handler();
     ProgressBar progressBar;
-    int currentSongID;
+    int currentSongID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         //finding different UI, R - resources
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        progressBar = binding.progressBarSong;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.discovery, R.id.my_music, R.id.friends)
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         //TODO: load last heard song id and timestamp from server
+
+        // changes url after starting the app to the song last heard
+        url = "http://10.0.2.2:3000/songs/" + currentSongID + "/output.m3u8";
     }
 
 //    private void replaceFragment(Fragment fragment){
@@ -167,8 +171,6 @@ public class MainActivity extends AppCompatActivity {
             timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
-
-
     }
 
     @Override
@@ -177,10 +179,10 @@ public class MainActivity extends AppCompatActivity {
         //if (timeStamp > 30000) -> send id and timestamp to server
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
         currentSongID = Integer.parseInt(data);
-        System.out.println(currentSongID);
         timeStamp = 0;
         playFile(null);
     }
+
 
     public boolean isConnectedToServer(String url, int timeout) {
         try{
