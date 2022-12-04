@@ -6,4 +6,33 @@
     <string name="title_notifications">Friends</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_login">Login</string>
+    <string name="action_register">Register</string>
+    <string name="action_skip"><u>I don\'t need an account.</u></string>
+    <string name="action_direct_login"><u>Already have an account?</u></string>
+    <string name="action_logout">Logout</string>
+    <string name="invalid_username">Username can not be empty</string>
+    <string name="invalid_login">Wrong username or password</string>
+    <string name="duplicate_username">This username already exists!</string>
+    <string name="wrong_password">Your current password is wrong.</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">Login failed</string>
+    <string name="reset_pw">Reset password</string>
+    <string name="change_genre">Change genres</string>
+    <string name="login_required">You need to login/register first!</string>
+    <string name="submit_genre">Let\'s get started!</string>
+    <string name="save">Save</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+
+    <string name="genre_country">Country</string>
+    <string name="genre_electronic">Electronic</string>
+    <string name="genre_hiphop">Hiphop</string>
+    <string name="genre_jazz">Jazz</string>
+    <string name="genre_pop">Pop</string>
+    <string name="genre_rock">Rock</string>
+    <string name="genre_classic">Classic</string>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F44336"
-    tools:context=".DiscoveryPart.DiscoveryMostHeardFragment">
+    tools:context=".fragment.discovery.DiscoveryMostHeardFragment">
 
     <ListView
         android:id="@+id/lvdiscovery"

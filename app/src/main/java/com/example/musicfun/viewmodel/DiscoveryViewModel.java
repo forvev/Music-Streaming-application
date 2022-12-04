@@ -1,10 +1,11 @@
-package com.example.musicfun.DiscoveryPart;
+package com.example.musicfun.viewmodel;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.VolleyError;
 import com.example.musicfun.repository.Database;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.datatype.Songs;
@@ -15,13 +16,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DiscoveryChartsViewModel extends AndroidViewModel {
+public class DiscoveryViewModel extends AndroidViewModel {
+
     MutableLiveData<ArrayList<Songs>> songNames;
     private ArrayList<Songs> songsArrayList;
     Application application;
     Database db;
 
-    public DiscoveryChartsViewModel(Application application) throws JSONException {
+    public DiscoveryViewModel(Application application) throws JSONException{
         super(application);
         songNames = new MutableLiveData<>();
         this.application = application;
@@ -33,7 +35,7 @@ public class DiscoveryChartsViewModel extends AndroidViewModel {
         return songNames;
     }
 
-    public void init() {
+    public void init(String url) {
         songsArrayList.clear();
         db.sendMsg(new ServerCallBack() {
             @Override
@@ -49,6 +51,12 @@ public class DiscoveryChartsViewModel extends AndroidViewModel {
                     e.printStackTrace();
                 }
             }
-        }, "get/mostPopularSongs");
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url);
     }
+
+
 }

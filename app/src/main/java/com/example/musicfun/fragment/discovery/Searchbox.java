@@ -1,7 +1,11 @@
-package com.example.musicfun.ui.discovery;
+package com.example.musicfun.fragment.discovery;
+
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -15,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,19 +28,18 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.musicfun.DiscoveryPart.DiscoveryChartsFragment;
-import com.example.musicfun.DiscoveryPart.DiscoveryMayLikeFragment;
-import com.example.musicfun.DiscoveryPart.DiscoveryMostHeardFragment;
-import com.example.musicfun.DiscoveryPart.SimpleDiscoveryFragment;
 import com.example.musicfun.R;
+import com.example.musicfun.activity.RegisterActivity;
+import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.databinding.FragmentDiscoveryBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.adapter.SearchResultAdapter;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.viewmodel.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends Fragment {
+public class Searchbox extends Fragment {
 
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
@@ -44,6 +48,7 @@ public class DiscoveryFragment extends Fragment {
     SearchView searchView;
     DiscoveryViewModel discoveryViewModel;
     public PassDataInterface mOnInputListner;
+    private SharedPreferences sp;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +58,7 @@ public class DiscoveryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DiscoveryFragment() {
+    public Searchbox() {
         // Required empty public constructor
     }
     /**
@@ -65,8 +70,8 @@ public class DiscoveryFragment extends Fragment {
      * @return A new instance of fragment Discovery_Decision_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DiscoveryFragment newInstance(String param1, String param2) {
-        DiscoveryFragment fragment = new DiscoveryFragment();
+    public static Searchbox newInstance(String param1, String param2) {
+        Searchbox fragment = new Searchbox();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -101,6 +106,27 @@ public class DiscoveryFragment extends Fragment {
             System.out.println("network not connected!!");
             return;
         }
+
+        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
+        int state = sp.getInt("logged", 999);
+        binding.setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gotoSetting = new Intent(getActivity(), SettingActivity.class);
+//                System.out.println("state current = " + state);
+                if(state ==0){
+                    Intent gotoLogin = new Intent(getActivity(), RegisterActivity.class);
+                    sp.edit().putInt("logged", -1).apply();
+                    Toast.makeText(getContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+//                    System.out.println("state after = " + sp.getInt("logged", 999));
+                    getActivity().startActivity(gotoLogin);
+                }
+                else{
+                    getActivity().startActivity(gotoSetting);
+                }
+            }
+        });
+
         // locate the SearchView in fragment_discovery.xml
         searchView = binding.searchView;
         // search result list appears only if a user start searching
@@ -110,7 +136,7 @@ public class DiscoveryFragment extends Fragment {
                 if(listView != null){
                     listView.setVisibility(View.VISIBLE);
                 }
-                discoveryViewModel.init();
+                discoveryViewModel.init("get/allSongs");
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
 

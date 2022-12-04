@@ -1,7 +1,9 @@
-package com.example.musicfun.DiscoveryPart;
+package com.example.musicfun.fragment.discovery;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,22 +21,29 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MainActivity;
+import com.example.musicfun.activity.RegisterActivity;
+import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.viewmodel.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DiscoveryMostHeardFragment#newInstance} factory method to
+ * Use the {@link SimpleDiscoveryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DiscoveryMostHeardFragment extends Fragment {
+
+//this is Releases class
+public class SimpleDiscoveryFragment extends Fragment {
 
     ListView listView;
     public PassDataInterface mOnInputListner;
     DiscoveryFragmentAdapter adapter;
-    DiscoveryMostHeardViewModel discoveryMostHeardViewModel;
+    DiscoveryViewModel discoveryViewModel;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,7 +53,8 @@ public class DiscoveryMostHeardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DiscoveryMostHeardFragment() {
+
+    public SimpleDiscoveryFragment() {
         // Required empty public constructor
     }
 
@@ -53,11 +64,11 @@ public class DiscoveryMostHeardFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DiscoveryMostHeardFragment.
+     * @return A new instance of fragment SimpleDiscoveryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DiscoveryMostHeardFragment newInstance(String param1, String param2) {
-        DiscoveryMostHeardFragment fragment = new DiscoveryMostHeardFragment();
+    public static SimpleDiscoveryFragment newInstance(String param1, String param2) {
+        SimpleDiscoveryFragment fragment = new SimpleDiscoveryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,14 +83,15 @@ public class DiscoveryMostHeardFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        discoveryMostHeardViewModel = new ViewModelProvider(this).get(DiscoveryMostHeardViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_discovery_most_heard, container, false);
+        discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_simple_discovery, container, false);
         return view;
     }
 
@@ -93,17 +105,18 @@ public class DiscoveryMostHeardFragment extends Fragment {
             return;
         }
 
-        discoveryMostHeardViewModel.init();
+        discoveryViewModel.init("get/recentlyUploadedSongs");
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
 
-        discoveryMostHeardViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
+        discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
                 adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
                 listView.setAdapter(adapter);
             }
         });
+
     }
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);

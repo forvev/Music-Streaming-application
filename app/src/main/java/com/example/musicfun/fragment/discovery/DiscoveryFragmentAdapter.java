@@ -1,4 +1,4 @@
-package com.example.musicfun.DiscoveryPart;
+package com.example.musicfun.fragment.discovery;
 
 import android.content.Context;
 import android.view.LayoutInflater;

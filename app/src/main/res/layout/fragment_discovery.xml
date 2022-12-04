@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.discovery.DiscoveryFragment">
+    tools:context=".fragment.discovery.Searchbox">
 
     <RelativeLayout
         android:id="@+id/rl_search"
@@ -15,11 +15,25 @@
         app:layout_constraintTop_toTopOf="parent">
         <SearchView
             android:id="@+id/search_view"
-            android:layout_width="fill_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
             android:background="@drawable/rounded_corner_view">
         </SearchView>
+
+        <ImageButton
+            android:id="@+id/setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="10dp"
+            android:layout_alignBottom="@+id/search_view"
+            android:layout_alignTop="@+id/search_view"
+            android:layout_toEndOf="@+id/search_view"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/default_pic" />
 
         <ListView
             android:id="@+id/search_list"
