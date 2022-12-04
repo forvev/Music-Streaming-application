@@ -39,7 +39,7 @@ import com.example.musicfun.viewmodel.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
-public class Searchbox extends Fragment {
+public class DiscoveryFragment extends Fragment {
 
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
@@ -58,7 +58,7 @@ public class Searchbox extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Searchbox() {
+    public DiscoveryFragment() {
         // Required empty public constructor
     }
     /**
@@ -70,8 +70,8 @@ public class Searchbox extends Fragment {
      * @return A new instance of fragment Discovery_Decision_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Searchbox newInstance(String param1, String param2) {
-        Searchbox fragment = new Searchbox();
+    public static DiscoveryFragment newInstance(String param1, String param2) {
+        DiscoveryFragment fragment = new DiscoveryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -189,20 +189,20 @@ public class Searchbox extends Fragment {
         });
 
         // link to other song list fragments
-        insertNestedFragment(new SimpleDiscoveryFragment());
+        insertNestedFragment(new NewReleaseFragment());
         binding.DiscoveryNav.setOnItemSelectedListener(item ->{
             switch (item.getItemId()){
                 case  R.id.new_releases:
-                    insertNestedFragment(new SimpleDiscoveryFragment());
+                    insertNestedFragment(new NewReleaseFragment());
                     break;
                 case R.id.most_heard:
-                    insertNestedFragment(new DiscoveryMostHeardFragment());
+                    insertNestedFragment(new MostHeardFragment());
                     break;
                 case R.id.charts:
-                    insertNestedFragment(new DiscoveryChartsFragment());
+                    insertNestedFragment(new ChartsFragment());
                     break;
                 case R.id.may_like:
-                    insertNestedFragment(new DiscoveryMayLikeFragment());
+                    insertNestedFragment(new MayLikeFragment());
                     break;
             }
             return true;

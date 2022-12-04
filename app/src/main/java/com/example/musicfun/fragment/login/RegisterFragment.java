@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.musicfun.LoginFormState;
+import com.example.musicfun.constant.LoginFormState;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.FragmentRegisterBinding;
 import com.example.musicfun.viewmodel.RegisterViewModel;

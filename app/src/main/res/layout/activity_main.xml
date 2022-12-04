@@ -36,7 +36,7 @@
     <FrameLayout
         android:layout_width="418dp"
         android:layout_height="60dp"
-        android:background="#AC9DC8"
+        android:background="@color/theme_purple_light"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -45,17 +45,17 @@
             android:id="@+id/play_button"
             android:layout_width="66dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:onClick="playFile"
+            android:backgroundTint="@android:color/transparent"
             android:src="@drawable/ic_baseline_play_arrow_24" />
 
         <!--Progress bar inside for music-->
         <ProgressBar
             android:id="@+id/progress_bar_song"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="128dp"
+            android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_gravity="center"
             android:indeterminate="false"
 

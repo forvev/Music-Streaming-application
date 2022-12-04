@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.R;
-import com.example.musicfun.LoginFormState;
+import com.example.musicfun.constant.LoginFormState;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.LoginRepository;
 

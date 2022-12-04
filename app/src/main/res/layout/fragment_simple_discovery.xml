@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3BCD41"
-    tools:context=".fragment.discovery.SimpleDiscoveryFragment">
+    tools:context=".fragment.discovery.NewReleaseFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <!---tools:listitem="@layout/songs_custom_view" with baseadapterVersion (SongsCustomView and CustomViewAdapter)-->

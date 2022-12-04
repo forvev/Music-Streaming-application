@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        progressBar = binding.progressBarSong;
     }
 
     // TODO: This function should be placed somewhere else instead of MainActivity

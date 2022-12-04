@@ -1,4 +1,4 @@
-package com.example.musicfun;
+package com.example.musicfun.constant;
 
 import androidx.annotation.Nullable;
 

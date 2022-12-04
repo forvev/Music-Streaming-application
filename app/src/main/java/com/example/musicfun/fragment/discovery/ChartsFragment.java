@@ -10,15 +10,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.SongListAdapter;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.DiscoveryViewModel;
@@ -27,14 +29,14 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DiscoveryMayLikeFragment#newInstance} factory method to
+ * Use the {@link ChartsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DiscoveryMayLikeFragment extends Fragment {
+public class ChartsFragment extends Fragment {
 
     ListView listView;
     public PassDataInterface mOnInputListner;
-    DiscoveryFragmentAdapter adapter;
+    SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +48,7 @@ public class DiscoveryMayLikeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DiscoveryMayLikeFragment() {
+    public ChartsFragment() {
         // Required empty public constructor
     }
 
@@ -56,11 +58,11 @@ public class DiscoveryMayLikeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DiscoveryMayLikeFragment.
+     * @return A new instance of fragment DiscoveryChartsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DiscoveryMayLikeFragment newInstance(String param1, String param2) {
-        DiscoveryMayLikeFragment fragment = new DiscoveryMayLikeFragment();
+    public static ChartsFragment newInstance(String param1, String param2) {
+        ChartsFragment fragment = new ChartsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -82,7 +84,7 @@ public class DiscoveryMayLikeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_discovery_may_like, container, false);
+        View view = inflater.inflate(R.layout.fragment_discovery_charts, container, false);
         return view;
     }
 
@@ -96,17 +98,18 @@ public class DiscoveryMayLikeFragment extends Fragment {
             return;
         }
 
-        discoveryViewModel.init("get/songRecommendations");
+        discoveryViewModel.init("get/mostPopularSongs");
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
 
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
+                adapter = new SongListAdapter(getActivity(), newName);
                 listView.setAdapter(adapter);
             }
         });
+
     }
 
     private Boolean isNetworkAvailable(Application application) {

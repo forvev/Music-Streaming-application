@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.SongListAdapter;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.DiscoveryViewModel;
@@ -26,14 +27,14 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DiscoveryMostHeardFragment#newInstance} factory method to
+ * Use the {@link MostHeardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DiscoveryMostHeardFragment extends Fragment {
+public class MostHeardFragment extends Fragment {
 
     ListView listView;
     public PassDataInterface mOnInputListner;
-    DiscoveryFragmentAdapter adapter;
+    SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +45,7 @@ public class DiscoveryMostHeardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DiscoveryMostHeardFragment() {
+    public MostHeardFragment() {
         // Required empty public constructor
     }
 
@@ -57,8 +58,8 @@ public class DiscoveryMostHeardFragment extends Fragment {
      * @return A new instance of fragment DiscoveryMostHeardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DiscoveryMostHeardFragment newInstance(String param1, String param2) {
-        DiscoveryMostHeardFragment fragment = new DiscoveryMostHeardFragment();
+    public static MostHeardFragment newInstance(String param1, String param2) {
+        MostHeardFragment fragment = new MostHeardFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -101,7 +102,7 @@ public class DiscoveryMostHeardFragment extends Fragment {
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
+                adapter = new SongListAdapter(getActivity(), newName);
                 listView.setAdapter(adapter);
             }
         });

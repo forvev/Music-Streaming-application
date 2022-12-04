@@ -2,8 +2,6 @@ package com.example.musicfun.fragment.discovery;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -12,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.MainActivity;
-import com.example.musicfun.activity.RegisterActivity;
-import com.example.musicfun.activity.SettingActivity;
+import com.example.musicfun.adapter.SongListAdapter;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.DiscoveryViewModel;
@@ -32,16 +27,16 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SimpleDiscoveryFragment#newInstance} factory method to
+ * Use the {@link NewReleaseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
 //this is Releases class
-public class SimpleDiscoveryFragment extends Fragment {
+public class NewReleaseFragment extends Fragment {
 
     ListView listView;
     public PassDataInterface mOnInputListner;
-    DiscoveryFragmentAdapter adapter;
+    SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -54,7 +49,7 @@ public class SimpleDiscoveryFragment extends Fragment {
     private String mParam2;
 
 
-    public SimpleDiscoveryFragment() {
+    public NewReleaseFragment() {
         // Required empty public constructor
     }
 
@@ -67,8 +62,8 @@ public class SimpleDiscoveryFragment extends Fragment {
      * @return A new instance of fragment SimpleDiscoveryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SimpleDiscoveryFragment newInstance(String param1, String param2) {
-        SimpleDiscoveryFragment fragment = new SimpleDiscoveryFragment();
+    public static NewReleaseFragment newInstance(String param1, String param2) {
+        NewReleaseFragment fragment = new NewReleaseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -112,7 +107,7 @@ public class SimpleDiscoveryFragment extends Fragment {
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new DiscoveryFragmentAdapter(getActivity(), newName);
+                adapter = new SongListAdapter(getActivity(), newName);
                 listView.setAdapter(adapter);
             }
         });

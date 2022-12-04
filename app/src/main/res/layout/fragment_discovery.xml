@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.discovery.Searchbox">
+    tools:context=".fragment.discovery.DiscoveryFragment">
 
     <RelativeLayout
         android:id="@+id/rl_search"
@@ -30,10 +30,11 @@
             android:scaleType="fitCenter"
             android:layout_marginLeft="10dp"
             android:layout_alignBottom="@+id/search_view"
+            android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/search_view"
             android:layout_toEndOf="@+id/search_view"
             android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/default_pic" />
+            android:src="@drawable/profile_pic" />
 
         <ListView
             android:id="@+id/search_list"

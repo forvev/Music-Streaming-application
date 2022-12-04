@@ -1,4 +1,4 @@
-package com.example.musicfun.fragment.discovery;
+package com.example.musicfun.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,7 @@ import com.example.musicfun.datatype.Songs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiscoveryFragmentAdapter extends BaseAdapter {
+public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Songs> songsList = null;
@@ -25,7 +25,7 @@ public class DiscoveryFragmentAdapter extends BaseAdapter {
     public PassDataInterface mOnInputListner;
 
 
-    public DiscoveryFragmentAdapter(Context context, List<Songs> songsList){
+    public SongListAdapter(Context context, List<Songs> songsList){
         mContext = context;
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);

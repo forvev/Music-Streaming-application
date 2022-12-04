@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/discovery"
-        android:name="com.example.musicfun.fragment.discovery.Searchbox"
+        android:name="com.example.musicfun.fragment.discovery.DiscoveryFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_discovery" />
 
