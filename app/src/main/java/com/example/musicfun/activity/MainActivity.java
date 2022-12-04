@@ -1,15 +1,14 @@
 package com.example.musicfun.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -26,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -38,16 +38,22 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
-    String url = "http://localhost:3000/testconnection";
     private boolean playing;
-//    String url = "http://10.0.2.2:3000/?song_name=o_tannenbaum";
     //playing stuff
     ExoPlayer player;
+    String url = "http://10.0.2.2:3000/songs/0/output.m3u8";
+    int timeStamp = 0;
+    boolean durationSet = false;
+    int progressStatus = 0;
+    private Handler handler = new Handler();
+    ProgressBar progressBar;
+    int currentSongID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     }
 
     // TODO: This function should be placed somewhere else instead of MainActivity
-    // TODO: Continue playing the song after pressing the stop button
     public void playFile(View v){
 
         //creating desired descenation
@@ -84,13 +89,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
             playing = true;
 
-            //String url = "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8";
-            //String url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-            //String url = "http://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8";
-
-
-            //DefaultRenderersFactory defaultRenderersFactory = new DefaultRenderersFactory(this).forceDisableMediaCodecAsynchronousQueueing();
-            String url = "http://10.0.2.2:3000/songs/stream/?id=0";
             Uri uri = Uri.parse(url);
             player = new ExoPlayer.Builder(this).build();
             MediaItem mediaItem = MediaItem.fromUri(uri);
@@ -100,47 +98,63 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             // Create a HLS media source pointing to a playlist uri.
             HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem);
 
-
-
-
-
-            //player.setMediaItem(mediaItem);
             player.setMediaSource(hlsMediaSource);
+            player.seekTo(timeStamp);
             player.prepare();
-            //player.play();
+            player.addListener(new ExoPlayer.Listener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_READY && !durationSet) {
+                        long realDuration = player.getDuration()/1000;
+                        System.out.println("Real one: "+realDuration);
+                        durationSet = true;
+                        player.play();
+                        // Start long running operation in a background thread
+                        new Thread(new Runnable() {
+                            public void run() {
+                                while (progressStatus < realDuration) {
+                                    progressStatus += 1;
+                                    // Update the progress bar
+                                    handler.post(new Runnable() {
+                                        public void run() {
+                                            progressBar.setProgress(progressStatus);
+                                            System.out.println(progressStatus);
+                                        }
+                                    });
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }).start();
+
+                    }
+
+                }
+            });
+
         }
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
             playing = false;
+            timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
-    }
 
-    // establish connection to server
-    public void sendMsg(View v) throws JSONException {
-        JSONObject item = new JSONObject();
-        item.put("song_name", "o_tannenbaum");
-        System.out.println("Im here");
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest ExampleRequest = new JsonObjectRequest(Request.Method.GET, url, item, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // TODO: handle response from server
-                //JSonObject jsonObject = response.getJSONObject("");
 
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        ExampleRequestQueue.add(ExampleRequest);
     }
 
     @Override
     public void sendInput(String data) {
-        Log.d(TAG, "sendInput: got the input " + data);
+        //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
+        //if (timeStamp > 30000) -> send id and timestamp to server
+        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
+        currentSongID = Integer.parseInt(data);
+        System.out.println(currentSongID);
+        timeStamp = 0;
+        playFile(null);
     }
 
     public boolean isConnectedToServer(String url, int timeout) {
