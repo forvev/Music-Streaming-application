@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     int progressStatus = 0;
     private Handler handler = new Handler();
     ProgressBar progressBar;
-    int currentSongID;
+    int currentSongID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         setContentView(binding.getRoot());
         //finding different UI, R - resources
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        progressBar = binding.progressBarSong;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.discovery, R.id.my_music, R.id.friends)
@@ -75,7 +76,24 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        progressBar = binding.progressBarSong;
+
+//        replaceFragment(new Discovery_Decision_Fragment());
+//        binding.navView.setOnItemSelectedListener(item -> {
+//            switch (item.getItemId()){
+//                case R.id.discovery:
+//                    replaceFragment(new Discovery_Decision_Fragment());
+//                    break;
+//                case R.id.friends:
+//                    replaceFragment(new SimpleFriendsFragment());
+//                    break;
+//                case R.id.my_music:
+//                    replaceFragment(new SimpleMyMusicFragment());
+//                    break;
+//            }
+//            return true;
+//        });
+
+        //TODO: load last heard song id and timestamp from server
     }
 
     // TODO: This function should be placed somewhere else instead of MainActivity
@@ -143,8 +161,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
-
-
     }
 
     @Override
@@ -153,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         //if (timeStamp > 30000) -> send id and timestamp to server
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
         currentSongID = Integer.parseInt(data);
-        System.out.println(currentSongID);
         timeStamp = 0;
         playFile(null);
     }
