@@ -157,7 +157,7 @@ public class DiscoveryFragment extends Fragment {
                             @Override
                             public boolean onQueryTextChange(String newText) {
                                 String text = newText;
-                                adapter.filter(text);
+                                discoveryViewModel.filter(text);
                                 return true;
                             }
                         });
