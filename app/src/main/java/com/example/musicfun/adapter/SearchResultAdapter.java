@@ -7,8 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.repository.Database;
+import com.example.musicfun.viewmodel.DiscoveryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,22 +69,4 @@ public class SearchResultAdapter extends BaseAdapter {
         holder.artist.setText(songsList.get(position).getArtist());
         return view;
     }
-
-    // find the item matches the given search text
-    public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        songsList.clear();
-        if (charText.length() == 0) {
-            songsList.addAll(arraylist);
-        } else {
-//            System.out.println("arraylist length = " + arraylist.size());
-            for (Songs wp : arraylist) {
-                if (wp.getSongName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    songsList.add(wp);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
-
 }

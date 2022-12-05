@@ -58,5 +58,28 @@ public class DiscoveryViewModel extends AndroidViewModel {
         }, url);
     }
 
+    public void filter(String name){
+        songsArrayList.clear();
+        db.search(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray songTitles = (JSONArray) response.get("Songs");
+                    for (int i = 0; i < songTitles.length(); i++) {
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("_id"));
+                        songsArrayList.add(s);
+                    }
+                    songNames.setValue(songsArrayList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, name);
+    }
+
 
 }
