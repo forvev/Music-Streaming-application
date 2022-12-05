@@ -52,16 +52,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
 
-    int timeStamp = 0;
-    int progressStatus = 0;
+    private int timeStamp = 0;
+    private int progressStatus = 0;
     int currentSongID = 0;
 
-    long threadID;
-
-    boolean durationSet = false;
-    boolean startingNewSong = false;
-
+    private boolean startingNewSong = false;
     private boolean playing;
+
     private Handler handler = new Handler();
 
 
@@ -93,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     // TODO: This function should be placed somewhere else instead of MainActivity
     public void playFile(View v){
 
+        //checks if there was a song being played before to stop the thread tracking the last songs progress
         if (startingNewSong) {
             player.pause();
             playing = false;
@@ -129,22 +127,18 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             player.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_READY && !durationSet) {
+                    if (playbackState == ExoPlayer.STATE_READY) {
                         long realDuration = player.getDuration()/1000;
-                        //durationSet = true;
                         progressBar.setMax((int) realDuration * 10);
                         // Start long running operation in a background thread
                         new Thread(new Runnable() {
                             public void run() {
-                                threadID = Thread.currentThread().getId();
-                                System.out.println("Thread ID = " + threadID);
                                 while (progressStatus < realDuration * 10 && playing) {
                                     progressStatus += 1;
                                     // Update the progress bar
                                     handler.post(new Runnable() {
                                         public void run() {
                                             progressBar.setProgress(progressStatus);
-                                            System.out.println(progressStatus);
                                         }
                                     });
                                     try {
@@ -158,11 +152,21 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                     }
                 }
             });
+            // after playing the song: information are send to the server and the progress bar is reset
             player.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_ENDED) {
                         playing = false;
+                        timeStamp = (int) player.getContentDuration();
+                        System.out.println("Content : " + timeStamp);
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
+                        //if (timeStamp > 10000) -> send id and timestamp to server
                         my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                         timeStamp = 0;
                         progressBar.setProgress(0);
@@ -181,12 +185,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     @Override
     public void sendInput(String data) {
-        //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
-        //if (timeStamp > 30000) -> send id and timestamp to server
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
         currentSongID = Integer.parseInt(data);
         if (playing) {
             startingNewSong = true;
+            timeStamp = (int) player.getCurrentPosition();
+            System.out.println(timeStamp);
+            //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
+            //if (timeStamp > 10000) -> send id and timestamp to server
         }
         timeStamp = 0;
         progressBar.setProgress(0);
