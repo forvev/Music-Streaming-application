@@ -1,66 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:id="@+id/rl_search"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     tools:context=".fragment.discovery.DiscoveryFragment">
 
-    <RelativeLayout
-        android:id="@+id/rl_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
         <SearchView
             android:id="@+id/search_view"
-            android:layout_width="300dp"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:background="@drawable/rounded_corner_view">
-        </SearchView>
+            android:background="@drawable/rounded_corner_view"
+            android:iconifiedByDefault="false" />
 
         <ImageButton
             android:id="@+id/setting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitCenter"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:scaleType="fitCenter"
-            android:layout_marginLeft="10dp"
-            android:layout_alignBottom="@+id/search_view"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/search_view"
-            android:layout_toEndOf="@+id/search_view"
-            android:backgroundTint="@android:color/transparent"
             android:src="@drawable/profile_pic" />
 
-        <ListView
-            android:id="@+id/search_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/theme_purple_light"
-            android:layout_below="@+id/search_view" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/DiscoveryNav"
+        <TextView
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/search_view"
-            android:paddingTop="20dp"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/discovery_navigation_bar">
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/theme_purple_dark"
+            android:visibility="gone"
+            android:textSize="15sp" />
+    </LinearLayout>
 
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-        <FrameLayout
-            android:id="@+id/discovery_childFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/DiscoveryNav">
+    <ListView
+        android:id="@+id/search_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/theme_purple_light"
+        android:layout_below="@+id/ll_title" />
 
-        </FrameLayout>
-    </RelativeLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/DiscoveryNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_title"
+        android:paddingTop="20dp"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/discovery_navigation_bar">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <FrameLayout
+        android:id="@+id/discovery_childFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/DiscoveryNav">
+
+    </FrameLayout>
+</RelativeLayout>

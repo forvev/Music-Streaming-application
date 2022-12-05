@@ -1,5 +1,6 @@
 package com.example.musicfun.activity;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private boolean playing;
 
     private Handler handler = new Handler();
+    private SharedPreferences sp;
 
 
     @Override
@@ -77,13 +79,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         BottomNavigationView navView = findViewById(R.id.nav_view);
         progressBar = binding.progressBarSong;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.discovery, R.id.my_music, R.id.friends)
-                .build();
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        if(sp.getInt("logged",0) == 0){
+            binding.navView.getMenu().removeItem(R.id.friends);
+        }
         NavigationUI.setupWithNavController(binding.navView, navController);
-
         //TODO: load last heard song id and timestamp from server
     }
 

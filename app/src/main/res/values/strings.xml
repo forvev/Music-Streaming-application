@@ -27,6 +27,7 @@
     <string name="save">Save</string>
     <string name="current_password">Current password</string>
     <string name="new_password">New password</string>
+    <string name="cancel">Cancel</string>
 
     <string name="genre_country">Country</string>
     <string name="genre_electronic">Electronic</string>

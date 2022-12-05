@@ -136,6 +136,22 @@ public class DiscoveryFragment extends Fragment {
                 if(listView != null){
                     listView.setVisibility(View.VISIBLE);
                 }
+                binding.setting.setVisibility(View.GONE);
+                binding.cancel.setVisibility(View.VISIBLE);
+                // cancel the search
+                binding.cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        closeKeyboard(view);
+                        searchView.setQuery("", false);
+                        searchView.clearFocus();
+                        listView.setVisibility(View.INVISIBLE);
+                        binding.DiscoveryNav.setVisibility(View.VISIBLE);
+                        binding.discoveryChildFragment.setVisibility((View.VISIBLE));
+                        binding.setting.setVisibility(View.VISIBLE);
+                        binding.cancel.setVisibility(View.GONE);
+                    }
+                });
                 discoveryViewModel.init("get/allSongs");
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
@@ -183,6 +199,8 @@ public class DiscoveryFragment extends Fragment {
                         listView.setVisibility(View.INVISIBLE);
                         binding.DiscoveryNav.setVisibility(View.VISIBLE);
                         binding.discoveryChildFragment.setVisibility((View.VISIBLE));
+                        binding.setting.setVisibility(View.VISIBLE);
+                        binding.cancel.setVisibility(View.GONE);
                     }
                 });
             }
