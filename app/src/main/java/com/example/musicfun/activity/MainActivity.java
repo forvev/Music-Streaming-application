@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private boolean playing;
     //playing stuff
     ExoPlayer player;
-    String url = "http://10.0.2.2:3000/songs/0/output.m3u8";
+    String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
     int timeStamp = 0;
     boolean durationSet = false;
     int progressStatus = 0;
@@ -104,14 +104,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             player.setMediaSource(hlsMediaSource);
             player.seekTo(timeStamp);
             player.prepare();
+            player.play();
             player.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_READY && !durationSet) {
                         long realDuration = player.getDuration()/1000;
-                        System.out.println("Real one: "+realDuration);
                         durationSet = true;
-                        player.play();
                         // Start long running operation in a background thread
                         new Thread(new Runnable() {
                             public void run() {
@@ -132,12 +131,9 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                                 }
                             }
                         }).start();
-
                     }
-
                 }
             });
-
         }
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
@@ -154,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
         currentSongID = Integer.parseInt(data);
         timeStamp = 0;
+        progressBar.setProgress(0);
+        progressStatus = 0;
         playFile(null);
     }
 
