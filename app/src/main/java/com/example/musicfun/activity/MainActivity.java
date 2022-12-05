@@ -38,22 +38,32 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
-    private boolean playing;
+
     //playing stuff
     ExoPlayer player;
-    String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
-    int timeStamp = 0;
-    boolean durationSet = false;
-    int progressStatus = 0;
-    private Handler handler = new Handler();
     ProgressBar progressBar;
+
+    String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
+
+    int timeStamp = 0;
+    int progressStatus = 0;
     int currentSongID = 0;
+
+    long threadID;
+
+    boolean durationSet = false;
+    boolean startingNewSong = false;
+
+    private boolean playing;
+    private Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +93,23 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     // TODO: This function should be placed somewhere else instead of MainActivity
     public void playFile(View v){
 
+        if (startingNewSong) {
+            player.pause();
+            playing = false;
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         //creating desired descenation
         // changing an icon
         ImageView my_icon = findViewById(R.id.play_button);
         my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
 
         if(playing == false)  {
+            startingNewSong = false;
             my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
             playing = true;
 
@@ -110,11 +131,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_READY && !durationSet) {
                         long realDuration = player.getDuration()/1000;
-                        durationSet = true;
+                        //durationSet = true;
+                        progressBar.setMax((int) realDuration * 10);
                         // Start long running operation in a background thread
                         new Thread(new Runnable() {
                             public void run() {
-                                while (progressStatus < realDuration) {
+                                threadID = Thread.currentThread().getId();
+                                System.out.println("Thread ID = " + threadID);
+                                while (progressStatus < realDuration * 10 && playing) {
                                     progressStatus += 1;
                                     // Update the progress bar
                                     handler.post(new Runnable() {
@@ -124,13 +148,25 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                                         }
                                     });
                                     try {
-                                        Thread.sleep(2000);
+                                        Thread.sleep(100);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             }
                         }).start();
+                    }
+                }
+            });
+            player.addListener(new ExoPlayer.Listener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_ENDED) {
+                        playing = false;
+                        my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                        timeStamp = 0;
+                        progressBar.setProgress(0);
+                        progressStatus = 0;
                     }
                 }
             });
@@ -149,6 +185,9 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         //if (timeStamp > 30000) -> send id and timestamp to server
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
         currentSongID = Integer.parseInt(data);
+        if (playing) {
+            startingNewSong = true;
+        }
         timeStamp = 0;
         progressBar.setProgress(0);
         progressStatus = 0;
