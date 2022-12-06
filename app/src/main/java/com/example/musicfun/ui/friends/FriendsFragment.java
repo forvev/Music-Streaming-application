@@ -5,12 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.musicfun.R;
+import com.example.musicfun.databinding.FragmentFriendsBinding;
 
 public class FriendsFragment extends Fragment {
 
+    private FragmentFriendsBinding binding;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,7 +59,31 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
+        binding = FragmentFriendsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        insertNestedFragment(new Friends_friend_Fragment());
+        binding.FriendsNav.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.friends_friend:
+                    insertNestedFragment(new Friends_friend_Fragment());
+                    break;
+                case R.id.friends_sharedPlaylist:
+                    insertNestedFragment(new Friends_shared_playlist_Fragment());
+                    break;
+            }
+            return true;
+        });
+    }
+
+    private void insertNestedFragment(Fragment childFragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.friends_childFragment, childFragment).commit();
     }
 }

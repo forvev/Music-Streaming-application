@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.friends.FriendsFragment">
+    android:id="@+id/rl_search"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    tools:context=".fragment.discovery.DiscoveryFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
+        android:id="@+id/friends_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <SearchView
+            android:id="@+id/friends_search_view"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_view"
+            android:iconifiedByDefault="false" />
+
+        <ImageButton
+            android:id="@+id/friends_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitCenter"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:src="@drawable/profile_pic" />
+
+        <TextView
+            android:id="@+id/friends_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/theme_purple_dark"
+            android:visibility="gone"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/friends_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/FriendsNav"
+        android:layout_marginTop="1dp"
+        android:background="@color/theme_purple_light" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/FriendsNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/friends_title"
+        android:paddingTop="20dp"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/friend_navigation">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <FrameLayout
+        android:id="@+id/friends_childFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#DC1D1D"
-        android:paddingTop="30dp"
-        android:text="This is SimpleFriendsFragment"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
-</FrameLayout>
+        android:layout_below="@+id/FriendsNav">
+
+    </FrameLayout>
+</RelativeLayout>
