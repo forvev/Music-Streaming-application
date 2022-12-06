@@ -58,7 +58,6 @@ public class RegisterViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject result) {
                 try {
                     sp.edit().putString("token",result.getString("token")).apply();
-                    System.out.println(sp.getString("token", ""));
                     loginResult.setValue(true);
                 } catch (JSONException e) {
                     e.printStackTrace();

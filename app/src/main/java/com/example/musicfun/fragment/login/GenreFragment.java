@@ -96,7 +96,11 @@ public class GenreFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // sends out the selected genre ids
-                genreViewModel.submit();
+                try {
+                    genreViewModel.submit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 if(fromSetting){
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
                 }

@@ -10,11 +10,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.musicfun.interfaces.ServerCallBack;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class GenreRepository {
-    private String url_receive_genre = "http://10.0.2.2:3000/getallsongs";
+    private String url_receive_genre = "";
     private String url_post_genre = "http://10.0.2.2:3000/getallsongs";
 
     private Context context;
@@ -23,9 +27,32 @@ public class GenreRepository {
         this.context = context;
     }
 
-    public void getAllGenres(ServerCallBack callBack) throws JSONException {
+//    public void getAllGenres(ServerCallBack callBack) throws JSONException {
+//        RequestQueue requestQueue = Volley.newRequestQueue(context);
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url_receive_genre, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                callBack.onSuccess(response);
+//            }
+//        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                System.out.println("Error Response from receive_genre" + error.getMessage());
+//            }
+//        });
+//        requestQueue.add(request);
+//    }
+
+    public void sendGenres(String token, ArrayList<String> selectedGenres, ServerCallBack callBack) throws JSONException {
+        JSONArray arr = new JSONArray();
+        Iterator iter = selectedGenres.iterator();
+        while (iter.hasNext()) {
+            arr.put(iter.next());
+        }
+        JSONObject toSend = new JSONObject();
+        toSend.put("genres", arr);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url_receive_genre, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url_receive_genre + token, toSend, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.onSuccess(response);
@@ -33,26 +60,7 @@ public class GenreRepository {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Error Response from receive_genre" + error.getMessage());
-            }
-        });
-        requestQueue.add(request);
-    }
-
-    public void sendGenres(ServerCallBack callBack){
-
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url_receive_genre, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                callBack.onSuccess(response);
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error Response from receive_genre" + error.getMessage());
+                callBack.onError(error);
             }
         });
         requestQueue.add(request);

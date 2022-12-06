@@ -1,15 +1,21 @@
 package com.example.musicfun.viewmodel;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.VolleyError;
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.Genre;
+import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.GenreRepository;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -18,6 +24,7 @@ public class GenreViewModel extends AndroidViewModel {
     private ArrayList<Genre> genreArrayList;
     Application application;
     GenreRepository genreRepository;
+    SharedPreferences sp;
 
     public GenreViewModel(Application application){
         super(application);
@@ -25,6 +32,7 @@ public class GenreViewModel extends AndroidViewModel {
         this.genreLiveList = new MutableLiveData<>();
         this.application = application;
         genreRepository = new GenreRepository(application.getApplicationContext());
+        sp = getApplication().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
     }
 
     public MutableLiveData<ArrayList<Genre>> getGenreLiveList() {
@@ -64,12 +72,22 @@ public class GenreViewModel extends AndroidViewModel {
 
     }
 
-    public void submit(){
+    public void submit() throws JSONException {
+        ArrayList<String> selectedGerne = new ArrayList<>();
         for (int i = 0; i < genreArrayList.size(); i++) {
             Genre temp = genreArrayList.get(i);
-            System.out.println("name: " + temp.getGenre_name() + " selected: " + temp.getSelected());
+            if (temp.getSelected()){
+                selectedGerne.add(temp.getGenre_name());
+            }
         }
-        // TODO:
+        genreRepository.sendGenres(sp.getString("token", ""), selectedGerne, new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+            }
 
+            @Override
+            public void onError(VolleyError error) {
+            }
+        });
     }
 }
