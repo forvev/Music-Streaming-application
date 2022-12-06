@@ -1,7 +1,10 @@
 package com.example.musicfun.fragment.discovery;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -32,7 +35,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class MayLikeFragment extends Fragment {
-
+    SharedPreferences sp;
     ListView listView;
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
@@ -76,6 +79,7 @@ public class MayLikeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
     }
 
     @Override
@@ -97,7 +101,7 @@ public class MayLikeFragment extends Fragment {
             return;
         }
 
-        discoveryViewModel.init("get/songRecommendations");
+        discoveryViewModel.init("get/songRecommendations?auth_token=" + sp.getString("token", ""));
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
 
