@@ -37,13 +37,18 @@ public class FriendsViewModel extends AndroidViewModel {
     public void init(String url){
         db.sendMsg(new ServerCallBack() {
             @Override
-            public void onSuccess(JSONObject result) throws JSONException {
-                JSONArray userNames = (JSONArray) result.get("users");
-                for(int i=0; i< userNames.length(); i++){
-                    //TODO: ask server side about the names
-                    User user = new User(userNames.getJSONObject(i).getString("_id"), userNames.getJSONObject(i).getString("username"));
-                    userArrayList.add(user);
-                }
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames = (JSONArray) result.get("users");
+                    for(int i=0; i< userNames.length(); i++){
+                        //TODO: ask server side about the names
+                        User user = new User(userNames.getJSONObject(i).getString("_id"), userNames.getJSONObject(i).getString("username"));
+                        userArrayList.add(user);
+                    }
+                } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             }
 
             @Override

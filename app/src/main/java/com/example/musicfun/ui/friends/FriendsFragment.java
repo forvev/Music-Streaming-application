@@ -1,9 +1,19 @@
 package com.example.musicfun.ui.friends;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,11 +21,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.RegisterActivity;
+import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 
 public class FriendsFragment extends Fragment {
 
+    private SharedPreferences sp;
     private FragmentFriendsBinding binding;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,6 +82,12 @@ public class FriendsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        boolean temp = isNetworkAvailable(getActivity().getApplication());
+        if (!temp){
+            System.out.println("network not connected!!");
+            return;
+        }
+
         insertNestedFragment(new Friends_friend_Fragment());
         binding.FriendsNav.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -80,10 +100,38 @@ public class FriendsFragment extends Fragment {
             }
             return true;
         });
+
+        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
+        int state = sp.getInt("logged", 999);
+        binding.friendsSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gotoSetting = new Intent(getActivity(), SettingActivity.class);
+//                System.out.println("state current = " + state);
+                if(state ==0){
+                    Intent gotoLogin = new Intent(getActivity(), RegisterActivity.class);
+                    sp.edit().putInt("logged", -1).apply();
+                    Toast.makeText(getContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+//                    System.out.println("state after = " + sp.getInt("logged", 999));
+                    getActivity().startActivity(gotoLogin);
+                }
+                else{
+                    getActivity().startActivity(gotoSetting);
+                }
+            }
+        });
     }
 
     private void insertNestedFragment(Fragment childFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.friends_childFragment, childFragment).commit();
+    }
+
+    private Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 }
