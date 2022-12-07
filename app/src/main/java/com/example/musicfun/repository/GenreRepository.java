@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 public class GenreRepository {
     private String url_receive_genre = "";
-    private String url_post_genre = "http://10.0.2.2:3000/getallsongs";
+    private String url_post_genre = "http://10.0.2.2:3000/account/sendgenres?auth_token=";
 
     private Context context;
 
@@ -52,7 +52,7 @@ public class GenreRepository {
         JSONObject toSend = new JSONObject();
         toSend.put("genres", arr);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url_receive_genre + token, toSend, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url_post_genre + token, toSend, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.onSuccess(response);
