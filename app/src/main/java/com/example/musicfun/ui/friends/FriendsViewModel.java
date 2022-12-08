@@ -20,33 +20,37 @@ import java.util.ArrayList;
 
 public class FriendsViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<String> mText;
+    private MutableLiveData<ArrayList<User>> userNames = new MutableLiveData<>();
     private ArrayList<User> userArrayList;
     Database db;
+    Application application;
 
     public FriendsViewModel(Application application) {
         super(application);
-        mText = new MutableLiveData<>();
-        mText.setValue("This is friends fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+        userNames = new MutableLiveData<>();
+        this.application = application;
+        db = new Database(application.getApplicationContext());
+        userArrayList = new ArrayList<>();
+        userNames.setValue(userArrayList);
     }
 
     public void init(String url){
+        userArrayList.clear();
         db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
-                    JSONArray userNames = (JSONArray) result.get("users");
-                    for(int i=0; i< userNames.length(); i++){
+                    JSONArray userNames1 = (JSONArray) result.get("users");
+                    for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
-                        User user = new User(userNames.getJSONObject(i).getString("_id"), userNames.getJSONObject(i).getString("username"));
+                        User user = new User(userNames1.getJSONObject(i).getString("username"));
                         userArrayList.add(user);
+
                     }
+                    userNames.setValue(userArrayList);
+
                 } catch (JSONException e) {
-                e.printStackTrace();
+                    e.printStackTrace();
             }
 
             }
@@ -57,4 +61,33 @@ public class FriendsViewModel extends AndroidViewModel {
             }
         }, url);
     }
+
+    public void filter(String url){
+        db.sendMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames1 = (JSONArray) result.get("users");
+                    for(int i=0; i< userNames1.length(); i++){
+                        //TODO: ask server side about the names
+                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        userArrayList.add(user);
+
+                    }
+                    userNames.setValue(userArrayList);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url);
+    }
+
+    public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}
 }

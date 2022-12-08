@@ -13,22 +13,38 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.activity.SettingActivity;
+import com.example.musicfun.adapter.SearchUserResultAdapter;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
+import com.example.musicfun.datatype.User;
+
+import java.util.ArrayList;
 
 public class FriendsFragment extends Fragment {
 
     private SharedPreferences sp;
     private FragmentFriendsBinding binding;
+
+    //search view part
+    SearchView searchView;
+    ListView listView;
+    FriendsViewModel friendsViewModel;
+    SearchUserResultAdapter adapter;
+    //----
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,6 +89,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
@@ -120,12 +137,81 @@ public class FriendsFragment extends Fragment {
                 }
             }
         });
+
+
+        //Search view part
+        searchView = binding.friendsSearchView;
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener(){
+
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(searchView != null){
+                    searchView.setVisibility(View.VISIBLE);
+                }
+                binding.friendsSetting.setVisibility(View.GONE);
+                binding.friendsCancel.setVisibility(View.VISIBLE);
+                // cancel the search
+                binding.friendsCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        closeKeyboard(view);
+                        searchView.setQuery("", false);
+                        searchView.clearFocus();
+                        listView.setVisibility(View.INVISIBLE);
+                        binding.FriendsNav.setVisibility(View.VISIBLE);
+                        binding.friendsChildFragment.setVisibility((View.VISIBLE));
+                        binding.friendsSetting.setVisibility(View.VISIBLE);
+                        binding.friendsCancel.setVisibility(View.GONE);
+                    }
+                });
+                friendsViewModel.init("get/allUsers");
+                binding.FriendsNav.setVisibility(View.INVISIBLE);
+                binding.friendsChildFragment.setVisibility((View.INVISIBLE));
+
+                listView = binding.friendsList;
+
+                friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+                    @Override
+                    public void onChanged(@Nullable final ArrayList<User> users) {
+                        adapter = new SearchUserResultAdapter(getActivity(), users);
+                        // binds the Adapter to the ListView
+                        listView.setAdapter(adapter);
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newTest) {
+                                String text = newTest;
+                                friendsViewModel.filter(text);
+                                return false;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
     }
 
     private void insertNestedFragment(Fragment childFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.friends_childFragment, childFragment).commit();
     }
+
+    private void closeKeyboard(View view) {
+        // this will give us the view which is currently focus in this layout
+        // if nothing is currently focus then this will protect the app from crash
+        if (view != null) {
+            // assign the system service to InputMethodManager
+            InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
 
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
