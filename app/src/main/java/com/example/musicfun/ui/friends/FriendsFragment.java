@@ -195,6 +195,7 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+
     }
 
     private void insertNestedFragment(Fragment childFragment) {

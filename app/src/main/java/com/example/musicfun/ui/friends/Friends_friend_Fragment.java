@@ -1,14 +1,31 @@
 package com.example.musicfun.ui.friends;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.FriendsListAdapter;
+import com.example.musicfun.datatype.User;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +33,11 @@ import com.example.musicfun.R;
  * create an instance of this fragment.
  */
 public class Friends_friend_Fragment extends Fragment {
+
+    ListView listView;
+    FriendsViewModel friendsViewModel;
+    SharedPreferences sp;
+    FriendsListAdapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,12 +77,45 @@ public class Friends_friend_Fragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends_friend_, container, false);
+        friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_friends_friend_, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        boolean temp = isNetworkAvailable(getActivity().getApplication());
+        if(!temp){
+            System.out.println("Network not connected!!!");
+            return;
+        }
+
+        friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        listView = (ListView) view.findViewById(R.id.lvdiscovery);
+        friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+                adapter = new FriendsListAdapter(getActivity(), users);
+                listView.setAdapter(adapter);
+            }
+        });
+
+    }
+
+
+    private Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 }

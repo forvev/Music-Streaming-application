@@ -42,7 +42,7 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/custom_view_songshare"
+            android:id="@+id/friends_custom_view_profile"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_gravity="center_vertical"
@@ -50,7 +50,7 @@
             android:src="@drawable/ic_baseline_perm_identity_24" />
 
         <ImageView
-            android:id="@+id/custom_view_songadd"
+            android:id="@+id/friends_custom_view_delete"
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_gravity="center_vertical"
