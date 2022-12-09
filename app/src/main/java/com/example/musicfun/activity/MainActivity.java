@@ -1,10 +1,11 @@
 package com.example.musicfun.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,7 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.google.android.exoplayer2.ExoPlaybackException;
+import com.example.musicfun.interfaces.ServerCallBack;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -39,8 +40,6 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -48,14 +47,16 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private static final String TAG = "MainActivity";
 
     //playing stuff
-    ExoPlayer player;
+    static ExoPlayer player;
     ProgressBar progressBar;
 
-    String url = "http://10.0.2.2:3000/songs/1/output.m3u8";
+    String url;
 
-    private int timeStamp = 0;
+    private int timestamp = 0;
     private int progressStatus = 0;
-    int currentSongID = 0;
+    int currentSongID = 1;
+
+    long realDuration = 100;
 
     private boolean startingNewSong = false;
     private boolean playing;
@@ -87,8 +88,24 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             binding.navView.getMenu().removeItem(R.id.friends);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
-        //TODO: load last heard song id and timestamp from server
+        currentSongID = sp.getInt("lastSongID", 1);
+        timestamp = sp.getInt("lastSongTimestamp", 0);
+        realDuration = sp.getLong("realDuration", 100);
+        progressBar.setMax((int) realDuration * 10);
+        progressStatus = timestamp / 100;
+        url = "http://10.0.2.2:3000/songs/" + currentSongID + "/output.m3u8";
+        progressBar.setProgress(progressStatus);
     }
+
+
+    @Override
+    protected void onStop() {
+        sp.edit().putInt("lastSongID",currentSongID).apply();
+        sp.edit().putInt("lastSongTimestamp",timestamp).apply();
+        sp.edit().putLong("realDuration",realDuration).apply();
+        super.onStop();
+    }
+
 
     // TODO: This function should be placed somewhere else instead of MainActivity
     public void playFile(View v){
@@ -124,20 +141,21 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem);
 
             player.setMediaSource(hlsMediaSource);
-            player.seekTo(timeStamp);
+            player.seekTo(timestamp);
             player.prepare();
             player.play();
             player.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_READY) {
-                        long realDuration = player.getDuration()/1000;
+                        realDuration = player.getDuration()/1000;
                         progressBar.setMax((int) realDuration * 10);
                         // Start long running operation in a background thread
                         new Thread(new Runnable() {
                             public void run() {
                                 while (progressStatus < realDuration * 10 && playing) {
                                     progressStatus += 1;
+                                    timestamp += 100;
                                     // Update the progress bar
                                     handler.post(new Runnable() {
                                         public void run() {
@@ -161,17 +179,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_ENDED) {
                         playing = false;
-                        timeStamp = (int) player.getContentDuration();
-                        System.out.println("Content : " + timeStamp);
+                        timestamp = (int) player.getContentDuration();
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
-                        //if (timeStamp > 10000) -> send id and timestamp to server
                         my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                        timeStamp = 0;
+                        timestamp = 0;
                         progressBar.setProgress(0);
                         progressStatus = 0;
                     }
@@ -181,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         else {
             my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
             playing = false;
-            timeStamp = (int) player.getCurrentPosition();
             player.pause();
         }
     }
@@ -192,12 +206,33 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         currentSongID = Integer.parseInt(data);
         if (playing) {
             startingNewSong = true;
-            timeStamp = (int) player.getCurrentPosition();
-            System.out.println(timeStamp);
             //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
-            //if (timeStamp > 10000) -> send id and timestamp to server
+            if (timestamp > 10000) {
+                String urlListenHistory = "http://10.0.2.2:3000/account/addListenHistory?auth_token=" + sp.getString("token", "");
+                JSONObject heardSong = new JSONObject();
+                try {
+                    heardSong.put("songID", currentSongID);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlListenHistory, heardSong, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        //callBack.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        //callBack.onError(error);
+                    }
+                });
+                requestQueue.add(request);
+            }
         }
-        timeStamp = 0;
+        timestamp = 0;
         progressBar.setProgress(0);
         progressStatus = 0;
         playFile(null);
@@ -214,5 +249,9 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             // Handle your exceptions
             return false;
         }
+    }
+
+    public static void stopMusic() {
+        player.pause();
     }
 }
