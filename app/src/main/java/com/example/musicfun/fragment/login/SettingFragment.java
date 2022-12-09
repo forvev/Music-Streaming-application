@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.adapter.SettingAdapter;
 import com.example.musicfun.databinding.FragmentSettingBinding;
@@ -76,6 +77,7 @@ public class SettingFragment extends Fragment {
     }
 
     public void logout() {
+        MainActivity.stopMusic();
         sp.edit().putInt("logged", -1).apply();
         sp.edit().putString("name", "").apply();
         sp.edit().putString("password", "").apply();

@@ -36,11 +36,13 @@ public class Database {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Error Response" + error.getMessage());
+                System.out.println("Error Response 1" + error.getMessage() + "url = " + baseUrl + url);
             }
         });
         requestQueue.add(request);
     }
+
+
 
     public void search(ServerCallBack callback, String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
