@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,20 +100,18 @@ public class Friends_friend_Fragment extends Fragment {
             System.out.println("Network not connected!!!");
             return;
         }
-        //TODO: No friends shown...
+
 
         friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
         listView = (ListView) view.findViewById(R.id.lvfriends);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                    adapter = new FriendsListAdapter(getActivity(), users);
-                    listView.setAdapter(adapter);
+                adapter = new FriendsListAdapter(getActivity(), users);
+                listView.setAdapter(adapter);
 
             }
         });
-
-
 
     }
 

@@ -40,7 +40,7 @@ public class FriendsViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
-                    JSONArray userNames1 = (JSONArray) result.get("Users");
+                    JSONArray userNames1 = (JSONArray) result.get("friends");
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getJSONObject(i).getString("username"));
@@ -67,7 +67,7 @@ public class FriendsViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
-                    JSONArray userNames1 = (JSONArray) result.get("users");
+                    JSONArray userNames1 = (JSONArray) result.get("friends");
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getJSONObject(i).getString("username"));
