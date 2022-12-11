@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.User;
@@ -28,6 +26,8 @@ public class FriendsViewModel extends AndroidViewModel {
     Application application;
     SharedPreferences sp;
     private String serverAnswer;
+
+    String user;
 
     public FriendsViewModel(Application application) {
         super(application);
@@ -123,9 +123,10 @@ public class FriendsViewModel extends AndroidViewModel {
         }, url);
     }
 
-    public void sendMsgWithBody(String url, boolean delete, int i){
+    public void sendMsgWithBodyDelete(String url, int i){
         //db.test();
         //Log.d("onSuccess", url + " " + user);
+
         db.addMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -133,10 +134,9 @@ public class FriendsViewModel extends AndroidViewModel {
                 try{
                     String answer = result.getString("message");
                     Log.d("onSuccess", answer);
-                    if (delete == true){
-                        userArrayList.remove(i);
-                        userNames.setValue(userArrayList);
-                    }
+                    userArrayList.remove(i);
+                    userNames.setValue(userArrayList);
+
                     //maybe thinnk on how to automatically add user
                 }catch (JSONException e){
                     e.printStackTrace();
@@ -148,6 +148,31 @@ public class FriendsViewModel extends AndroidViewModel {
 
             }
         }, url, userArrayList.get(i).getUserName());
+    }
+
+    public void sendMsgWithBodyAdd(String url, String userToBeAdded){
+        //db.test();
+        //Log.d("onSuccess", url + " " + user);
+
+        db.addMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+                try{
+                    String answer = result.getString("message");
+                    Log.d("onSuccess", answer);
+
+                    //maybe thinnk on how to automatically add user
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url, userToBeAdded);
     }
 
     public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}

@@ -57,7 +57,12 @@ public class Friends_friend_Fragment extends Fragment {
         public void deleteFriend(int i) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
 
-            friendsViewModel.sendMsgWithBody("user/deleteFriend?auth_token=" + sp.getString("token", ""),true,i);
+            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+        }
+
+        @Override
+        public void addFriend(String name) {
+
         }
 
         @Override

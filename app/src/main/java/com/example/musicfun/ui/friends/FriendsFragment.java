@@ -10,10 +10,13 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -192,8 +195,44 @@ public class FriendsFragment extends Fragment {
                         });
                     }
                 });
+
+                listView.setOnTouchListener(new View.OnTouchListener() {
+                    // hide soft keyboard if a user is scrolling the result list
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        return false;
+                    }
+                });
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        closeKeyboard(view);
+                        User u = (User) listView.getItemAtPosition(i);
+                        //in case if we would like to do sth with chosen user
+                        String name = u.getUserName();
+                        Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
+                        friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
+                        searchView.setQuery("", false);
+                        searchView.clearFocus();
+                        listView.setVisibility(View.INVISIBLE);
+                        binding.FriendsNav.setVisibility(View.VISIBLE);
+                        binding.friendsChildFragment.setVisibility(View.VISIBLE);
+                        binding.friendsCancel.setVisibility(View.VISIBLE);
+                        binding.friendsCancel.setVisibility(View.GONE);
+                        (new Handler()).postDelayed(this::doChange, 1000);
+
+                    }
+
+                    public void doChange(){
+                        insertNestedFragment(new Friends_friend_Fragment());
+                    }
+
+                });
             }
         });
+
+
 
 
     }
