@@ -11,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.datatype.Songs;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -32,6 +33,28 @@ public class Database {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error Response 1" + error.getMessage() + "url = " + baseUrl + url);
+            }
+        });
+        requestQueue.add(request);
+    }
+//TODO: Do we need a response from the server and if so what shall we do with it?
+    public void addMsg(String url, String username){
+        JSONObject user = new JSONObject();
+        try {
+            user.put("username", username);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl + url, user, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println("It worked!");
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override

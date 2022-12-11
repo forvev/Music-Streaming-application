@@ -1,6 +1,7 @@
 package com.example.musicfun.ui.friends;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -24,6 +25,7 @@ public class FriendsViewModel extends AndroidViewModel {
     private ArrayList<User> userArrayList;
     Database db;
     Application application;
+    SharedPreferences sp;
 
     public FriendsViewModel(Application application) {
         super(application);
@@ -60,6 +62,10 @@ public class FriendsViewModel extends AndroidViewModel {
 
             }
         }, url);
+    }
+
+    public void sendMsgWithBody(String url, String user){
+        db.addMsg(url, user);
     }
 
     public void filter(String url){
