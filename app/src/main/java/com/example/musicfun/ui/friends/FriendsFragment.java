@@ -164,7 +164,7 @@ public class FriendsFragment extends Fragment {
                         binding.friendsCancel.setVisibility(View.GONE);
                     }
                 });
-                friendsViewModel.init("get/allUsers");
+                friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
                 binding.FriendsNav.setVisibility(View.INVISIBLE);
                 binding.friendsChildFragment.setVisibility((View.INVISIBLE));
 

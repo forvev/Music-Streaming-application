@@ -6,6 +6,7 @@ import static java.security.AccessController.getContext;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+
 import com.example.musicfun.R;
+import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.interfaces.FriendFragmentInterface;
+import com.example.musicfun.repository.Database;
 import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.ui.friends.Friends_DBAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +38,19 @@ public class FriendsListAdapter extends BaseAdapter {
     LayoutInflater inflater;
     private List<User> userList = null;
     private ArrayList<User> arrayList;
-    FriendsViewModel friendsViewModel;
+    Friends_DBAccess dbAccess;
     SharedPreferences sp;
+    FriendFragmentInterface fi;
 
-    public FriendsListAdapter(Context context, List<User> userList){
+
+    public FriendsListAdapter(Context context, List<User> userList, FriendFragmentInterface fi){
         mContext = context;
         this.userList = userList;
         inflater = LayoutInflater.from(mContext);
         this.arrayList = new ArrayList<>();
         this.arrayList.addAll(userList);
+        dbAccess = new Friends_DBAccess(mContext);
+        this.fi = fi;
     }
 
     @Override
@@ -65,20 +79,22 @@ public class FriendsListAdapter extends BaseAdapter {
 /*
         clickArea.setOnClickListener(click -> startChat(i));
         profile.setOnClickListener(click -> getProfile(i));  */
-        delete.setOnClickListener(click -> deleteFriend(i));
-
+        delete.setOnClickListener(click -> fi.deleteFriend(i));
 
         username.setText(userList.get(i).getUserName());
 
         return view;
     }
 
+/*
     private void deleteFriend(int i) {
         sp = inflater.getContext().getSharedPreferences("login", MODE_PRIVATE);
-        Toast.makeText(inflater.getContext(),"Deleted",Toast.LENGTH_SHORT).show();
-        friendsViewModel.sendMsgWithBody("user/deleteFriend?auth_token=" + sp.getString("token", ""), userList.get(i).getUserName());
+        //Log.d("thisIsWhy", dbAccess.sendMsgWithBody());
+        Toast.makeText(inflater.getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+
+        dbAccess.sendMsgWithBody("user/deleteFriend?auth_token=" + sp.getString("token", ""), userList.get(i).getUserName());
     }
-/*
+
     private void getProfile(int i) {
     }
 

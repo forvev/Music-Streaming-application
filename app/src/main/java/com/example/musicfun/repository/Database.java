@@ -1,6 +1,7 @@
 package com.example.musicfun.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,26 +44,28 @@ public class Database {
         requestQueue.add(request);
     }
 //TODO: Do we need a response from the server and if so what shall we do with it?
-    public void addMsg(String url, String username){
+    public void addMsg(ServerCallBack callBack, String url, String username){
         JSONObject user = new JSONObject();
         try {
-            user.put("username", username);
+            user.put("friendName", username);
         }catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("onSuccess", username);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl + url, user, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, baseUrl + url, user, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                System.out.println("It worked!");
+                callBack.onSuccess(response);
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Error Response 1" + error.getMessage() + "url = " + baseUrl + url);
+                callBack.onError(error);
             }
         });
         requestQueue.add(request);
+
     }
 
 
@@ -81,5 +84,9 @@ public class Database {
             }
         });
         requestQueue.add(request);
+    }
+
+    public void test(){
+        Log.d("connecGood?", "Connected");
     }
 }

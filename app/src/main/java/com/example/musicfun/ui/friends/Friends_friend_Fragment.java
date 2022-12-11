@@ -21,11 +21,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.FriendsListAdapter;
+import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.interfaces.FriendFragmentInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,24 @@ public class Friends_friend_Fragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
+        @Override
+        public void deleteFriend(int i) {
+            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+
+            friendsViewModel.sendMsgWithBody("user/deleteFriend?auth_token=" + sp.getString("token", ""),true,i);
+        }
+
+        @Override
+        public void getProfile(int i) {
+
+        }
+
+        @Override
+        public void startChat(int i) {
+
+        }
+    };
     private String mParam1;
     private String mParam2;
 
@@ -107,11 +129,14 @@ public class Friends_friend_Fragment extends Fragment {
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new FriendsListAdapter(getActivity(), users);
+                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
+                //adapter.notifyDataSetChanged(); Not working like that!
 
             }
         });
+
+
 
     }
 
@@ -123,4 +148,5 @@ public class Friends_friend_Fragment extends Fragment {
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
+
 }

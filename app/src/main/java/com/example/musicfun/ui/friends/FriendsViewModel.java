@@ -2,6 +2,7 @@ package com.example.musicfun.ui.friends;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -26,6 +27,7 @@ public class FriendsViewModel extends AndroidViewModel {
     Database db;
     Application application;
     SharedPreferences sp;
+    private String serverAnswer;
 
     public FriendsViewModel(Application application) {
         super(application);
@@ -64,16 +66,42 @@ public class FriendsViewModel extends AndroidViewModel {
         }, url);
     }
 
-    public void sendMsgWithBody(String url, String user){
-        db.addMsg(url, user);
+    public void initSearch(String url){
+        userArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames1 = (JSONArray) result.get("Users");
+                    //Log.d("onSucces", userNames1.getString(0));
+                    for(int i=0; i< userNames1.length(); i++){
+                        //TODO: ask server side about the names
+                        User user = new User(userNames1.getString(i));
+                        userArrayList.add(user);
+
+                    }
+                    userNames.setValue(userArrayList);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url);
     }
+
 
     public void filter(String url){
         db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
-                    JSONArray userNames1 = (JSONArray) result.get("friends");
+                    JSONArray userNames1 = (JSONArray) result.get("Users");
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getJSONObject(i).getString("username"));
@@ -93,6 +121,33 @@ public class FriendsViewModel extends AndroidViewModel {
 
             }
         }, url);
+    }
+
+    public void sendMsgWithBody(String url, boolean delete, int i){
+        //db.test();
+        //Log.d("onSuccess", url + " " + user);
+        db.addMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+                try{
+                    String answer = result.getString("message");
+                    Log.d("onSuccess", answer);
+                    if (delete == true){
+                        userArrayList.remove(i);
+                        userNames.setValue(userArrayList);
+                    }
+                    //maybe thinnk on how to automatically add user
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url, userArrayList.get(i).getUserName());
     }
 
     public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}
