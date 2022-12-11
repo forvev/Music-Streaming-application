@@ -152,7 +152,7 @@ public class DiscoveryFragment extends Fragment {
                         binding.cancel.setVisibility(View.GONE);
                     }
                 });
-                discoveryViewModel.init("get/allSongs");
+                discoveryViewModel.init("get/allFriends?auth_token=" + sp.getString("token", ""));
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
 

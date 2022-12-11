@@ -45,8 +45,8 @@ public class SearchUserResultAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.friends_custom_view, null);
-            holder.name = (TextView) view.findViewById(R.id.friends_custom_view_username);
+            view = inflater.inflate(R.layout.user_search_result_lv, null);
+            holder.name = (TextView) view.findViewById(R.id.user_name);
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();

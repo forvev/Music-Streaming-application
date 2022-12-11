@@ -48,10 +48,10 @@
 
     <ListView
         android:id="@+id/friends_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="645dp"
         android:layout_below="@+id/FriendsNav"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="-77dp"
         android:background="@color/theme_purple_light" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
