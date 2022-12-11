@@ -179,12 +179,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     if (playbackState == ExoPlayer.STATE_ENDED) {
                         playing = false;
-                        timestamp = (int) player.getContentDuration();
+                        //timestamp = (int) player.getContentDuration();
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        addSongToListenHistory();
                         my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                         timestamp = 0;
                         progressBar.setProgress(0);
@@ -202,36 +203,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     @Override
     public void sendInput(String data) {
-        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
-        currentSongID = Integer.parseInt(data);
         if (playing) {
             startingNewSong = true;
-            //TODO: Send last heard song id and timestamp to server (to track what songs the user likes)
             if (timestamp > 10000) {
-                String urlListenHistory = "http://10.0.2.2:3000/account/addListenHistory?auth_token=" + sp.getString("token", "");
-                JSONObject heardSong = new JSONObject();
-                try {
-                    heardSong.put("songID", currentSongID);
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlListenHistory, heardSong, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        //callBack.onSuccess(response);
-                    }
-                }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //callBack.onError(error);
-                    }
-                });
-                requestQueue.add(request);
+                addSongToListenHistory();
             }
         }
+        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
+        currentSongID = Integer.parseInt(data);
         timestamp = 0;
         progressBar.setProgress(0);
         progressStatus = 0;
@@ -253,5 +232,30 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     public static void stopMusic() {
         player.pause();
+    }
+
+    public void addSongToListenHistory() {
+        String urlListenHistory = "http://10.0.2.2:3000/account/addListenHistory?auth_token=" + sp.getString("token", "");
+        JSONObject heardSong = new JSONObject();
+        try {
+            heardSong.put("songID", currentSongID);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlListenHistory, heardSong, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                //callBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
     }
 }
