@@ -76,9 +76,9 @@ public class FriendsListAdapter extends BaseAdapter {
         ImageView delete = (ImageView) view.findViewById(R.id.friends_custom_view_delete);
 
         RelativeLayout clickArea = (RelativeLayout) view.findViewById(R.id.user_and_id);
-/*
-        clickArea.setOnClickListener(click -> startChat(i));
-        profile.setOnClickListener(click -> getProfile(i));  */
+
+        clickArea.setOnClickListener(click -> fi.startChat(i));
+        profile.setOnClickListener(click -> fi.getProfile(i));
         delete.setOnClickListener(click -> fi.deleteFriend(i));
 
         username.setText(userList.get(i).getUserName());
@@ -86,21 +86,5 @@ public class FriendsListAdapter extends BaseAdapter {
         return view;
     }
 
-/*
-    private void deleteFriend(int i) {
-        sp = inflater.getContext().getSharedPreferences("login", MODE_PRIVATE);
-        //Log.d("thisIsWhy", dbAccess.sendMsgWithBody());
-        Toast.makeText(inflater.getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
-
-        dbAccess.sendMsgWithBody("user/deleteFriend?auth_token=" + sp.getString("token", ""), userList.get(i).getUserName());
-    }
-
-    private void getProfile(int i) {
-    }
-
-    private void startChat(int i) {
-        Toast.makeText(inflater.getContext(), "Here we go to chat", Toast.LENGTH_SHORT).show();
-    }
-*/
 
 }

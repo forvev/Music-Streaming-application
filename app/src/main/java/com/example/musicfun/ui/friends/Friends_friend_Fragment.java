@@ -72,7 +72,7 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void startChat(int i) {
-
+            Toast.makeText(getContext(),"Chat should start",Toast.LENGTH_SHORT).show();
         }
     };
     private String mParam1;
