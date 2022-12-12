@@ -108,19 +108,6 @@ public class FriendsFragment extends Fragment {
             return;
         }
 
-        insertNestedFragment(new Friends_friend_Fragment());
-        binding.FriendsNav.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.friends_friend:
-                    insertNestedFragment(new Friends_friend_Fragment());
-                    break;
-                case R.id.friends_sharedPlaylist:
-                    insertNestedFragment(new Friends_shared_playlist_Fragment());
-                    break;
-            }
-            return true;
-        });
-
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
         int state = sp.getInt("logged", 999);
         binding.friendsSetting.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +131,7 @@ public class FriendsFragment extends Fragment {
 
         //Search view part
         searchView = binding.friendsSearchView;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener(){
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -189,8 +176,8 @@ public class FriendsFragment extends Fragment {
                             @Override
                             public boolean onQueryTextChange(String newTest) {
                                 String text = newTest;
-                                friendsViewModel.filter(text);
-                                return false;
+                                friendsViewModel.filter(text, sp.getString("token", ""));
+                                return true;
                             }
                         });
                     }
@@ -232,7 +219,18 @@ public class FriendsFragment extends Fragment {
             }
         });
 
-
+        insertNestedFragment(new Friends_friend_Fragment());
+        binding.FriendsNav.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.friends_friend:
+                    insertNestedFragment(new Friends_friend_Fragment());
+                    break;
+                case R.id.friends_sharedPlaylist:
+                    insertNestedFragment(new Friends_shared_playlist_Fragment());
+                    break;
+            }
+            return true;
+        });
 
 
     }

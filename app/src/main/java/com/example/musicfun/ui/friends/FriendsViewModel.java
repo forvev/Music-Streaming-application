@@ -96,15 +96,16 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
 
-    public void filter(String url){
-        db.sendMsg(new ServerCallBack() {
+    public void filter(String name, String token){
+        userArrayList.clear();
+        db.searchUser(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("Users");
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
-                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        User user = new User(userNames1.getString(i));
                         userArrayList.add(user);
 
                     }
@@ -120,7 +121,7 @@ public class FriendsViewModel extends AndroidViewModel {
             public void onError(VolleyError error) {
 
             }
-        }, url);
+        }, name, token);
     }
 
     public void sendMsgWithBodyDelete(String url, int i){

@@ -21,6 +21,7 @@ public class Database {
 
     private String baseUrl = "http://10.0.2.2:3000/";
     private String searchUrl = "http://10.0.2.2:3000/get/titleStartsWith?string=";
+    private String searchUserUrl = "http://10.0.2.2:3000/get/userStartsWith?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -73,6 +74,22 @@ public class Database {
     public void search(ServerCallBack callback, String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,searchUrl + url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error Response" + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void searchUser(ServerCallBack callback, String url, String token) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,searchUserUrl + token + "&string=" + url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);
