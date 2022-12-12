@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Friends"
+        android:id="@+id/friends_friend"
+        android:icon="@drawable/ic_baseline_3p_24"/>
+    <item android:title="Shared Playlists"
+        android:id="@+id/friends_sharedPlaylist"
+        android:icon="@drawable/ic_baseline_folder_shared_24"/>
+</menu>

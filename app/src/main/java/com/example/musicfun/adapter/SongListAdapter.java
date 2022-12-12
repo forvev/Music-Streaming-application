@@ -56,7 +56,7 @@ public class SongListAdapter extends BaseAdapter {
         TextView artist = (TextView) view.findViewById(R.id.custom_view_songartist);
 
         RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
-        //TODO: Make it play Music
+
         clickField.setOnClickListener(click -> playSong(i));
 
         ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);

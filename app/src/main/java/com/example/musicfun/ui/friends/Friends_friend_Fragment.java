@@ -1,4 +1,4 @@
-package com.example.musicfun.fragment.discovery;
+package com.example.musicfun.ui.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,27 +21,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.SongListAdapter;
-import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.viewmodel.DiscoveryViewModel;
+import com.example.musicfun.adapter.FriendsListAdapter;
+import com.example.musicfun.databinding.FragmentFriendsBinding;
+import com.example.musicfun.datatype.User;
+import com.example.musicfun.interfaces.FriendFragmentInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MayLikeFragment#newInstance} factory method to
+ * Use the {@link Friends_friend_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MayLikeFragment extends Fragment {
-    SharedPreferences sp;
+public class Friends_friend_Fragment extends Fragment {
+
     ListView listView;
-    public PassDataInterface mOnInputListner;
-    SongListAdapter adapter;
-    DiscoveryViewModel discoveryViewModel;
+    FriendsViewModel friendsViewModel;
+    SharedPreferences sp;
+    FriendsListAdapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,10 +52,33 @@ public class MayLikeFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
+        @Override
+        public void deleteFriend(int i) {
+            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+
+            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+        }
+
+        @Override
+        public void addFriend(String name) {
+
+        }
+
+        @Override
+        public void getProfile(int i) {
+
+        }
+
+        @Override
+        public void startChat(int i) {
+
+        }
+    };
     private String mParam1;
     private String mParam2;
 
-    public MayLikeFragment() {
+    public Friends_friend_Fragment() {
         // Required empty public constructor
     }
 
@@ -61,11 +88,11 @@ public class MayLikeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DiscoveryMayLikeFragment.
+     * @return A new instance of fragment Friends_friend_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MayLikeFragment newInstance(String param1, String param2) {
-        MayLikeFragment fragment = new MayLikeFragment();
+    public static Friends_friend_Fragment newInstance(String param1, String param2) {
+        Friends_friend_Fragment fragment = new Friends_friend_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,9 +113,8 @@ public class MayLikeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_discovery_may_like, container, false);
+        friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_friends_friend_, container, false);
         return view;
     }
 
@@ -102,18 +128,23 @@ public class MayLikeFragment extends Fragment {
             return;
         }
 
-        discoveryViewModel.init("get/songRecommendations?auth_token=" + sp.getString("token", ""));
 
-        listView = (ListView)view.findViewById(R.id.lvdiscovery);
-
-        discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
+        friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        listView = (ListView) view.findViewById(R.id.lvfriends);
+        friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
-            public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new SongListAdapter(getActivity(), newName);
+            public void onChanged(ArrayList<User> users) {
+                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
+                //adapter.notifyDataSetChanged(); Not working like that!
+
             }
         });
+
+
+
     }
+
 
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -122,4 +153,5 @@ public class MayLikeFragment extends Fragment {
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
+
 }
