@@ -135,8 +135,8 @@ public class FriendsFragment extends Fragment {
 
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(searchView != null){
-                    searchView.setVisibility(View.VISIBLE);
+                if(listView != null){
+                    listView.setVisibility(View.VISIBLE);
                 }
                 binding.friendsSetting.setVisibility(View.GONE);
                 binding.friendsCancel.setVisibility(View.VISIBLE);
@@ -187,10 +187,11 @@ public class FriendsFragment extends Fragment {
                     // hide soft keyboard if a user is scrolling the result list
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
+                        closeKeyboard(view);
                         return false;
                     }
                 });
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -198,14 +199,14 @@ public class FriendsFragment extends Fragment {
                         User u = (User) listView.getItemAtPosition(i);
                         //in case if we would like to do sth with chosen user
                         String name = u.getUserName();
-                        Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
                         friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
                         searchView.setQuery("", false);
                         searchView.clearFocus();
                         listView.setVisibility(View.INVISIBLE);
                         binding.FriendsNav.setVisibility(View.VISIBLE);
                         binding.friendsChildFragment.setVisibility(View.VISIBLE);
-                        binding.friendsCancel.setVisibility(View.VISIBLE);
+                        binding.friendsSetting.setVisibility(View.VISIBLE);
                         binding.friendsCancel.setVisibility(View.GONE);
                         (new Handler()).postDelayed(this::doChange, 1000);
 
@@ -257,5 +258,11 @@ public class FriendsFragment extends Fragment {
         if (nw == null) return false;
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
