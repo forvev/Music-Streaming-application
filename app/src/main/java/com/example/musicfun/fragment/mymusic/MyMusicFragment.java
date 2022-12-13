@@ -70,14 +70,14 @@ public class MyMusicFragment extends Fragment {
             else{
                 viewModel.setAsDefault(position);
             }
-            Toast.makeText(getContext(), "setDefaultPlaylist", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "setDefaultPlaylist", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void deletePlaylist(int position) {
             // remove this playlist from server
             viewModel.deletePlaylist(position);
-            Toast.makeText(getContext(), "remove playlist", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "remove playlist", Toast.LENGTH_SHORT).show();
         }
 
         @Override

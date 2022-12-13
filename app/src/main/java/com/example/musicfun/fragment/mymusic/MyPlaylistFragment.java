@@ -60,7 +60,7 @@ public class MyPlaylistFragment extends Fragment {
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
         public void removeFromPlaylist(int position) {
-            Toast.makeText(getContext(), "remove from playlist", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "remove from playlist", Toast.LENGTH_SHORT).show();
             viewModel.deleteSongsFromPlaylist(selected_playlist_id, position);
         }
 
@@ -97,12 +97,15 @@ public class MyPlaylistFragment extends Fragment {
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
             @Override
             public void onChanged(ArrayList<Songs> songs) {
-                if (songs.size() != 0){
-                    binding.empty.setVisibility(View.GONE);
-                }
                 listView = binding.songlist;
                 adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick);
                 listView.setAdapter(adapter);
+                if (songs.size() != 0){
+                    binding.empty.setVisibility(View.GONE);
+                }
+                else{
+                    binding.empty.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -134,7 +137,7 @@ public class MyPlaylistFragment extends Fragment {
             public void onChanged(String playlist_position) {
                 if(playlist_position != null){
                     viewModel.addSongToPlaylist(playlist_position, song_id);
-                    Toast.makeText(getContext(), "add this song to playlist", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "add this song to playlist", Toast.LENGTH_SHORT).show();
                 }
             }
         });

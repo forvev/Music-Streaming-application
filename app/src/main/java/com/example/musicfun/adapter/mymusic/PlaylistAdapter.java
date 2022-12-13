@@ -135,7 +135,7 @@ public class PlaylistAdapter extends BaseAdapter {
                                         // remove this list item
                                         AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
                                         adb.setTitle(R.string.delete_playlist);
-                                        adb.setMessage(mContext.getString(R.string.sure_delete) + " " + getItem(position));
+                                        adb.setMessage(mContext.getString(R.string.sure_delete_playlist));
                                         final int positionToRemove = position;
                                         adb.setNegativeButton("Cancel", null);
                                         adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
