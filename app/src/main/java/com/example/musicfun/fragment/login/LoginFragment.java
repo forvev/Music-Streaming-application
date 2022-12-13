@@ -78,7 +78,6 @@ public class LoginFragment extends Fragment {
                 else{
                     sp.edit().putInt("logged",1).apply();
                     sp.edit().putString("name",usernameEditText.getText().toString()).apply();
-                    sp.edit().putString("password",passwordEditText.getText().toString()).apply();
                     Intent myIntent = new Intent(getActivity(), MainActivity.class);
                     getActivity().startActivity(myIntent);
                 }

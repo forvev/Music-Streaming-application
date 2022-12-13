@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         progressBar = binding.progressBarSong;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         sp = getSharedPreferences("login",MODE_PRIVATE);
+        player = new ExoPlayer.Builder(this).build();
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -132,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             playing = true;
 
             Uri uri = Uri.parse(url);
-            player = new ExoPlayer.Builder(this).build();
             MediaItem mediaItem = MediaItem.fromUri(uri);
 
             // Create a data source factory.
