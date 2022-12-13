@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 
@@ -20,17 +21,27 @@ import java.util.List;
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
-    private List<Songs> songsList = null;
+    private List<Songs> songsList;
     private ArrayList<Songs> arrayList;
     public PassDataInterface mOnInputListner;
+    private boolean click = false;
+    private DiscoveryItemClick discoveryItemClick;
 
 
-    public SongListAdapter(Context context, List<Songs> songsList){
+    public SongListAdapter(Context context, List<Songs> songsList, DiscoveryItemClick discoveryItemClick){
         mContext = context;
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);
         this.arrayList = new ArrayList<>();
         this.arrayList.addAll(songsList);
+        this.discoveryItemClick = discoveryItemClick;
+    }
+
+    private class SongListViewHolder {
+        TextView name;
+        TextView artist;
+        ImageView share;
+        ImageView setDefault;
     }
 
     @Override
@@ -48,26 +59,43 @@ public class SongListAdapter extends BaseAdapter {
         return i;
     }
 
-    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        final SongListViewHolder holder;
+        if(view == null){
+            holder = new SongListViewHolder();
+            view = inflater.inflate(R.layout.songs_custom_view, null);
+            holder.name = (TextView) view.findViewById(R.id.custom_view_songtitle);
+            holder.artist = (TextView) view.findViewById(R.id.custom_view_songartist);
+            RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
 
-        view = inflater.inflate(R.layout.songs_custom_view, null);
-        TextView name = (TextView) view.findViewById(R.id.custom_view_songtitle);
-        TextView artist = (TextView) view.findViewById(R.id.custom_view_songartist);
+            clickField.setOnClickListener(click -> playSong(i));
 
-        RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
+            holder.share = (ImageView) view.findViewById(R.id.custom_view_songshare);
+            holder.share.setOnClickListener(share -> shareSong());
 
-        clickField.setOnClickListener(click -> playSong(i));
-
-        ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);
-        songShare.setOnClickListener(share -> shareSong());
-
-        ImageView songAdd = (ImageView) view.findViewById(R.id.custom_view_songadd);
-        songAdd.setOnClickListener(add -> addSong());
-
-        name.setText(songsList.get(i).getSongName());
-        artist.setText(songsList.get(i).getArtist());
-
+            holder.setDefault = (ImageView) view.findViewById(R.id.custom_view_songadd);
+            holder.setDefault.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!click){
+                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
+                        click = true;
+                        discoveryItemClick.addToDefault(songsList.get(i).getSongId());
+                    }
+                    else{
+                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
+                        click = false;
+                        discoveryItemClick.removeFromDefault(songsList.get(i).getSongId());
+                    }
+                }
+            });
+            view.setTag(holder);
+        }
+        else{
+            holder = (SongListViewHolder) view.getTag();
+        }
+        holder.name.setText(songsList.get(i).getSongName());
+        holder.artist.setText(songsList.get(i).getArtist());
         mOnInputListner = (PassDataInterface) mContext;
 
         return view;
@@ -78,10 +106,6 @@ public class SongListAdapter extends BaseAdapter {
         int id = s.getSongId();
         mOnInputListner.sendInput(Integer.toString(id));
         Toast.makeText(inflater.getContext(), s.getSongName() + " is played", Toast.LENGTH_SHORT).show();
-    }
-
-    private void addSong() {
-        Toast.makeText(inflater.getContext(), "Clicked: Add", Toast.LENGTH_SHORT).show();
     }
 
     private void shareSong() {

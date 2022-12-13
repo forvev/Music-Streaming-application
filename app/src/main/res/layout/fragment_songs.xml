@@ -8,7 +8,7 @@
     tools:context=".fragment.mymusic.MyMusicFragment">
 
     <RelativeLayout
-        android:id="@+id/rl_search_playlist"
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal">
@@ -25,7 +25,7 @@
             android:src="@drawable/profile_pic" />
 
         <SearchView
-            android:id="@+id/search_playlist"
+            android:id="@+id/search_song_result"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_view"
@@ -47,33 +47,53 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/search_playlist_result"
+        android:id="@+id/search_songlist_result"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/rl_search_playlist"
+        android:layout_below="@+id/rl_title"
         android:divider="@color/theme_purple_dark"
-        android:dividerHeight="2dp"
         android:background="@color/theme_purple_light"
+        android:dividerHeight="2dp"
         android:visibility="gone"/>
 
     <ImageButton
-        android:id="@id/add_playlist"
+        android:id="@+id/play_all_songs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/rl_search_playlist"
+        android:layout_below="@id/rl_title"
         android:padding="20dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@drawable/ic_baseline_play_circle_24"
         android:backgroundTint="@android:color/transparent"/>
 
+    <ImageButton
+        android:id="@+id/shuffle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_title"
+        android:layout_toStartOf="@+id/play_all_songs"
+        android:padding="20dp"
+        android:scaleX="1.5"
+        android:scaleY="1"
+        android:src="@drawable/ic_baseline_shuffle_24"
+        android:backgroundTint="@android:color/transparent"/>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_centerInParent="true"
+        android:text="@string/empty_playlist"
+        />
+
     <ListView
-        android:id="@+id/playlist"
+        android:id="@+id/songlist"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/add_playlist"
         android:divider="@color/theme_purple_light"
-        android:dividerHeight="2dp"/>
-
+        android:dividerHeight="2dp"
+        android:layout_below="@+id/play_all_songs" />
 </RelativeLayout>

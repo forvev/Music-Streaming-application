@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.search;
 
 import android.content.Context;
 import android.view.LayoutInflater;

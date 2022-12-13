@@ -36,4 +36,19 @@
     <string name="genre_pop">Pop</string>
     <string name="genre_rock">Rock</string>
     <string name="genre_classic">Classic</string>
+
+    <string name="remove">Remove</string>
+    <string name="rename_playlist">Rename playlist</string>
+    <string name="add_playlist">Create a new playlist</string>
+    <string name="give_new_name">Give a new name to your playlist:</string>
+    <string name="set_as_default">Set playlist as default</string>
+    <string name="unpin">Unpin</string>
+    <string name="share">Share</string>
+    <string name="playlist_name">Your playlist name</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="create">Create</string>
+    <string name="add_to_playlist">Add to a playlist</string>
+    <string name="delete_playlist">Delete?</string>
+    <string name="sure_delete">Are you sure you want to delete</string>
+    <string name="empty_playlist">Your playlist is still empty</string>
 </resources>

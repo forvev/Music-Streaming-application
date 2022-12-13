@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.musicfun.constant.LoginFormState;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.FragmentRegisterBinding;
-import com.example.musicfun.viewmodel.RegisterViewModel;
+import com.example.musicfun.viewmodel.login.RegisterViewModel;
 
 import org.json.JSONException;
 

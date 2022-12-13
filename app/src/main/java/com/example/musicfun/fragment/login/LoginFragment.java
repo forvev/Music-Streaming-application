@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentLoginBinding;
 import com.example.musicfun.R;
-import com.example.musicfun.viewmodel.RegisterViewModel;
+import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;

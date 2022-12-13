@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,10 @@ import android.widget.ListView;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.SongListAdapter;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.viewmodel.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
@@ -41,6 +41,17 @@ public class MayLikeFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
+    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
+        @Override
+        public void addToDefault(int position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
+
+        @Override
+        public void removeFromDefault(int position) {
+            // TODO: do not change the star color
+        }
+    };
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,7 +120,7 @@ public class MayLikeFragment extends Fragment {
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new SongListAdapter(getActivity(), newName);
+                adapter = new SongListAdapter(getActivity(), newName, discoveryItemClick);
                 listView.setAdapter(adapter);
             }
         });

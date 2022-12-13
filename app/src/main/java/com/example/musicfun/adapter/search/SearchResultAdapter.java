@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.search;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,16 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.repository.Database;
-import com.example.musicfun.viewmodel.DiscoveryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchResultAdapter extends BaseAdapter {
     Context mContext;

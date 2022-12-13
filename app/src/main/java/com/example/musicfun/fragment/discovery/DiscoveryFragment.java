@@ -33,9 +33,9 @@ import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.databinding.FragmentDiscoveryBinding;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.adapter.SearchResultAdapter;
+import com.example.musicfun.adapter.search.SearchResultAdapter;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.viewmodel.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
