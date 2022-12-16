@@ -41,12 +41,12 @@ public class NewReleaseFragment extends Fragment {
     DiscoveryViewModel discoveryViewModel;
     private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
         @Override
-        public void addToDefault(int position) {
+        public void addToDefault(String position) {
             discoveryViewModel.getDefaultPlaylist(position);
         }
 
         @Override
-        public void removeFromDefault(int position) {
+        public void removeFromDefault(String position) {
 
         }
     };

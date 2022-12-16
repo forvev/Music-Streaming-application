@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -33,7 +32,6 @@ import com.example.musicfun.adapter.search.SearchSonglistAdapter;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.PlaylistModes;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
@@ -48,7 +46,7 @@ public class MyPlaylistFragment extends Fragment {
     private SongListAdapter adapter;
     private ArrayList<Songs> songList = new ArrayList<>();
     private String selected_playlist_id;
-    private int song_id;
+    private String song_id;
     private SearchView searchView;
     private SearchSonglistAdapter searchResultAdapter;
     private ListView searchResult;
@@ -65,7 +63,7 @@ public class MyPlaylistFragment extends Fragment {
         }
 
         @Override
-        public void addToPlaylist(int songId) {
+        public void addToPlaylist(String songId) {
             NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;

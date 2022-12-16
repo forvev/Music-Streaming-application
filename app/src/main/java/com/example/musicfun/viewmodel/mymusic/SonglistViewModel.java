@@ -62,7 +62,7 @@ public class SonglistViewModel extends AndroidViewModel {
                 try {
                     JSONArray songlistArray = (JSONArray) response.get("songs");
                     for (int j = 0; j < songlistArray.length(); j++){
-                        Songs s = new Songs(songlistArray.getJSONObject(j).getString("title"), songlistArray.getJSONObject(j).getString("artist"), songlistArray.getJSONObject(j).getInt("_id"));
+                        Songs s = new Songs(songlistArray.getJSONObject(j).getString("title"), songlistArray.getJSONObject(j).getString("artist"), songlistArray.getJSONObject(j).getString("_id"));
                         songlist.add(s);
                     }
                     m_songlist.setValue(songlist);
@@ -79,7 +79,7 @@ public class SonglistViewModel extends AndroidViewModel {
     }
 
     public void deleteSongsFromPlaylist (String selected_playlist_id, int position) {
-        String song_id = Integer.toString(songlist.get(position).getSongId());
+        String song_id = songlist.get(position).getSongId();
 
         playlistRepository.deleteSongsFromPlaylist(new ServerCallBack() {
             @Override
@@ -94,7 +94,7 @@ public class SonglistViewModel extends AndroidViewModel {
         }, selected_playlist_id, song_id, token);
     }
 
-    public void addSongToPlaylist(String playlist_position, int song_id){
+    public void addSongToPlaylist(String playlist_position, String song_id){
         playlistRepository.addSongToPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -105,7 +105,7 @@ public class SonglistViewModel extends AndroidViewModel {
                     Toast.makeText(application, "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, playlist_position, Integer.toString(song_id), token);
+        }, playlist_position, song_id, token);
     }
 
     public void searchSongByName(String name, String selected_playlist_id){
@@ -116,7 +116,7 @@ public class SonglistViewModel extends AndroidViewModel {
                 try {
                     JSONArray songTitles = (JSONArray) response.get("songs");
                     for (int i = 0; i < songTitles.length(); i++) {
-                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("_id"));
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
                         searchResult.add(s);
                     }
                     m_searchResult.setValue(searchResult);

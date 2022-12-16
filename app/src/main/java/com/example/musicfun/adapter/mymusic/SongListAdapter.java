@@ -111,7 +111,7 @@ public class SongListAdapter extends BaseAdapter {
         holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnInputListner.sendInput(Integer.toString(songList.get(position).getSongId()));
+                mOnInputListner.sendInput(songList.get(position).getSongId());
             }
         });
 
