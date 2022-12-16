@@ -75,8 +75,8 @@ public class SongListAdapter extends BaseAdapter {
 
     private void playSong(int i) {
         Songs s = songsList.get(i);
-        int id = s.getSongId();
-        mOnInputListner.sendInput(Integer.toString(id));
+        String id = s.getSongId();
+        mOnInputListner.sendInput(id);
         Toast.makeText(inflater.getContext(), s.getSongName() + " is played", Toast.LENGTH_SHORT).show();
     }
 

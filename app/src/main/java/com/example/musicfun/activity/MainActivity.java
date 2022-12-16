@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     private int timestamp = 0;
     private int progressStatus = 0;
-    int currentSongID = 1;
+    String currentSongID;
 
     long realDuration = 100;
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             binding.navView.getMenu().removeItem(R.id.friends);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
-        currentSongID = sp.getInt("lastSongID", 1);
+        currentSongID = sp.getString("lastSongID", "");
         timestamp = sp.getInt("lastSongTimestamp", 0);
         realDuration = sp.getLong("realDuration", 100);
         progressBar.setMax((int) realDuration * 10);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     @Override
     protected void onStop() {
-        sp.edit().putInt("lastSongID",currentSongID).apply();
+        sp.edit().putString("lastSongID",currentSongID).apply();
         sp.edit().putInt("lastSongTimestamp",timestamp).apply();
         sp.edit().putLong("realDuration",realDuration).apply();
         super.onStop();
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             }
         }
         url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
-        currentSongID = Integer.parseInt(data);
+        currentSongID = data;
         timestamp = 0;
         progressBar.setProgress(0);
         progressStatus = 0;
