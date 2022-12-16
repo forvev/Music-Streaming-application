@@ -22,9 +22,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.SongListAdapter;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.viewmodel.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,17 @@ public class MostHeardFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
+    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
+        @Override
+        public void addToDefault(int position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
+
+        @Override
+        public void removeFromDefault(int position) {
+
+        }
+    };
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -106,7 +118,7 @@ public class MostHeardFragment extends Fragment {
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new SongListAdapter(getActivity(), newName);
+                adapter = new SongListAdapter(getActivity(), newName, discoveryItemClick);
                 listView.setAdapter(adapter);
             }
         });

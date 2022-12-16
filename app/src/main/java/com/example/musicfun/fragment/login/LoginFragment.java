@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentLoginBinding;
 import com.example.musicfun.R;
-import com.example.musicfun.viewmodel.RegisterViewModel;
+import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -78,7 +78,6 @@ public class LoginFragment extends Fragment {
                 else{
                     sp.edit().putInt("logged",1).apply();
                     sp.edit().putString("name",usernameEditText.getText().toString()).apply();
-                    sp.edit().putString("password",passwordEditText.getText().toString()).apply();
                     Intent myIntent = new Intent(getActivity(), MainActivity.class);
                     getActivity().startActivity(myIntent);
                 }

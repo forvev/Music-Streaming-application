@@ -1,7 +1,5 @@
 package com.example.musicfun.activity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +24,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityMainBinding;
+import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.interfaces.ServerCallBack;
+import com.example.musicfun.interfaces.PlaylistModes;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -40,8 +40,9 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements PassDataInterface {
+public class MainActivity extends AppCompatActivity implements PassDataInterface, PlaylistModes {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
@@ -81,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         progressBar = binding.progressBarSong;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         sp = getSharedPreferences("login",MODE_PRIVATE);
+        player = new ExoPlayer.Builder(this).build();
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         if(sp.getInt("logged",0) == 0){
             binding.navView.getMenu().removeItem(R.id.friends);
+            binding.navView.getMenu().removeItem(R.id.my_music);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
         currentSongID = sp.getString("lastSongID", "");
@@ -132,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             playing = true;
 
             Uri uri = Uri.parse(url);
-            player = new ExoPlayer.Builder(this).build();
             MediaItem mediaItem = MediaItem.fromUri(uri);
 
             // Create a data source factory.
@@ -257,5 +259,39 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             }
         });
         requestQueue.add(request);
+    }
+
+    @Override
+    public void repeatMode(ArrayList<Songs> listOfSongs, int repeatMode, boolean shuffle) {
+
+//        player.clearMediaItems();
+        startingNewSong = true;
+        for(Songs s : listOfSongs){
+            String url = "http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8";
+            Uri uri = Uri.parse(url);
+            MediaItem mediaItem = MediaItem.fromUri(uri);
+            player.addMediaItem(mediaItem);
+        }
+        player.setRepeatMode(repeatMode);
+        if (shuffle){
+            player.setShuffleModeEnabled(true);
+        }
+        player.prepare();
+        player.play();
+        player.addListener(new ExoPlayer.Listener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == ExoPlayer.STATE_ENDED) {
+                    System.out.println("state end once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                    playing = false;
+                    //timestamp = (int) player.getContentDuration();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

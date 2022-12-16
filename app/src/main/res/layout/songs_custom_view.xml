@@ -6,8 +6,6 @@
     android:padding="10dip"
     android:orientation="horizontal">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,8 +59,10 @@
                 android:id="@+id/custom_view_songadd"
                 android:layout_width="30dip"
                 android:layout_height="30dip"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_baseline_stars_24" />
+                android:src="@drawable/ic_baseline_star_border_24" />
 
         </LinearLayout>
 

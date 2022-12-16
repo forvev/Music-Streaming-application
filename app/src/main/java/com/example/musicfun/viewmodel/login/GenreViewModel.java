@@ -1,4 +1,4 @@
-package com.example.musicfun.viewmodel;
+package com.example.musicfun.viewmodel.login;
 
 import static android.content.Context.MODE_PRIVATE;
 

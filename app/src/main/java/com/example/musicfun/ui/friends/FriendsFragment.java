@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.musicfun.R;
 import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.activity.SettingActivity;
-import com.example.musicfun.adapter.SearchUserResultAdapter;
+import com.example.musicfun.adapter.search.SearchUserResultAdapter;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
 

@@ -18,10 +18,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
-import com.example.musicfun.adapter.GridViewAdapter;
+import com.example.musicfun.adapter.login.GridViewAdapter;
 import com.example.musicfun.databinding.FragmentGenreBinding;
 import com.example.musicfun.datatype.Genre;
-import com.example.musicfun.viewmodel.GenreViewModel;
+import com.example.musicfun.viewmodel.login.GenreViewModel;
 
 import org.json.JSONException;
 
