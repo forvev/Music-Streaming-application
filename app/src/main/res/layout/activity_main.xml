@@ -35,33 +35,24 @@
 
     <FrameLayout
         android:layout_width="418dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/theme_purple_light"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/play_button"
-            android:layout_width="66dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:onClick="playFile"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_play_arrow_24" />
-
-        <!--Progress bar inside for music-->
-        <ProgressBar
-            android:id="@+id/progress_bar_song"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="256dp"
+        <com.google.android.exoplayer2.ui.PlayerControlView
+            android:id="@+id/controls"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="false"
-
-            android:minWidth="200dp"
-            android:minHeight="50dp"
-            android:progress="1" />
+            android:background="@color/theme_purple_light"
+            app:show_next_button="false"
+            app:show_shuffle_button="false"
+            app:show_previous_button="false"
+            app:show_rewind_button="false"
+            app:show_fastforward_button="false"
+            app:played_color="@android:color/holo_red_light"
+            app:show_timeout="0" />
 
     </FrameLayout>
 

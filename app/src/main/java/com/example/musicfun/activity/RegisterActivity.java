@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("login",MODE_PRIVATE);
         if(sp.getInt("logged",0) >= 0){
-            System.out.println(sp.getString("token", ""));
+//            System.out.println(sp.getString("token", ""));
             goToMainActivity();
             return;
         }
