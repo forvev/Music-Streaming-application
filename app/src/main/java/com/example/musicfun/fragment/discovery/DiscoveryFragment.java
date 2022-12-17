@@ -192,8 +192,8 @@ public class DiscoveryFragment extends Fragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         closeKeyboard(view);
                         Songs s = (Songs) listView.getItemAtPosition(i);
-                        int id = s.getSongId();
-                        mOnInputListner.sendInput(Integer.toString(id));
+                        String id = s.getSongId();
+                        mOnInputListner.sendInput(id);
                         searchView.setQuery("", false);
                         searchView.clearFocus();
                         listView.setVisibility(View.INVISIBLE);

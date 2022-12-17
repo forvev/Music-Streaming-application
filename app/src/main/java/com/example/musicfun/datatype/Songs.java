@@ -3,9 +3,9 @@ package com.example.musicfun.datatype;
 public class Songs {
     private String songName;
     private String artist;
-    private int id;
+    private String id;
 
-    public Songs(String songName, String artist, Integer id) {
+    public Songs(String songName, String artist, String id) {
         this.songName = songName;
         this.artist = artist;
         this.id = id;
@@ -22,7 +22,7 @@ public class Songs {
     public String getArtist() {
         return this.artist;
     }
-    public int getSongId() {
+    public String getSongId() {
         return this.id;
     }
 }

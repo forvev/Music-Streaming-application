@@ -54,7 +54,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
                 try {
                     JSONArray songTitles = (JSONArray) response.get("Songs");
                     for (int i = 0; i < songTitles.length(); i++) {
-                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("_id"));
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
                         songsArrayList.add(s);
                     }
                     songNames.setValue(songsArrayList);
@@ -77,7 +77,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
                 try {
                     JSONArray songTitles = (JSONArray) response.get("Songs");
                     for (int i = 0; i < songTitles.length(); i++) {
-                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getInt("_id"));
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
                         songsArrayList.add(s);
                     }
                     songNames.setValue(songsArrayList);
@@ -92,7 +92,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
         }, name);
     }
 
-    public void getDefaultPlaylist(int position){
+    public void getDefaultPlaylist(String position){
         playlistRepository.getDefaultPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -111,7 +111,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
         }, token);
     }
 
-    public void addSongToPlaylist(String playlist_position, int songlist_position){
+    public void addSongToPlaylist(String playlist_position, String songlist_position){
         playlistRepository.addSongToPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -124,7 +124,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     Toast.makeText(application.getApplicationContext(), "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, playlist_position, Integer.toString(songlist_position), token);
+        }, playlist_position, songlist_position, token);
     }
 
 
