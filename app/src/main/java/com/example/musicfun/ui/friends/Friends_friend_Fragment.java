@@ -75,11 +75,11 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void startChat(int i) {
-            Log.d("MyTag", "we clicked");
+
             Intent goChat = new Intent(getActivity(), MessageListActivity.class);
-            Log.d("MyTag", "we created Intent");
+
             getActivity().startActivity(goChat);
-            Log.d("MyTag", "we created Activity");
+
         }
     };
     private String mParam1;
