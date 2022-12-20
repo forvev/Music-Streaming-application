@@ -131,6 +131,7 @@ public class FriendsFragment extends Fragment {
 
         //Search view part
         searchView = binding.friendsSearchView;
+        searchView.setQueryHint("Add friends");
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override

@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -17,6 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MessageListActivity;
 import com.example.musicfun.adapter.FriendsListAdapter;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
@@ -72,7 +75,11 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void startChat(int i) {
-
+            Log.d("MyTag", "we clicked");
+            Intent goChat = new Intent(getActivity(), MessageListActivity.class);
+            Log.d("MyTag", "we created Intent");
+            getActivity().startActivity(goChat);
+            Log.d("MyTag", "we created Activity");
         }
     };
     private String mParam1;

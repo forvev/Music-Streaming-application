@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<!--
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layout_group_chat"
         android:layout_width="match_parent"
@@ -79,6 +79,21 @@
             android:textColor="@color/design_default_color_background" />
 
     </RelativeLayout>
+
+-->
+
+    <TextView
+        android:id="@+id/test_chat_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is a test!"
+        android:textSize="120dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/teal_200"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

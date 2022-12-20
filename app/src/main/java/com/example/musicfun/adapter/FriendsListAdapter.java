@@ -76,9 +76,9 @@ public class FriendsListAdapter extends BaseAdapter {
         ImageView delete = (ImageView) view.findViewById(R.id.friends_custom_view_delete);
 
         RelativeLayout clickArea = (RelativeLayout) view.findViewById(R.id.user_and_id);
-/*
-        clickArea.setOnClickListener(click -> startChat(i));
-        profile.setOnClickListener(click -> getProfile(i));  */
+
+        clickArea.setOnClickListener(click -> fi.startChat(i));
+        /*      profile.setOnClickListener(click -> getProfile(i));  */
         delete.setOnClickListener(click -> fi.deleteFriend(i));
 
         username.setText(userList.get(i).getUserName());
