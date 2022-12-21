@@ -18,6 +18,7 @@ import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.R;
+import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class SongListAdapter extends BaseAdapter {
         holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnInputListner.sendInput(songList.get(position).getSongId());
+                mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL, false);
             }
         });
 

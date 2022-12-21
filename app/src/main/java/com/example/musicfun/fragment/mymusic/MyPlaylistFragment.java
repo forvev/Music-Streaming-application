@@ -32,7 +32,7 @@ import com.example.musicfun.adapter.search.SearchSonglistAdapter;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
-import com.example.musicfun.interfaces.PlaylistModes;
+import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 
@@ -52,7 +52,7 @@ public class MyPlaylistFragment extends Fragment {
     private ListView searchResult;
     private ImageButton playAllSongs;
     private ImageButton shuffle;
-    private PlaylistModes playlistModes;
+    private PassDataInterface passData;
 
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
@@ -115,14 +115,14 @@ public class MyPlaylistFragment extends Fragment {
             public void onClick(View view) {
 //                repeatMode: Player.REPEAT_MODE_OFF = 0, Player.REPEAT_MODE_ONE = 1, Player.REPEAT_MODE_ALL = 2
 //                TODO: enable all three modes in the app
-                playlistModes.repeatMode(viewModel.getM_songlist().getValue(), 2, false);
+                passData.playSong(viewModel.getM_songlist().getValue(), 2, false);
             }
         });
         shuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "shuffle button is clicked", Toast.LENGTH_SHORT).show();
-                playlistModes.repeatMode(viewModel.getM_songlist().getValue(), 1, true);
+                passData.playSong(viewModel.getM_songlist().getValue(), 1, true);
             }
         });
 
@@ -237,7 +237,7 @@ public class MyPlaylistFragment extends Fragment {
     public void onAttach(Context context){
         super.onAttach(context);
         try{
-            playlistModes = (PlaylistModes) getActivity();
+            passData = (PassDataInterface) getActivity();
         }catch(ClassCastException e){
             Log.e(TAG, "onAttach: ClassCast WRONG " + e.getMessage());
         }

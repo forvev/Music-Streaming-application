@@ -14,15 +14,14 @@ import com.example.musicfun.R;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
+import com.google.android.exoplayer2.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Songs> songsList;
-    private ArrayList<Songs> arrayList;
     public PassDataInterface mOnInputListner;
     private boolean click = false;
     private DiscoveryItemClick discoveryItemClick;
@@ -32,8 +31,6 @@ public class SongListAdapter extends BaseAdapter {
         mContext = context;
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);
-        this.arrayList = new ArrayList<>();
-        this.arrayList.addAll(songsList);
         this.discoveryItemClick = discoveryItemClick;
     }
 
@@ -104,7 +101,7 @@ public class SongListAdapter extends BaseAdapter {
     private void playSong(int i) {
         Songs s = songsList.get(i);
         String id = s.getSongId();
-        mOnInputListner.sendInput(id);
+        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
         Toast.makeText(inflater.getContext(), s.getSongName() + " is played", Toast.LENGTH_SHORT).show();
     }
 

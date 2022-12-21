@@ -36,14 +36,17 @@ import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.adapter.search.SearchResultAdapter;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.google.android.exoplayer2.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiscoveryFragment extends Fragment {
 
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
     ListView listView;
+    List<Songs> songsList = new ArrayList<>();
     SearchResultAdapter adapter;
     SearchView searchView;
     DiscoveryViewModel discoveryViewModel;
@@ -177,6 +180,7 @@ public class DiscoveryFragment extends Fragment {
                                 return true;
                             }
                         });
+                        songsList = newName;
                     }
                 });
                 listView.setOnTouchListener(new View.OnTouchListener() {
@@ -192,8 +196,8 @@ public class DiscoveryFragment extends Fragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         closeKeyboard(view);
                         Songs s = (Songs) listView.getItemAtPosition(i);
-                        String id = s.getSongId();
-                        mOnInputListner.sendInput(id);
+//                        String id = s.getSongId();
+                        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
                         searchView.setQuery("", false);
                         searchView.clearFocus();
                         listView.setVisibility(View.INVISIBLE);

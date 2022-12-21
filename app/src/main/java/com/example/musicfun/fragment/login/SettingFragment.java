@@ -16,9 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.MainActivity;
+import com.example.musicfun.activity.MusicbannerService;
 import com.example.musicfun.activity.RegisterActivity;
-import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.adapter.SettingAdapter;
 import com.example.musicfun.databinding.FragmentSettingBinding;
 
@@ -82,7 +81,7 @@ public class SettingFragment extends Fragment {
         sp.edit().putString("name", "").apply();
         sp.edit().putString("password", "").apply();
 
-        MainActivity.mainActivity.finish();
+        getActivity().getApplicationContext().stopService(new Intent(getContext(), MusicbannerService.class));
 
         Intent i = new Intent(getActivity(), RegisterActivity.class);
         startActivity(i);
