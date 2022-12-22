@@ -111,6 +111,10 @@ public class DiscoveryFragment extends Fragment {
         }
 
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
+
+        // locate the ListView in fragment_discovery.xml
+        listView = binding.searchList;
+
         int state = sp.getInt("logged", 999);
         binding.setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +140,7 @@ public class DiscoveryFragment extends Fragment {
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(listView != null){
-                    listView.setVisibility(View.VISIBLE);
-                }
+                listView.setVisibility(View.VISIBLE);
                 binding.setting.setVisibility(View.GONE);
                 binding.cancel.setVisibility(View.VISIBLE);
                 // cancel the search
@@ -159,8 +161,6 @@ public class DiscoveryFragment extends Fragment {
                 binding.DiscoveryNav.setVisibility(View.INVISIBLE);
                 binding.discoveryChildFragment.setVisibility((View.INVISIBLE));
 
-                // locate the ListView in fragment_discovery.xml
-                listView = binding.searchList;
                 // pass results to ListViewAdapter Class
                 discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
                     @Override

@@ -99,9 +99,10 @@ public class MusicbannerService extends Service {
         player.addAnalyticsListener(new PlaybackStatsListener(false, (eventTime, playbackStats) -> {
                     // Analytics data for the session started at `eventTime` is ready
                     // Songs which are played more than 10 seconds are considered as listen history and will be sent to database
-                    if(playbackStats.getTotalPlayTimeMs() > 1000){
+                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null){
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
+//            System.out.println("why is here being called????????????? " + (player == null));
                     // TODO: add listen history UI to setting activity
 //                    System.out.println("playbackStats.getTotalPlayTimeMs() = " + playbackStats.getTotalPlayTimeMs());
                 }));
@@ -134,6 +135,7 @@ public class MusicbannerService extends Service {
 
     @Override
     public void onDestroy(){
+        System.out.println("onDestroy in Service!!!");
         if(player.isPlaying()){
             player.stop();
         }
