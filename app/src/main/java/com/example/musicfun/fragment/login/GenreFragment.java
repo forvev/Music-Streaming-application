@@ -63,7 +63,7 @@ public class GenreFragment extends Fragment {
         fromSetting = getArguments().getBoolean("fromSetting");
         if(fromSetting){
             button.setText(R.string.save);
-            button.setTextSize(30);
+            button.setTextSize(24);
         }
         try {
             genreViewModel.init();
@@ -77,14 +77,14 @@ public class GenreFragment extends Fragment {
                 // binds the Adapter to the ListView
                 gridView.setAdapter(adapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @SuppressLint("ResourceAsColor")
+                    @SuppressLint("UseCompatLoadingForDrawables")
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         if(!genres.get(i).getSelected()) {
-                            view.setBackgroundColor(R.color.purple_700);
+                            view.setBackground(getResources().getDrawable(R.drawable.rounded_corner_view, getContext().getTheme()));
                         }
                         else{
-                            view.setBackgroundColor(0x00000000);
+                            view.setBackground(null);
                         }
                         genres.get(i).setSelected();
                     }

@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_playlist_row"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:layout_height="48dp"
+    android:padding="4dp">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/playlist_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_more_horiz_24"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:backgroundTint="@android:color/transparent"/>
+        android:layout_marginStart="4dp"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_more_horiz_24" />
 
 
     <LinearLayout
@@ -41,7 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Playlist 1"
-            android:textSize="25sp" />
+            android:fontFamily="@font/merriweather"
+            android:textSize="20sp"
+            android:textColor="@color/purple_900"/>
 
     </LinearLayout>
 

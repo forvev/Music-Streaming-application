@@ -6,13 +6,13 @@
     android:id="@+id/rl_search"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="20dp"
     tools:context=".fragment.discovery.DiscoveryFragment">
 
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_margin="20dp"
         android:orientation="horizontal">
 
         <SearchView
@@ -26,12 +26,12 @@
             android:id="@+id/setting"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:backgroundTint="@android:color/transparent"
             android:layout_marginStart="10dp"
+            android:backgroundTint="@android:color/transparent"
             android:scaleType="fitCenter"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:src="@drawable/profile_pic" />
+            android:src="@drawable/profile_pic"/>
 
         <TextView
             android:id="@+id/cancel"
@@ -51,6 +51,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/theme_purple_light"
+        android:visibility="gone"
         android:layout_below="@+id/ll_title" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,8 +59,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_title"
-        android:paddingTop="20dp"
-        app:labelVisibilityMode="labeled"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="20dp"
+        app:itemBackground="@drawable/upper_navigation_background"
+        app:itemTextColor="@drawable/upper_navigation_colors"
+        app:labelVisibilityMode="selected"
         app:menu="@menu/discovery_navigation_bar">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
@@ -68,6 +73,9 @@
         android:id="@+id/discovery_childFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/DiscoveryNav">
 
     </FrameLayout>

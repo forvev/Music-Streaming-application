@@ -42,6 +42,10 @@
             android:name=".activity.SettingActivity"
             android:exported="true"
             android:label="Setting"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

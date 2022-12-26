@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="20dp">
+    android:layout_height="48dp"
+    android:padding="4dp">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/songlist_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_more_horiz_24"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:backgroundTint="@android:color/transparent"/>
+        android:layout_marginStart="4dp"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_more_horiz_24" />
 
     <RelativeLayout
         android:id="@+id/rl_clickable_song"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/songlist_menu"
         android:layout_alignTop="@+id/songlist_menu"
         android:layout_alignParentStart="true"
@@ -28,17 +28,19 @@
             android:id="@+id/song_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather"
             android:gravity="center"
-            android:text="Playlist 1"
-            android:textSize="20sp" />
+            android:textColor="@color/purple_900"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/artist_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_below="@+id/song_name"
-            android:text="artist 1"
+            android:fontFamily="@font/merriweather"
+            android:gravity="center"
+            android:textColor="@color/purple_900"
             android:textSize="14sp" />
     </RelativeLayout>
 

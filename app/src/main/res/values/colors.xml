@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="theme_purple_light">#E1D5E7</color>
+    <color name="theme_pink">#F4C4D0</color>
     <color name="theme_purple_dark">#7030A0</color>
     <color name="theme_purple_transparent">#80000000</color>
+    <color name="theme_green_light">#E6E9CC</color>
+    <color name="theme_red_purple">#ba8e9f</color>
+    <color name="theme_red_brown">#d48fa3</color>
+    <color name="theme_red_light">#e7bdc1</color>
+    <color name="theme_grey">#a0aeba</color>
+
+    <color name="theme_olive">#7C864A</color>
+    <color name="theme_brown">#AC7244</color>
+    <color name="theme_yellow_light">#E9E6C3</color>
+
+
+    <color name="theme_purple_1">#756480</color>
+    <color name="theme_purple_2">#9f8399</color>
+    <color name="theme_purple_3">#b398b4</color>
+    <color name="theme_purple_4">#d2b5d5</color>
+
+
+    <color name="theme_brown_purple_yellow_1">#BAAEB8</color>
+    <color name="theme_brown_purple_yellow_2">#EAE9E5</color>
+    <color name="theme_brown_purple_yellow_3">#ab4d32</color>
+
+    <color name="purple_50">#EDE7F6</color>
+    <color name="purple_200">#B39DDB</color>
+    <color name="purple_400">#7E57C2</color>
+    <color name="purple_600">#5E35B1</color>
+    <color name="purple_900">#4A148C</color>
+    <color name="deep_purple_900">#311B92</color>
+
+    <color name="yellow_200">#FFF59D</color>
+    <color name="yellow_400">#FFEE58</color>
+    <color name="yellow_600">#FDD835</color>
+    <color name="yellow_800">#F9A825</color>
 
 
 

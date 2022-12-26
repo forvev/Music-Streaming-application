@@ -42,7 +42,7 @@ public class PlaylistAdapter extends BaseAdapter {
 
     public class PlaylistViewHolder {
         TextView name;
-        ImageButton imageButton;
+        ImageView imageView;
         ImageView pin;
         LinearLayout linearLayout;
     }
@@ -70,8 +70,8 @@ public class PlaylistAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.playlist_row, null);
             holder.name = (TextView) view.findViewById(R.id.playlist_name);
             holder.pin = (ImageView) view.findViewById(R.id.default_icon);
-            holder.imageButton = (ImageButton) view.findViewById(R.id.playlist_menu);
-            holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            holder.imageView = (ImageView) view.findViewById(R.id.playlist_menu);
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     popup = new PopupMenu(mContext, view);

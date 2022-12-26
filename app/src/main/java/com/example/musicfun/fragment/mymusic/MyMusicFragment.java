@@ -1,6 +1,8 @@
 package com.example.musicfun.fragment.mymusic;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -41,7 +44,7 @@ public class MyMusicFragment extends Fragment {
     private PlaylistViewModel viewModel;
     private ListView listView;
     private PlaylistAdapter playlistAdapter;
-    private ImageButton add_playlist;
+    private ImageView add_playlist;
 
     private ListView searchResult;
     private SearchView searchView;
@@ -215,6 +218,7 @@ public class MyMusicFragment extends Fragment {
         dialog.setCancelable(true);
         //Mention the name of the layout of your custom dialog.
         dialog.setContentView(R.layout.dialog_create_playlist);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
         //Initializing the views of the dialog.

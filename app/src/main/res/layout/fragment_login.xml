@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:boxBackgroundColor="@color/theme_purple_light"
-        app:passwordToggleEnabled="false"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,8 +24,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_username"
+            android:fontFamily="@font/merriweather"
+            android:inputType="textPassword"
             android:selectAllOnFocus="true"
             android:textSize="20sp" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -46,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_password"
+            android:fontFamily="@font/merriweather"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
             android:selectAllOnFocus="true"

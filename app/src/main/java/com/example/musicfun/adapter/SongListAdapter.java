@@ -1,6 +1,7 @@
 package com.example.musicfun.adapter;
 
 import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,9 @@ public class SongListAdapter extends BaseAdapter {
             holder = new SongListViewHolder();
             view = inflater.inflate(R.layout.songs_custom_view, null);
             holder.name = (TextView) view.findViewById(R.id.custom_view_songtitle);
+            holder.name.setSelected(true);
             holder.artist = (TextView) view.findViewById(R.id.custom_view_songartist);
+            holder.artist.setSelected(true);
             RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
 
             clickField.setOnClickListener(click -> playSong(i));

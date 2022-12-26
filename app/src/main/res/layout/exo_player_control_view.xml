@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
-    android:background="@android:color/transparent"
     android:orientation="vertical"
     tools:targetApi="28">
 
@@ -19,11 +18,10 @@
             android:id="@id/exo_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_weight="0.05"
+            android:paddingStart="10dp"
+            android:layout_weight="0.01"
             android:includeFontPadding="false"
             android:textColor="@color/theme_purple_dark"/>
 
@@ -31,17 +29,16 @@
             android:id="@id/exo_progress_placeholder"
             android:layout_width="0dp"
             android:layout_height="13dp"
-            android:layout_weight="0.9" />
+            android:layout_weight="0.98" />
 
         <TextView
             android:id="@id/exo_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:textSize="10sp"
+            android:layout_weight="0.01"
+            android:textSize="11sp"
             android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:includeFontPadding="false"
             android:textColor="@color/theme_purple_dark" />
 

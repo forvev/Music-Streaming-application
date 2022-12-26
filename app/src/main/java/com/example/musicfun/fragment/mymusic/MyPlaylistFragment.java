@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -50,8 +51,8 @@ public class MyPlaylistFragment extends Fragment {
     private SearchView searchView;
     private SearchSonglistAdapter searchResultAdapter;
     private ListView searchResult;
-    private ImageButton playAllSongs;
-    private ImageButton shuffle;
+    private ImageView playAllSongs;
+    private ImageView shuffle;
     private PassDataInterface passData;
 
 

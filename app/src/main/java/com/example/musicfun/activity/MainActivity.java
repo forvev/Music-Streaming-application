@@ -11,12 +11,14 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private int startItemIndex;
     private long startPosition;
     private MainActivityViewModel viewModel;
+    private Toolbar toolbar;
     private TextView tv_title;
     private TextView tv_artist;
     private boolean isBound;
@@ -72,12 +75,17 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         //creates a full screen view and hides the default action bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         sp = getSharedPreferences("login",MODE_PRIVATE);
 
+//        TODO: move search view and setting to the custom toolbar
+        toolbar = binding.toolbar;
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().hide();
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -117,6 +125,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             createMediaItems(null);
         }
         startAutoPlay = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.custom_appbar_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

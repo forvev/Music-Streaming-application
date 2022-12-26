@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.musicfun.R;
@@ -27,7 +28,7 @@ public class SearchSonglistAdapter extends BaseAdapter {
     public class SearchSonglistViewHolder {
         TextView name;
         TextView artist;
-        ImageButton songlist_menu;
+        ImageView songlist_menu;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class SearchSonglistAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.songlist_row, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist_name);
-            holder.songlist_menu = (ImageButton) view.findViewById(R.id.songlist_menu);
+            holder.songlist_menu = (ImageView) view.findViewById(R.id.songlist_menu);
             holder.songlist_menu.setVisibility(View.GONE);
             view.setTag(holder);
         } else {
