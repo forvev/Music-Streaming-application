@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -67,7 +66,7 @@ public class PlaylistAdapter extends BaseAdapter {
         if (view == null) {
             holder = new PlaylistViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
-            view = inflater.inflate(R.layout.playlist_row, null);
+            view = inflater.inflate(R.layout.row_playlist, null);
             holder.name = (TextView) view.findViewById(R.id.playlist_name);
             holder.pin = (ImageView) view.findViewById(R.id.default_icon);
             holder.imageView = (ImageView) view.findViewById(R.id.playlist_menu);

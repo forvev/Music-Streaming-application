@@ -32,7 +32,7 @@ public class PlaylistViewModel extends AndroidViewModel {
 
     private String token;
 
-    public PlaylistViewModel(Application application) throws JSONException {
+    public PlaylistViewModel(Application application) {
         super(application);
         m_playlist = new MutableLiveData<>();
         m_searchResult = new MutableLiveData<>();

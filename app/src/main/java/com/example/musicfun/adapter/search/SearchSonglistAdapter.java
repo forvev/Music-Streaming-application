@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,10 +50,10 @@ public class SearchSonglistAdapter extends BaseAdapter {
         if (view == null) {
             holder = new SearchSonglistViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
-            view = inflater.inflate(R.layout.songlist_row, null);
+            view = inflater.inflate(R.layout.row_songlist, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist_name);
-            holder.songlist_menu = (ImageView) view.findViewById(R.id.songlist_menu);
+            holder.songlist_menu = (ImageView) view.findViewById(R.id.add_to_default);
             holder.songlist_menu.setVisibility(View.GONE);
             view.setTag(holder);
         } else {

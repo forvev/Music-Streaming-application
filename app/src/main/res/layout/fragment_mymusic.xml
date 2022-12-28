@@ -7,61 +7,11 @@
     android:padding="16dp"
     tools:context=".fragment.mymusic.MyMusicFragment">
 
-    <RelativeLayout
-        android:id="@+id/rl_search_playlist"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/setting"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:backgroundTint="@android:color/transparent"
-            android:layout_alignParentEnd="true"
-            android:scaleType="fitCenter"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:src="@drawable/profile_pic" />
-
-        <SearchView
-            android:id="@+id/search_playlist"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner_view"
-            android:iconifiedByDefault="false"
-            android:layout_alignParentStart="true"/>
-
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_gravity="center"
-            android:layout_alignParentEnd="true"
-            android:text="cancel"
-            android:textColor="@android:color/black"
-            android:visibility="gone"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/search_playlist_result"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/rl_search_playlist"
-        android:divider="@color/theme_purple_dark"
-        android:dividerHeight="2dp"
-        android:background="@color/theme_purple_light"
-        android:visibility="gone"/>
-
     <ImageView
         android:id="@id/add_playlist"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/rl_search_playlist"
         android:padding="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_baseline_add_24"

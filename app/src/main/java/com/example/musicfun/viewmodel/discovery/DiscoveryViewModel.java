@@ -30,7 +30,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
     PlaylistRepository playlistRepository;
     private String token;
 
-    public DiscoveryViewModel(Application application) throws JSONException{
+    public DiscoveryViewModel(Application application){
         super(application);
         songNames = new MutableLiveData<>();
         this.application = application;

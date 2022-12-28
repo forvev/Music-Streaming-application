@@ -1,7 +1,9 @@
 package com.example.musicfun.activity;
 
+import static android.view.View.GONE;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,30 +12,55 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.search.SearchPlaylistAdapter;
+import com.example.musicfun.adapter.search.SearchResultAdapter;
+import com.example.musicfun.adapter.search.SearchSonglistAdapter;
+import com.example.musicfun.adapter.search.SearchUserResultAdapter;
 import com.example.musicfun.databinding.ActivityMainBinding;
+import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentArgs;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,6 +70,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -59,14 +87,23 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
-    private MainActivityViewModel viewModel;
-    private Toolbar toolbar;
+    private MainActivityViewModel mainActivityViewModel;
+    private DiscoveryViewModel discoveryViewModel;
     private TextView tv_title;
     private TextView tv_artist;
     private boolean isBound;
     private MusicbannerService service;
     private BroadcastReceiver broadcastReceiver;
     private Intent intent;
+
+//    search relevant attributes
+    private Toolbar toolbar;
+    private SearchView searchView;
+    private ListView searchResult;
+    private ImageView setting;
+    private TextView cancel;
+    private NavController navController;
+    private String playlistId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +112,19 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         //creates a full screen view and hides the default action bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        getSupportActionBar().hide();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         sp = getSharedPreferences("login",MODE_PRIVATE);
 
-//        TODO: move search view and setting to the custom toolbar
+//       initialize toolbar
         toolbar = binding.toolbar;
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        getSupportActionBar().hide();
-        // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
+
+//       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         // hide fragments if user didn't login
         if(sp.getInt("logged",0) == 0){
@@ -101,7 +137,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         tv_title = findViewById(R.id.banner_song_title);
         tv_artist = findViewById(R.id.banner_artist);
         control = findViewById(R.id.controls);
-        viewModel = new MainActivityViewModel(getApplication());
+        mainActivityViewModel = new MainActivityViewModel(getApplication());
+        discoveryViewModel = new DiscoveryViewModel(getApplication());
 
         //update UI from based on the information passed from service
         broadcastReceiver = new BroadcastReceiver() {
@@ -125,13 +162,249 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             createMediaItems(null);
         }
         startAutoPlay = false;
+
+//        handel toolbar functions
+        searchView = binding.actionSearch;
+        searchResult = binding.searchList;
+        setting = binding.setting;
+        cancel = binding.cancel;
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                toolbar.setBackgroundColor(getResources().getColor(R.color.purple_50));
+                setting.setVisibility(View.GONE);
+                cancel.setVisibility(View.VISIBLE);
+                cancel.setOnClickListener(cancelSearch);
+                binding.flSearchResult.setVisibility(View.VISIBLE);
+                locateFragment();
+            }
+        });
+
+        setting.setOnClickListener(goToSetting);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.custom_appbar_menu,menu);
-        return super.onCreateOptionsMenu(menu);
+    private View.OnClickListener cancelSearch = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            closeSearchView(view);
+        }
+    };
+
+    private View.OnClickListener goToSetting = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(sp.getInt("logged", 999) == 1){
+                Intent gotoSetting = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(gotoSetting);
+            }
+            else{
+                Intent gotoLogin = new Intent(MainActivity.this, RegisterActivity.class);
+                sp.edit().putInt("logged", -1).apply();
+                Toast.makeText(getApplicationContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+                startActivity(gotoLogin);
+            }
+        }
+    };
+
+    private void locateFragment(){
+        int currentFragmentId = navController.getCurrentDestination().getId();
+        if(currentFragmentId == R.id.discovery){
+            searchSongs();
+        }
+        else if(currentFragmentId == R.id.my_music || currentFragmentId == R.id.choose_one_playlist){
+            searchPlaylist();
+        }
+        else if(currentFragmentId == R.id.myPlaylistFragment){
+            searchSongsInPlaylist();
+        }
+        else if(currentFragmentId == R.id.friends){
+            searchFriend();
+        }
+        else{
+            System.out.println("No Fragment is visible in Main activity!");
+        }
     }
+
+
+    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
+        @Override
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
+
+        @Override
+        public void removeFromDefault(String position) {
+
+        }
+    };
+
+    /*
+    Search a song from all songs in database.
+    Possible extension: Instead of fetch all songs from db, fetch the 10 songs
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchSongs(){
+        discoveryViewModel.init("get/allSongs");
+        discoveryViewModel.getSongNames().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName, discoveryItemClick);
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        discoveryViewModel.filter(newText);
+                        return true;
+                    }
+                });
+                songInfo = newName;
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                closeSearchView(view);
+            }
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchPlaylist(){
+        PlaylistViewModel playlistViewModel = new PlaylistViewModel(getApplication());
+        playlistViewModel.getAllPlaylists();
+        playlistViewModel.getM_searchResult().observe(MainActivity.this, new Observer<ArrayList<Playlist>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Playlist> newName) {
+                SearchPlaylistAdapter adapter = new SearchPlaylistAdapter(getApplicationContext(), newName);
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        playlistViewModel.searchPlaylistByName(newText);
+                        return true;
+                    }
+                });
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Playlist p = (Playlist) searchResult.getItemAtPosition(i);
+                playlistId = p.getPlaylist_id();
+                closeSearchView(view);
+                NavDirections action = MyMusicFragmentDirections.actionMyMusicToMyPlaylistFragment(playlistId);
+                navController.navigate(action);
+            }
+        });
+    }
+
+    public void setPlaylistId(String playlistId){
+        this.playlistId = playlistId;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchSongsInPlaylist(){
+        SonglistViewModel songlistViewModel = new SonglistViewModel(getApplication());
+        songlistViewModel.getSongsFromPlaylist(playlistId);
+        songlistViewModel.getM_searchResult().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                SearchSonglistAdapter searchResultAdapter = new SearchSonglistAdapter(getApplicationContext(), newName);
+                // binds the Adapter to the ListView
+                searchResult.setAdapter(searchResultAdapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        String text = newText;
+                        songlistViewModel.searchSongByName(text, playlistId);
+                        return true;
+                    }
+                });
+                songInfo = newName;
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                closeSearchView(view);
+            }
+        });
+    }
+
+    private void searchFriend(){
+        FriendsViewModel friendsViewModel = new FriendsViewModel(getApplication());
+        friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
+        friendsViewModel.getUserNames().observe(MainActivity.this, new Observer<ArrayList<User>>() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public void onChanged(@Nullable final ArrayList<User> users) {
+                SearchUserResultAdapter adapter = new SearchUserResultAdapter(getApplicationContext(), users);
+                // binds the Adapter to the ListView
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newTest) {
+                        String text = newTest;
+                        friendsViewModel.filter(text, sp.getString("token", ""));
+                        return true;
+                    }
+                });
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                closeSearchView(view);
+                User u = (User) searchResult.getItemAtPosition(i);
+                //in case if we would like to do sth with chosen user
+                String name = u.getUserName();
+                //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
+                friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
+
+                // do handler???????
+            }
+        });
+    }
+
+    public void closeSearchView(View view){
+        closeKeyboard(view);
+        searchView.setQuery("", false);
+        searchView.clearFocus();
+        toolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        binding.flSearchResult.setVisibility(View.GONE);
+        setting.setVisibility(View.VISIBLE);
+        cancel.setVisibility(View.GONE);
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private final View.OnTouchListener touchListener = (view, motionEvent) -> {
+        closeKeyboard(view);
+        return false;
+    };
 
     @Override
     public void onStart() {
@@ -164,8 +437,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         songInfo = playlist;
         // if the app just started, the songs in the new releases are set as default playlist
         if(playlist == null){
-            viewModel.init("get/recentlyUploadedSongs");
-            viewModel.getSongNames().observe(this, new Observer<ArrayList<Songs>>() {
+            discoveryViewModel.init("get/recentlyUploadedSongs");
+            discoveryViewModel.getSongNames().observe(this, new Observer<ArrayList<Songs>>() {
                 @Override
                 public void onChanged(@Nullable final ArrayList<Songs> newName) {
                     // binds the Adapter to the ListView
@@ -178,7 +451,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                                 .setDescription(s.getSongId())
                                 .build();
                         MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
-//                                .setMediaId(Integer.toString(i))
                                 .setMediaMetadata(m)
                                 .build();
                         mediaItems.add(mediaItem);
@@ -258,6 +530,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         player.setShuffleModeEnabled(shuffle);
     }
 
+    @Override
+    public void changePlayMode(int repeatMode, boolean shuffle) {
+        player.setRepeatMode(repeatMode);
+        player.setShuffleModeEnabled(shuffle);
+    }
+
     public boolean isConnectedToServer(String url, int timeout) {
         try{
             URL myUrl = new URL(url);
@@ -271,4 +549,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
+    private void closeKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

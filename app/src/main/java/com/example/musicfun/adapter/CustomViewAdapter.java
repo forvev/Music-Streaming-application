@@ -55,7 +55,7 @@ public class CustomViewAdapter extends BaseAdapter {
         ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);
         songShare.setOnClickListener(share -> shareSong());
 
-        ImageView songAdd = (ImageView) view.findViewById(R.id.custom_view_songadd);
+        ImageView songAdd = (ImageView) view.findViewById(R.id.custom_menu);
         songAdd.setOnClickListener(add -> addSong());
 
         songTitle.setText(listTitles[i]);

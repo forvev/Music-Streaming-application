@@ -22,7 +22,7 @@ public class SettingAdapter extends ArrayAdapter<String> {
     }
 
     public SettingAdapter(ArrayList<String> data, Context context) {
-        super(context, R.layout.setting_row_item, data);
+        super(context, R.layout.row_setting, data);
         this.dataSet = data;
         this.mContext=context;
     }
@@ -38,7 +38,7 @@ public class SettingAdapter extends ArrayAdapter<String> {
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.setting_row_item, parent, false);
+            convertView = inflater.inflate(R.layout.row_setting, parent, false);
             viewHolder.setting_option = (TextView) convertView.findViewById(R.id.setting_option);
             convertView.setTag(viewHolder);
         } else {

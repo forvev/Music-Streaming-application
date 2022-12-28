@@ -31,7 +31,7 @@ public class SonglistViewModel extends AndroidViewModel {
     private SharedPreferences sp;
     private String token;
 
-    public SonglistViewModel(Application application) throws JSONException {
+    public SonglistViewModel(Application application) {
         super(application);
         m_songlist = new MutableLiveData<>();
         m_searchResult = new MutableLiveData<>();

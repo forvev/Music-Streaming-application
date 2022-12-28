@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -65,10 +64,10 @@ public class SongListAdapter extends BaseAdapter {
         final SonglistViewHolder holder;
         if (view == null) {
             holder = new SonglistViewHolder();
-            view = inflater.inflate(R.layout.songlist_row, null);
+            view = inflater.inflate(R.layout.row_songlist, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist_name);
-            holder.imageView = (ImageView) view.findViewById(R.id.songlist_menu) ;
+            holder.imageView = (ImageView) view.findViewById(R.id.add_to_default) ;
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

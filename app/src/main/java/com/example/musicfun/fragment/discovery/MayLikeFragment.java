@@ -15,17 +15,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.SongListAdapter;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 
 import java.util.ArrayList;
@@ -41,15 +46,21 @@ public class MayLikeFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
-    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
+    private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
-        public void addToDefault(String position) {
-            discoveryViewModel.getDefaultPlaylist(position);
+        public void removeFromPlaylist(int position) {
+
         }
 
         @Override
-        public void removeFromDefault(String position) {
-            // TODO: do not change the star color
+        public void addToPlaylist(String songId) {
+//            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
+//            Navigation.findNavController(getView()).navigate(action);
+        }
+
+        @Override
+        public void share(int position) {
+            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -120,7 +131,7 @@ public class MayLikeFragment extends Fragment {
         discoveryViewModel.getSongNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                adapter = new SongListAdapter(getActivity(), newName, discoveryItemClick);
+                adapter = new SongListAdapter(getActivity(), newName, songlistMenuClick);
                 listView.setAdapter(adapter);
             }
         });

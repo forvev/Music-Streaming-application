@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_playlist_row"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:padding="4dp">
+    android:layout_height="48dp">
 
     <ImageView
         android:id="@+id/playlist_menu"
@@ -19,7 +17,7 @@
     <LinearLayout
         android:id="@+id/ll_playlist_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_alignBottom="@+id/playlist_menu"
         android:layout_alignTop="@+id/playlist_menu"
         android:layout_alignParentStart="true"
@@ -31,7 +29,6 @@
             android:id="@+id/default_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
             android:src="@drawable/ic_baseline_push_pin_24"
             android:visibility="gone"
             />
@@ -39,7 +36,9 @@
         <TextView
             android:id="@+id/playlist_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
             android:text="Playlist 1"
             android:fontFamily="@font/merriweather"
             android:textSize="20sp"

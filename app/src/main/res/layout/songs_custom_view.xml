@@ -54,7 +54,7 @@
         android:src="@drawable/ic_baseline_share_24" />
 
     <ImageView
-        android:id="@+id/custom_view_songadd"
+        android:id="@+id/custom_menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="4dp"

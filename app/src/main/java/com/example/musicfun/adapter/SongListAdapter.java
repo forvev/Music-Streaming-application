@@ -1,12 +1,17 @@
 package com.example.musicfun.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +20,7 @@ import com.example.musicfun.R;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.google.android.exoplayer2.Player;
 
 import java.util.List;
@@ -25,21 +31,22 @@ public class SongListAdapter extends BaseAdapter {
     private List<Songs> songsList;
     public PassDataInterface mOnInputListner;
     private boolean click = false;
-    private DiscoveryItemClick discoveryItemClick;
+    private SonglistMenuClick songlistMenuClick;
+    private PopupMenu popup;
 
 
-    public SongListAdapter(Context context, List<Songs> songsList, DiscoveryItemClick discoveryItemClick){
+    public SongListAdapter(Context context, List<Songs> songsList, SonglistMenuClick songlistMenuClick){
         mContext = context;
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);
-        this.discoveryItemClick = discoveryItemClick;
+        this.songlistMenuClick = songlistMenuClick;
     }
 
     private class SongListViewHolder {
         TextView name;
         TextView artist;
         ImageView share;
-        ImageView setDefault;
+        ImageView imageView;
     }
 
     @Override
@@ -59,7 +66,7 @@ public class SongListAdapter extends BaseAdapter {
 
     public View getView(int i, View view, ViewGroup viewGroup) {
         final SongListViewHolder holder;
-        if(view == null){
+        if(view == null) {
             holder = new SongListViewHolder();
             view = inflater.inflate(R.layout.songs_custom_view, null);
             holder.name = (TextView) view.findViewById(R.id.custom_view_songtitle);
@@ -73,20 +80,30 @@ public class SongListAdapter extends BaseAdapter {
             holder.share = (ImageView) view.findViewById(R.id.custom_view_songshare);
             holder.share.setOnClickListener(share -> shareSong());
 
-            holder.setDefault = (ImageView) view.findViewById(R.id.custom_view_songadd);
-            holder.setDefault.setOnClickListener(new View.OnClickListener() {
+            holder.imageView = (ImageView) view.findViewById(R.id.custom_menu);
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!click){
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
-                        click = true;
-                        discoveryItemClick.addToDefault(songsList.get(i).getSongId());
-                    }
-                    else{
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
-                        click = false;
-                        discoveryItemClick.removeFromDefault(songsList.get(i).getSongId());
-                    }
+                    popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.discovery_menu, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.add_to_playlist:
+                                    Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                                    songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
+                                    break;
+                                case R.id.share_song:
+                                    Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                                    songlistMenuClick.share(i);
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
                 }
             });
             view.setTag(holder);
@@ -105,7 +122,6 @@ public class SongListAdapter extends BaseAdapter {
         Songs s = songsList.get(i);
         String id = s.getSongId();
         mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
-        Toast.makeText(inflater.getContext(), s.getSongName() + " is played", Toast.LENGTH_SHORT).show();
     }
 
     private void shareSong() {
