@@ -6,6 +6,7 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
     android:orientation="vertical"
+    android:background="@color/theme_purple_light"
     tools:targetApi="28">
 
     <LinearLayout

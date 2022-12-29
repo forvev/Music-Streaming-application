@@ -110,36 +110,49 @@
         android:layout_marginBottom="4dp"
         app:defaultNavHost="true"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toTopOf="@id/musicbanner"
+        app:layout_constraintBottom_toTopOf="@id/controls"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
-    <FrameLayout
-        android:id="@+id/musicbanner"
+    <com.google.android.exoplayer2.ui.PlayerControlView
+        android:id="@+id/controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_50"
+        app:show_next_button="false"
+        app:show_shuffle_button="false"
+        app:show_previous_button="false"
+        app:show_rewind_button="false"
+        app:show_fastforward_button="false"
+        app:played_color="@color/purple_400"
+        app:buffered_color="@color/theme_red_light"
+        app:scrubber_color="@color/yellow_800"
+        app:time_bar_min_update_interval="200"
+        app:scrubber_dragged_size="0dp"
+        app:show_timeout="0"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.google.android.exoplayer2.ui.PlayerControlView
-            android:id="@+id/controls"
+
+    <FrameLayout
+        android:id="@+id/fl_lyrics"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:background="@color/theme_purple_light"
+        android:visibility="gone"
+        >
+        <androidx.fragment.app.FragmentContainerView
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:id="@+id/nav_host_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:show_next_button="false"
-            app:show_shuffle_button="false"
-            app:show_previous_button="false"
-            app:show_rewind_button="false"
-            app:show_fastforward_button="false"
-            app:played_color="@color/purple_400"
-            app:buffered_color="@color/theme_red_light"
-            app:scrubber_color="@color/yellow_800"
-            app:time_bar_min_update_interval="200"
-            app:scrubber_dragged_size="0dp"
-            app:show_timeout="0" />
-
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout="@layout/fragment_lyrics" />
     </FrameLayout>
 
 

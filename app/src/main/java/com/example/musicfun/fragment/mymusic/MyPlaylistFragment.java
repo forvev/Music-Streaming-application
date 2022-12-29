@@ -6,19 +6,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -30,9 +25,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
-import com.example.musicfun.adapter.search.SearchSonglistAdapter;
 import com.example.musicfun.databinding.FragmentSongsBinding;
-import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
@@ -157,5 +150,7 @@ public class MyPlaylistFragment extends Fragment {
             Log.e(TAG, "onAttach: ClassCast WRONG " + e.getMessage());
         }
     }
+
+
 
 }

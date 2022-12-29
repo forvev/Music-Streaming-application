@@ -1,23 +1,15 @@
 package com.example.musicfun.activity;
 
-import static com.google.android.exoplayer2.Player.MEDIA_ITEM_TRANSITION_REASON_AUTO;
-import static com.google.android.exoplayer2.Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED;
-import static com.google.android.exoplayer2.Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT;
-import static com.google.android.exoplayer2.Player.MEDIA_ITEM_TRANSITION_REASON_SEEK;
-import static com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH;
+import static android.app.NotificationManager.IMPORTANCE_HIGH;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -30,20 +22,15 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.analytics.AnalyticsListener;
-import com.google.android.exoplayer2.analytics.PlaybackStats;
 import com.google.android.exoplayer2.analytics.PlaybackStatsListener;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.util.EventLogger;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class MusicbannerService extends Service {
 
@@ -52,7 +39,7 @@ public class MusicbannerService extends Service {
     //broadcast to main activity
     static final public String COPA_RESULT = "com.example.musicfun.activity.MusicbannerService";
     //player
-    ExoPlayer player;
+    public ExoPlayer player;
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
@@ -168,7 +155,11 @@ public class MusicbannerService extends Service {
     PlayerNotificationManager.MediaDescriptionAdapter descriptionAdapter = new PlayerNotificationManager.MediaDescriptionAdapter() {
         @Override
         public CharSequence getCurrentContentTitle(Player player) {
-            return Objects.requireNonNull(player.getCurrentMediaItem().mediaMetadata.title);
+            CharSequence currentTitle = player.getCurrentMediaItem().mediaMetadata.title;
+            if(currentTitle == null){
+                currentTitle = songInfo.get(0).getSongName();
+            }
+            return currentTitle;
         }
 
         @Nullable

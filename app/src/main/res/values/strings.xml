@@ -22,6 +22,7 @@
     <string name="login_failed">Login failed</string>
     <string name="reset_pw">Reset password</string>
     <string name="change_genre">Change genres</string>
+    <string name="listen_history">Listen history</string>
     <string name="login_required">You need to login/register first!</string>
     <string name="submit_genre">Let\'s get started!</string>
     <string name="save">Save</string>

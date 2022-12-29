@@ -1,6 +1,5 @@
 package com.example.musicfun.activity;
 
-import static android.view.View.GONE;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.annotation.SuppressLint;
@@ -12,7 +11,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
 import android.view.Window;
@@ -28,8 +26,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
@@ -47,12 +43,11 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.LyricsFragment;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
-import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentArgs;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.ui.friends.FriendsViewModel;
-import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
@@ -70,7 +65,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -102,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private ListView searchResult;
     private ImageView setting;
     private TextView cancel;
-    private NavController navController;
+    public NavController navController;
     private String playlistId;
 
     @Override
@@ -136,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         // initialize the relative UI components
         tv_title = findViewById(R.id.banner_song_title);
         tv_artist = findViewById(R.id.banner_artist);
-        control = findViewById(R.id.controls);
+        control = binding.controls;
         mainActivityViewModel = new MainActivityViewModel(getApplication());
         discoveryViewModel = new DiscoveryViewModel(getApplication());
 
@@ -181,6 +175,23 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         });
 
         setting.setOnClickListener(goToSetting);
+        binding.controls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.flLyrics.setVisibility(View.VISIBLE);
+                LyricsFragment playerViewFragment = new LyricsFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString("title" , tv_title.getText().toString());
+                arguments.putString("artist" , tv_artist.getText().toString());
+                playerViewFragment.setArguments(arguments);
+                String fragmentTag = playerViewFragment.getClass().getName();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_container, playerViewFragment)
+                        .addToBackStack(fragmentTag)
+                        .commit();
+            }
+        });
     }
 
     private View.OnClickListener cancelSearch = new View.OnClickListener() {
@@ -519,6 +530,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             System.out.println("the service was killed! ");
         }
     };
+
+    public MusicbannerService getService (){
+        return service;
+    }
 
     @Override
     public void playSong(List<Songs> playlist, int repeatMode, boolean shuffle) {
