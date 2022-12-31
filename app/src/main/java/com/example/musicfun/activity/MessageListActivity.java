@@ -6,8 +6,7 @@ import android.os.Bundle;
 
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityChatBinding;
-import com.example.musicfun.databinding.ChatViewBinding;
-import com.example.musicfun.ui.friends.ChatFragment;
+import com.example.musicfun.fragment.chat.ChatFragment;
 
 public class MessageListActivity extends AppCompatActivity {
     private ActivityChatBinding binding;

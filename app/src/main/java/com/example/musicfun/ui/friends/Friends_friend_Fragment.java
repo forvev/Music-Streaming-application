@@ -115,6 +115,7 @@ public class Friends_friend_Fragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
+
     }
 
     @Override

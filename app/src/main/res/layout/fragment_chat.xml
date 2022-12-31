@@ -86,14 +86,16 @@
         android:id="@+id/test_chat_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/teal_200"
         android:text="This is a test!"
         android:textSize="120dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/teal_200"/>
+        app:layout_constraintVertical_bias="0.129" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

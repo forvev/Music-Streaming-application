@@ -11,6 +11,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -192,8 +193,15 @@ public class FriendsFragment extends Fragment {
                         return false;
                     }
                 });
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listView.setOnClickListener(new View.OnClickListener(){
 
+                    @Override
+                    public void onClick(View view) {
+                        Log.println(Log.INFO,"my_tag","hello");
+                    }
+                });
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         closeKeyboard(view);
