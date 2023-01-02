@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.discovery;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -47,6 +47,7 @@ public class SongListAdapter extends BaseAdapter {
         TextView artist;
         ImageView share;
         ImageView imageView;
+        RelativeLayout clickField;
     }
 
     @Override
@@ -73,54 +74,50 @@ public class SongListAdapter extends BaseAdapter {
             holder.name.setSelected(true);
             holder.artist = (TextView) view.findViewById(R.id.custom_view_songartist);
             holder.artist.setSelected(true);
-            RelativeLayout clickField = view.findViewById(R.id.song_and_artist);
-
-            clickField.setOnClickListener(click -> playSong(i));
+            holder.clickField = view.findViewById(R.id.song_and_artist);
 
             holder.share = (ImageView) view.findViewById(R.id.custom_view_songshare);
             holder.share.setOnClickListener(share -> shareSong());
 
             holder.imageView = (ImageView) view.findViewById(R.id.custom_menu);
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    popup = new PopupMenu(mContext, view);
-                    MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.discovery_menu, popup.getMenu());
-                    popup.show();
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.add_to_playlist:
-                                    Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-                                    songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
-                                    break;
-                                case R.id.share_song:
-                                    Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-                                    songlistMenuClick.share(i);
-                                    break;
-                            }
-                            return false;
+            holder.imageView.setOnClickListener(view1 -> {
+                popup = new PopupMenu(mContext, view1);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.discovery_menu, popup.getMenu());
+                popup.show();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.add_to_playlist:
+                                Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                                songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
+                                break;
+                            case R.id.share_song:
+                                Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                                songlistMenuClick.share(i);
+                                break;
                         }
-                    });
-                }
+                        return false;
+                    }
+                });
             });
             view.setTag(holder);
         }
         else{
             holder = (SongListViewHolder) view.getTag();
         }
+        holder.clickField.setOnClickListener(click -> {
+            playSong(i);
+        });
         holder.name.setText(songsList.get(i).getSongName());
         holder.artist.setText(songsList.get(i).getArtist());
         mOnInputListner = (PassDataInterface) mContext;
-
         return view;
     }
 
     private void playSong(int i) {
         Songs s = songsList.get(i);
-        String id = s.getSongId();
         mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
     }
 

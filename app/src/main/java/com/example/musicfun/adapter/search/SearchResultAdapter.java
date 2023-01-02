@@ -41,6 +41,7 @@ public class SearchResultAdapter extends BaseAdapter {
         TextView name;
         TextView artist;
         ImageView setDefault;
+        RelativeLayout clickField;
     }
 
     @Override
@@ -66,17 +67,7 @@ public class SearchResultAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.row_song_search, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist);
-            RelativeLayout clickField = view.findViewById(R.id.rl_clickable_song);
-
-            clickField.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    playSong(position);
-                    if (mContext instanceof MainActivity) {
-                        ((MainActivity)mContext).closeSearchView(view);
-                    }
-                }
-            });
+            holder.clickField = view.findViewById(R.id.rl_clickable_song);
 
             holder.setDefault = (ImageView) view.findViewById(R.id.add_to_default);
             holder.setDefault.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +90,16 @@ public class SearchResultAdapter extends BaseAdapter {
         else{
             holder = (ViewHolder) view.getTag();
         }
+        holder.clickField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playSong(position);
+                if (mContext instanceof MainActivity) {
+                    ((MainActivity)mContext).closeSearchView(view);
+                }
+            }
+        });
+
         holder.name.setText(songsList.get(position).getSongName());
         holder.artist.setText(songsList.get(position).getArtist());
         mOnInputListner = (PassDataInterface) mContext;
