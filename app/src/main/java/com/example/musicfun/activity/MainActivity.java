@@ -43,7 +43,7 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
-import com.example.musicfun.fragment.LyricsFragment;
+import com.example.musicfun.banner.LyricsFragment;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
@@ -444,11 +444,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     }
 
     // fetch songs to the playlist
-    private List<MediaItem> createMediaItems(List<Songs> playlist) {
+    private void createMediaItems(List<Songs> playlist) {
         songInfo = playlist;
         // if the app just started, the songs in the new releases are set as default playlist
         if(playlist == null){
-            discoveryViewModel.init("get/recentlyUploadedSongs");
             discoveryViewModel.getSongNames().observe(this, new Observer<ArrayList<Songs>>() {
                 @Override
                 public void onChanged(@Nullable final ArrayList<Songs> newName) {
@@ -488,7 +487,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             }
             initializePlayer();
         }
-        return mediaItems;
     }
 
     protected boolean initializePlayer() {
