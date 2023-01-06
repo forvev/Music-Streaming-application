@@ -89,7 +89,6 @@ public class MusicbannerService extends Service {
                     if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null){
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
-//            System.out.println("why is here being called????????????? " + (player == null));
                     // TODO: add listen history UI to setting activity
 //                    System.out.println("playbackStats.getTotalPlayTimeMs() = " + playbackStats.getTotalPlayTimeMs());
                 }));
@@ -155,9 +154,9 @@ public class MusicbannerService extends Service {
     PlayerNotificationManager.MediaDescriptionAdapter descriptionAdapter = new PlayerNotificationManager.MediaDescriptionAdapter() {
         @Override
         public CharSequence getCurrentContentTitle(Player player) {
-            CharSequence currentTitle = player.getCurrentMediaItem().mediaMetadata.title;
-            if(currentTitle == null){
-                currentTitle = songInfo.get(0).getSongName();
+            CharSequence currentTitle = "";
+            if(player.getCurrentMediaItem() != null){
+                currentTitle= player.getCurrentMediaItem().mediaMetadata.title;
             }
             return currentTitle;
         }
@@ -210,13 +209,14 @@ public class MusicbannerService extends Service {
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist);
+
+            // TODO: update lyrics file
         }
 
     }
 
 
     public void setPlaylist(List<MediaItem> mediaItems, int startItemIndex, long startPosition, boolean startAutoPlay){
-
         boolean haveStartPosition = startItemIndex != C.INDEX_UNSET;
         if (haveStartPosition) {
             player.seekTo(startItemIndex, startPosition);

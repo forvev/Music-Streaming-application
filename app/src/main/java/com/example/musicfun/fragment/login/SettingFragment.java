@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MusicbannerService;
 import com.example.musicfun.activity.RegisterActivity;
-import com.example.musicfun.adapter.SettingAdapter;
+import com.example.musicfun.adapter.login.SettingAdapter;
 import com.example.musicfun.databinding.FragmentSettingBinding;
 
 import java.util.ArrayList;

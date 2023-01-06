@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.SongListAdapter;
-import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
-import com.example.musicfun.interfaces.DiscoveryItemClick;
+import com.example.musicfun.adapter.discovery.SongListAdapter;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.SonglistMenuClick;
