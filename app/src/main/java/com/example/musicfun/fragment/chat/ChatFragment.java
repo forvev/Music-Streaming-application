@@ -77,7 +77,9 @@ public class ChatFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Message> messages) {
                 messageListAdapter = new MessageListAdapter(getContext(),messages,chatPartnerName);
-                mMessageRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                LinearLayoutManager manager = new LinearLayoutManager(getContext());
+                manager.setStackFromEnd(true);
+                mMessageRecycler.setLayoutManager(manager);
                 mMessageRecycler.setAdapter(messageListAdapter);
             }
         });
@@ -110,8 +112,6 @@ public class ChatFragment extends Fragment {
 
 
     }
-
-    //TODO: start at bottom of chat, message view going up when clicking on EditText
 
     private void closeKeyboard(View view) {
         // this will give us the view which is currently focus in this layout
