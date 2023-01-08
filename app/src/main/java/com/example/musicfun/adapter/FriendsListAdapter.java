@@ -77,7 +77,7 @@ public class FriendsListAdapter extends BaseAdapter {
 
         RelativeLayout clickArea = (RelativeLayout) view.findViewById(R.id.user_and_id);
 
-        clickArea.setOnClickListener(click -> fi.startChat(i));
+        clickArea.setOnClickListener(click -> fi.startChat(retrieveUserName(i)));
         /*      profile.setOnClickListener(click -> getProfile(i));  */
         delete.setOnClickListener(click -> fi.deleteFriend(i));
 
@@ -86,6 +86,9 @@ public class FriendsListAdapter extends BaseAdapter {
         return view;
     }
 
+    private String retrieveUserName(int i){
+        return userList.get(i).getUserName();
+    }
 /*
     private void deleteFriend(int i) {
         sp = inflater.getContext().getSharedPreferences("login", MODE_PRIVATE);

@@ -53,6 +53,7 @@ public class Friends_friend_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final String ARG_PARAM_NAME = "chatPartnerName";
 
     // TODO: Rename and change types of parameters
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
@@ -74,10 +75,10 @@ public class Friends_friend_Fragment extends Fragment {
         }
 
         @Override
-        public void startChat(int i) {
-
+        public void startChat(String name) {
+            //Log.d("disTest", name);
             Intent goChat = new Intent(getActivity(), MessageListActivity.class);
-
+            goChat.putExtra(ARG_PARAM_NAME, name);
             getActivity().startActivity(goChat);
 
         }

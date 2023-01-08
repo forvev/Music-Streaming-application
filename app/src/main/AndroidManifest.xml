@@ -29,8 +29,14 @@
         <activity
             android:name=".activity.MessageListActivity"
             android:exported="true"
-            android:label="Chat">
+            android:label="Chat"
+            android:parentActivityName=".activity.MessageListActivity"
+            >
+
             <!-- TODO: Remove label or maybe access it and change to username
+            //Add for no TopBar
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            //not this
             android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

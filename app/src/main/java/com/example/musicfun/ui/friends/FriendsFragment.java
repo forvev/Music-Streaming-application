@@ -193,13 +193,6 @@ public class FriendsFragment extends Fragment {
                         return false;
                     }
                 });
-                listView.setOnClickListener(new View.OnClickListener(){
-
-                    @Override
-                    public void onClick(View view) {
-                        Log.println(Log.INFO,"my_tag","hello");
-                    }
-                });
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

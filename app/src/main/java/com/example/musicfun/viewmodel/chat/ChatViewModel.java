@@ -1,6 +1,7 @@
 package com.example.musicfun.viewmodel.chat;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.Message;
+import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.Database;
 
@@ -27,7 +29,7 @@ public class ChatViewModel extends AndroidViewModel {
 
     public ChatViewModel(@NonNull Application application) {
         super(application);
-
+        messagesList = new MutableLiveData<>();
         this.application = application;
         messageArrayList =  new ArrayList<>();
         messagesList.setValue(messageArrayList);
@@ -35,30 +37,38 @@ public class ChatViewModel extends AndroidViewModel {
     }
 
     //display the initial list of messages
-    public void init(String url){
+    public void init(String token, String chatpartner){
         messageArrayList.clear();
-        db.sendMsg(new ServerCallBack() {
+        //Log.d("disTest", "good so far");
+        db.getChat(new ServerCallBack() {
             @Override
-            public void onSuccess(JSONObject result){
+            public void onSuccess(JSONObject result) {
+                //Log.d("disTest", "good so far");
                 try{
-                    JSONArray listOfMessages = (JSONArray) result.get("messages");
-                    for (int i=0; i<listOfMessages.length(); i++){
-                        //TODO: check what's the name in the JSON object
-                        Message message = new Message(listOfMessages.getJSONObject(i).getString("message"));
+                //TODO: Wenn request funktioniert hier das Array bearbeiten
+                    JSONArray messages = (JSONArray) result.get("messages");
+                    //Log.d("disTest", messages.get(0).toString());
+                    //Log.d("disTest", messages.getJSONObject(0).getString("sender"));
+                    for(int i=0; i<messages.length(); i++){
+                        JSONObject mess = messages.getJSONObject(i);
+                        Message message = new Message(mess.getString("message"),mess.getString("date"), mess.getString("time"), mess.getString("sender"));
                         messageArrayList.add(message);
                     }
                     messagesList.setValue(messageArrayList);
-                } catch (JSONException e) {
+
+                }catch(JSONException e){
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onError(VolleyError error) {
 
             }
-        }, url);
+        }, token, chatpartner);
 
     }
 
+    public MutableLiveData<ArrayList<Message>> getMessages() {return messagesList;}
 
 }
