@@ -35,6 +35,8 @@ import com.example.musicfun.datatype.RelativeSizeColorSpan;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class LyricsFragment extends Fragment {
     private TextView tv_title;
     private TextView tv_artist;
     private ImageView back;
+    private ImageView coverView;
 
     // views and variables for the canvas
     private List<Lyrics> lyricsList;
@@ -89,11 +92,16 @@ public class LyricsFragment extends Fragment {
 //      Initialize the views
         tv_title = getView().findViewById(R.id.styled_player_song_name);
         tv_artist = getView().findViewById(R.id.styled_player_artist);
+        coverView = getView().findViewById(R.id.imageView2);
         Bundle arguments = getArguments();
         String title = arguments.getString("title");
         tv_title.setText(title);
         String artist = arguments.getString("artist");
         tv_artist.setText(artist);
+        //todo: arguments songid
+        String id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+        String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+        Picasso.get().load(coverUrl).into(coverView);
         back = binding.scaleDownToBanner;
         back.setOnClickListener(backToPreviousFragment);
 
@@ -105,6 +113,8 @@ public class LyricsFragment extends Fragment {
                 String artist = intent.getStringExtra("artist");
                 tv_title.setText(title);
                 tv_artist.setText(artist);
+                String coverUrl = intent.getStringExtra("coverUrl");
+                changeCover(coverUrl);
             }
         };
 
@@ -223,5 +233,7 @@ public class LyricsFragment extends Fragment {
         return i;
     }
 
-
+    public void changeCover(String url){
+        Picasso.get().load(url).into(coverView);
+    }
 }
