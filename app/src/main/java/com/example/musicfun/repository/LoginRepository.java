@@ -19,9 +19,11 @@ import org.json.JSONObject;
  */
 public class LoginRepository {
 
-    private String url_login = "http://10.0.2.2:3000/account/login";
-    private String url_register = "http://10.0.2.2:3000/account/signup";
-    private String url_reset = "http://10.0.2.2:3000/account/change-password?auth_token=";
+    private final String url_login = "http://10.0.2.2:3000/account/login";
+    private final String url_register = "http://10.0.2.2:3000/account/signup";
+    private final String url_reset = "http://10.0.2.2:3000/account/change-password?auth_token=";
+    private final String url_saveListenStatus = "http://10.0.2.2:3000/user/saveData?auth_token=";
+    private final String url_getListenStatus = "http://10.0.2.2:3000/user/getData?auth_token=";
 
     private Context context;
 
@@ -86,6 +88,45 @@ public class LoginRepository {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url_with_token = url_reset + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url_with_token, user, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void saveDataWhenLogout(int startItemIndex, String startPosition, String savedPlaylist, String token){
+        JSONObject listenStatus = new JSONObject();
+        try {
+            listenStatus.put("startItemIndex", startItemIndex);
+            listenStatus.put("startPosition", startPosition);
+            listenStatus.put("savedPlaylist", savedPlaylist);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url_saveListenStatus + token, listenStatus, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("save data when logout did not work! " + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void getDataWhenLogin(String token, ServerCallBack callBack) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url_getListenStatus + token, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.onSuccess(response);

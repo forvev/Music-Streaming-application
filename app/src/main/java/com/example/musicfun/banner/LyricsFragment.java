@@ -56,10 +56,8 @@ public class LyricsFragment extends Fragment {
     private List<Lyrics> lyricsList;
     private int currentLine = -1;   // current singing row , should be highlighted.
     private TextView tv_lyrics;
-//    private ScrollView scrollView;
     private boolean isVisible;
 
-//    private int sumChar = 0;
     private final int POLL_INTERVAL_MS_PLAYING = 1000;
     private final int POLL_INTERVAL_MS_PAUSED = 3000;
     int spanColorHighlight = Color.parseColor("#311B92");
@@ -147,12 +145,10 @@ public class LyricsFragment extends Fragment {
             public void onChanged(ArrayList<Lyrics> lyrics) {
                 if(lyrics.size() != 0){
                     lyricsList = lyrics;
-//                    lrcInterface.setLrc(lyrics);
                     String allText = "";
                     for (Lyrics l : lyrics){
                         allText = allText + l.getLyrics() + "\n";
                     }
-                    System.out.println( "textview height = " + tv_lyrics.getHeight());
                     tv_lyrics.setText(allText, TextView.BufferType.SPANNABLE);
                     spannableText = (Spannable) tv_lyrics.getText();
                     getCurrentPlayerPosition();
@@ -188,9 +184,6 @@ public class LyricsFragment extends Fragment {
             currentLine = newLine;
             controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PAUSED);
         }
-        else{
-            System.out.println("view invisible");
-        }
     }
 
     // find the start and end point of the current line. This helps to highlight the lyrics.
@@ -215,10 +208,6 @@ public class LyricsFragment extends Fragment {
         int middleOfTextviewHeight = tv_lyrics.getHeight() / 2;
         tv_lyrics.scrollTo(0, -middleOfTextviewHeight + tv_lyrics.getLayout().getLineTop(i));
     }
-
-
-
-
 
     // returns the index of the current line of lyrics
     private int findLine(long currentTime){

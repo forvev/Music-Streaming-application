@@ -56,6 +56,10 @@ public class MusicbannerService extends Service {
         this.songInfo = songInfo;
     }
 
+    public List<Songs> getSongInfo(){
+        return songInfo;
+    }
+
     //class binder for clients
     public class ServiceBinder extends Binder {
         public MusicbannerService getMusicbannerService(){

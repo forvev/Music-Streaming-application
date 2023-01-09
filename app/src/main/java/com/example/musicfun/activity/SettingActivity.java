@@ -1,11 +1,11 @@
 package com.example.musicfun.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.example.musicfun.R;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.musicfun.databinding.ActivitySettingBinding;
 import com.example.musicfun.fragment.login.SettingFragment;
@@ -24,13 +25,13 @@ public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private Toolbar toolbar;
     private boolean isBound;
+    private MutableLiveData<MusicbannerService> service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        getSupportActionBar().hide();
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -46,9 +47,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        Intent musicbannerServiceIntent = new Intent(this, MusicbannerService.class);
-        bindService(musicbannerServiceIntent, playerServiceConnection, 0);
-
+        service = new MutableLiveData<>();
         getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
     }
 
@@ -56,6 +55,9 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             isBound = true;
+            System.out.println("service is bound!!!!!");
+            MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
+            service.setValue(binder.getMusicbannerService());
         }
 
         @Override
@@ -64,6 +66,17 @@ public class SettingActivity extends AppCompatActivity {
         }
     };
 
+    public MutableLiveData<MusicbannerService> getService (){
+        return service;
+    }
+
+    @Override
+    public void onStart() {
+        // Bind to LocalService
+        Intent musicbannerServiceIntent = new Intent(this, MusicbannerService.class);
+        bindService(musicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
+        super.onStart();
+    }
 
 
     @Override

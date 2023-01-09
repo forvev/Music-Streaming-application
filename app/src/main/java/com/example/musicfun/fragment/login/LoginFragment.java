@@ -124,6 +124,7 @@ public class LoginFragment extends Fragment {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 try {
                     registerViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                    registerViewModel.getDataWhenLogin();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
