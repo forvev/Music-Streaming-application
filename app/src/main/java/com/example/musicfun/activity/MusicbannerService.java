@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -75,7 +76,6 @@ public class MusicbannerService extends Service {
         //assign variables
         player = new ExoPlayer.Builder(getApplicationContext()).build();
         viewModel = new MainActivityViewModel(getApplication());
-
         //audio focus attributes
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -206,9 +206,11 @@ public class MusicbannerService extends Service {
             if(mediaItem == null){
                 return;
             }
+            String id = mediaItem.mediaMetadata.description.toString();
+            String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
-            sendSongInfo(title, artist);
+            sendSongInfo(title, artist, coverUrl);
 
             // TODO: update lyrics file
         }
@@ -227,10 +229,11 @@ public class MusicbannerService extends Service {
     }
 
     // send back to main activity to update music banner UI
-    protected void sendSongInfo(String title, String artist) {
+    protected void sendSongInfo(String title, String artist, String coverUrl) {
         Intent intent1 = new Intent(COPA_RESULT);
         intent1.putExtra("title", title);
         intent1.putExtra("artist", artist);
+        intent1.putExtra("coverUrl", coverUrl);
         broadcaster.sendBroadcast(intent1);
     }
 
@@ -256,5 +259,7 @@ public class MusicbannerService extends Service {
             sp.edit().putString("saved_playlist", json).apply();
         }
     }
+
+
 
 }
