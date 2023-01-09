@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ public class LoginFragment extends Fragment {
         reset_new.setHint(R.string.prompt_password);
 
         usernameEditText = binding.loginUsername;
+        usernameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         passwordEditText = binding.loginPassword;
         loginBtn = binding.login;
         loadingProgressBar = binding.loading;
@@ -122,6 +124,7 @@ public class LoginFragment extends Fragment {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 try {
                     registerViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                    registerViewModel.getDataWhenLogin();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

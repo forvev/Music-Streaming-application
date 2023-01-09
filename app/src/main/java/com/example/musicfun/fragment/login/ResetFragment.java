@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.FragmentLoginBinding;
 import com.example.musicfun.viewmodel.login.RegisterViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class ResetFragment extends Fragment {
@@ -54,14 +55,12 @@ public class ResetFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reset_current = binding.resetCurrent;
-        reset_current.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
         reset_current.setHint(R.string.current_password);
 
         reset_new = binding.resetNew;
         reset_new.setHint(R.string.new_password);
 
         currentPassword = binding.loginUsername;
-        currentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         newPassword = binding.loginPassword;
         saveBtn = binding.login;
         saveBtn.setText(R.string.save);

@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.musicfun.datatype.Playlist;
@@ -26,7 +26,7 @@ public class SearchPlaylistAdapter extends BaseAdapter {
 
     public class SearchPlaylistViewHolder {
         TextView name;
-        ImageButton playlist_menu;
+        ImageView playlist_menu;
     }
 
     @Override
@@ -49,9 +49,9 @@ public class SearchPlaylistAdapter extends BaseAdapter {
         if (view == null) {
             holder = new SearchPlaylistViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
-            view = inflater.inflate(R.layout.playlist_row, null);
+            view = inflater.inflate(R.layout.row_playlist, null);
             holder.name = (TextView) view.findViewById(R.id.playlist_name);
-            holder.playlist_menu = (ImageButton) view.findViewById(R.id.playlist_menu);
+            holder.playlist_menu = (ImageView) view.findViewById(R.id.playlist_menu);
             holder.playlist_menu.setVisibility(View.GONE);
             view.setTag(holder);
         } else {

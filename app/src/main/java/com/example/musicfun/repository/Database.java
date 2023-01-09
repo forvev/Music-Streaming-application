@@ -22,6 +22,8 @@ public class Database {
     private String baseUrl = "http://10.0.2.2:3000/";
     private String searchUrl = "http://10.0.2.2:3000/get/titleStartsWith?string=";
     private String searchUserUrl = "http://10.0.2.2:3000/get/userStartsWith?auth_token=";
+    private String urlListenHistory = "http://10.0.2.2:3000/account/addListenHistory?auth_token=";
+    private String fetchlyrics = "http://10.0.2.2:3000/get/lyrics";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -69,7 +71,26 @@ public class Database {
 
     }
 
-
+    public void sendListenHistory (String currentSongID, String token){
+        JSONObject heardSong = new JSONObject();
+        try {
+            heardSong.put("songID", currentSongID);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlListenHistory + token, heardSong, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error when send ListenHistory to databank");
+            }
+        });
+        requestQueue.add(request);
+    }
 
     public void search(ServerCallBack callback, String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -105,5 +126,28 @@ public class Database {
 
     public void test(){
         Log.d("connecGood?", "Connected");
+    }
+
+    public void fetchLyrics(ServerCallBack callback, String song_id){
+        JSONObject song = new JSONObject();
+        try {
+            song.put("songID", song_id);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, fetchlyrics, song, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error fetchLyrics " + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+
     }
 }

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#03A9F4"
     tools:context=".fragment.discovery.ChartsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/songs_custom_view"
-        android:divider="@color/black"
+        android:divider="@color/purple_200"
         android:dividerHeight="2dp"
         android:clickable="false"
         android:focusable="false"

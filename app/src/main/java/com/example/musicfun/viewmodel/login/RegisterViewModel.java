@@ -151,4 +151,24 @@ public class RegisterViewModel extends AndroidViewModel {
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
+
+    public void getDataWhenLogin(){
+        loginRepository.getDataWhenLogin(sp.getString("token", ""), new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    sp.edit().putInt("startItemIndex", result.getInt("startItemIndex")).apply();
+                    sp.edit().putLong("startPosition", Long.parseLong(result.getString("startPosition"))).apply();
+                    sp.edit().putString("saved_playlist", result.getString("saved_playlist")).apply();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        });
+    }
 }

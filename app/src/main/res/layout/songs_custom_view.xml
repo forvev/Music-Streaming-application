@@ -1,70 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="48dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dip"
+    android:padding="4dip"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
-        <LinearLayout
+    <RelativeLayout
+        android:id="@+id/song_and_artist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/custom_view_songtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/merriweather"
+            android:textColor="@color/purple_900"
+            android:textSize="16sp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:scrollbars="none"
+            tools:text="Title of the Song" />
 
-            <RelativeLayout
-                android:id="@+id/song_and_artist"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                >
+        <TextView
+            android:id="@+id/custom_view_songartist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_view_songtitle"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/merriweather"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:scrollbars="none"
+            android:textColor="@color/purple_900"
+            android:textSize="14sp"
+            tools:text="Artists Name" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+    </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/custom_view_songtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dip"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        tools:text="Title of the Song" />
+    <ImageView
+        android:id="@+id/custom_view_songshare"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_share_24" />
 
-                    <TextView
-                        android:id="@+id/custom_view_songartist"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        tools:text="Artists Name"
-                        android:textColor="@color/black"
-                        android:textSize="14dip"/>
+    <ImageView
+        android:id="@+id/custom_menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_more_horiz_24" />
 
-
-            </LinearLayout>
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/custom_view_songshare"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="20dip"
-                android:src="@drawable/ic_baseline_share_24" />
-
-            <ImageView
-                android:id="@+id/custom_view_songadd"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_baseline_star_border_24" />
-
-        </LinearLayout>
 
 
 

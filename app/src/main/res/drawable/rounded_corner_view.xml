@@ -11,6 +11,6 @@ android:shape="rectangle">
     android:color="@color/theme_purple_dark" />
 
 <!--- This is the background color -->
-<solid android:color="@color/theme_purple_light" />
+<solid android:color="@android:color/transparent" />
 
 </shape>

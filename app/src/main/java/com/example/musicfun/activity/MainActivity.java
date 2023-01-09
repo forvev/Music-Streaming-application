@@ -1,70 +1,103 @@
 package com.example.musicfun.activity;
 
+import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
+
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.IBinder;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.search.SearchPlaylistAdapter;
+import com.example.musicfun.adapter.search.SearchResultAdapter;
+import com.example.musicfun.adapter.search.SearchSonglistAdapter;
+import com.example.musicfun.adapter.search.SearchUserResultAdapter;
 import com.example.musicfun.databinding.ActivityMainBinding;
+import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.datatype.User;
+import com.example.musicfun.banner.LyricsFragment;
+import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.interfaces.PlaylistModes;
+import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PassDataInterface, PlaylistModes {
+public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
 
-    //playing stuff
-    static ExoPlayer player;
-    ProgressBar progressBar;
-
-    String url;
-
-    private int timestamp = 0;
-    private int progressStatus = 0;
-    String currentSongID;
-
-    long realDuration = 100;
-
-    private boolean startingNewSong = false;
-    private boolean playing;
-
-    private Handler handler = new Handler();
     private SharedPreferences sp;
 
+    protected @Nullable ExoPlayer player;
+    protected PlayerControlView control;
+
+    private List<MediaItem> mediaItems = new ArrayList<>();
+    private List<Songs> songInfo = new ArrayList<>();
+    private boolean startAutoPlay;
+    private int startItemIndex;
+    private long startPosition;
+    private MainActivityViewModel mainActivityViewModel;
+    private DiscoveryViewModel discoveryViewModel;
+    private TextView tv_title;
+    private TextView tv_artist;
+    private boolean isBound;
+    private MusicbannerService service;
+    private BroadcastReceiver broadcastReceiver;
+    private Intent intent;
+
+//    search relevant attributes
+    private Toolbar toolbar;
+    private SearchView searchView;
+    private ListView searchResult;
+    private ImageView setting;
+    private TextView cancel;
+    public NavController navController;
+    private String playlistId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,150 +106,447 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         //creates a full screen view and hides the default action bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //finding different UI, R - resources
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        progressBar = binding.progressBarSong;
-        // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         sp = getSharedPreferences("login",MODE_PRIVATE);
-        player = new ExoPlayer.Builder(this).build();
+
+//       initialize toolbar
+        toolbar = binding.toolbar;
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+//       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // hide fragments if user didn't login
         if(sp.getInt("logged",0) == 0){
             binding.navView.getMenu().removeItem(R.id.friends);
             binding.navView.getMenu().removeItem(R.id.my_music);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
-        currentSongID = sp.getString("lastSongID", "");
-        timestamp = sp.getInt("lastSongTimestamp", 0);
-        realDuration = sp.getLong("realDuration", 100);
-        progressBar.setMax((int) realDuration * 10);
-        progressStatus = timestamp / 100;
-        url = "http://10.0.2.2:3000/songs/" + currentSongID + "/output.m3u8";
-        progressBar.setProgress(progressStatus);
+
+        // initialize the relative UI components
+        tv_title = findViewById(R.id.banner_song_title);
+        tv_artist = findViewById(R.id.banner_artist);
+        control = binding.controls;
+        mainActivityViewModel = new MainActivityViewModel(getApplication());
+        discoveryViewModel = new DiscoveryViewModel(getApplication());
+
+        //update UI from based on the information passed from service
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getStringExtra("title");
+                String artist = intent.getStringExtra("artist");
+                tv_title.setText(title);
+                tv_artist.setText(artist);
+            }
+        };
+        // check whether any songs were saved in the playlist
+        String serializedObject = sp.getString("saved_playlist", null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Songs>>(){}.getType();
+            songInfo = gson.fromJson(serializedObject, type);
+            createMediaItems(songInfo);
+        }
+        else {
+            createMediaItems(null);
+        }
+        startAutoPlay = false;
+
+//        handel toolbar functions
+        searchView = binding.actionSearch;
+        searchResult = binding.searchList;
+        setting = binding.setting;
+        cancel = binding.cancel;
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                toolbar.setBackgroundColor(getResources().getColor(R.color.purple_50));
+                setting.setVisibility(View.GONE);
+                cancel.setVisibility(View.VISIBLE);
+                cancel.setOnClickListener(cancelSearch);
+                binding.flSearchResult.setVisibility(View.VISIBLE);
+                locateFragment();
+            }
+        });
+
+        setting.setOnClickListener(goToSetting);
+        binding.controls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.flLyrics.setVisibility(View.VISIBLE);
+                LyricsFragment playerViewFragment = new LyricsFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString("title" , tv_title.getText().toString());
+                arguments.putString("artist" , tv_artist.getText().toString());
+                playerViewFragment.setArguments(arguments);
+                String fragmentTag = playerViewFragment.getClass().getName();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_container, playerViewFragment)
+                        .addToBackStack(fragmentTag)
+                        .commit();
+            }
+        });
+    }
+
+    private View.OnClickListener cancelSearch = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            closeSearchView(view);
+        }
+    };
+
+    private View.OnClickListener goToSetting = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(sp.getInt("logged", 999) == 1){
+                Intent gotoSetting = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(gotoSetting);
+            }
+            else{
+                Intent gotoLogin = new Intent(MainActivity.this, RegisterActivity.class);
+                sp.edit().putInt("logged", -1).apply();
+                Toast.makeText(getApplicationContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+                startActivity(gotoLogin);
+            }
+        }
+    };
+
+    private void locateFragment(){
+        int currentFragmentId = navController.getCurrentDestination().getId();
+        if(currentFragmentId == R.id.discovery){
+            searchSongs();
+        }
+        else if(currentFragmentId == R.id.my_music || currentFragmentId == R.id.choose_one_playlist){
+            searchPlaylist();
+        }
+        else if(currentFragmentId == R.id.myPlaylistFragment){
+            searchSongsInPlaylist();
+        }
+        else if(currentFragmentId == R.id.friends){
+            searchFriend();
+        }
+        else{
+            System.out.println("No Fragment is visible in Main activity!");
+        }
     }
 
 
+    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
+        @Override
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
+
+        @Override
+        public void removeFromDefault(String position) {
+
+        }
+    };
+
+    /*
+    Search a song from all songs in database.
+    Possible extension: Instead of fetch all songs from db, fetch the 10 songs
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchSongs(){
+        discoveryViewModel.init("get/allSongs");
+        discoveryViewModel.getSongNames().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName, discoveryItemClick);
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        discoveryViewModel.filter(newText);
+                        return true;
+                    }
+                });
+                songInfo = newName;
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                closeSearchView(view);
+            }
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchPlaylist(){
+        PlaylistViewModel playlistViewModel = new PlaylistViewModel(getApplication());
+        playlistViewModel.getAllPlaylists();
+        playlistViewModel.getM_searchResult().observe(MainActivity.this, new Observer<ArrayList<Playlist>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Playlist> newName) {
+                SearchPlaylistAdapter adapter = new SearchPlaylistAdapter(getApplicationContext(), newName);
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        playlistViewModel.searchPlaylistByName(newText);
+                        return true;
+                    }
+                });
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Playlist p = (Playlist) searchResult.getItemAtPosition(i);
+                playlistId = p.getPlaylist_id();
+                closeSearchView(view);
+                NavDirections action = MyMusicFragmentDirections.actionMyMusicToMyPlaylistFragment(playlistId);
+                navController.navigate(action);
+            }
+        });
+    }
+
+    public void setPlaylistId(String playlistId){
+        this.playlistId = playlistId;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void searchSongsInPlaylist(){
+        SonglistViewModel songlistViewModel = new SonglistViewModel(getApplication());
+        songlistViewModel.getSongsFromPlaylist(playlistId);
+        songlistViewModel.getM_searchResult().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                SearchSonglistAdapter searchResultAdapter = new SearchSonglistAdapter(getApplicationContext(), newName);
+                // binds the Adapter to the ListView
+                searchResult.setAdapter(searchResultAdapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        String text = newText;
+                        songlistViewModel.searchSongByName(text, playlistId);
+                        return true;
+                    }
+                });
+                songInfo = newName;
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                closeSearchView(view);
+            }
+        });
+    }
+
+    private void searchFriend(){
+        FriendsViewModel friendsViewModel = new FriendsViewModel(getApplication());
+        friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
+        friendsViewModel.getUserNames().observe(MainActivity.this, new Observer<ArrayList<User>>() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public void onChanged(@Nullable final ArrayList<User> users) {
+                SearchUserResultAdapter adapter = new SearchUserResultAdapter(getApplicationContext(), users);
+                // binds the Adapter to the ListView
+                searchResult.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newTest) {
+                        String text = newTest;
+                        friendsViewModel.filter(text, sp.getString("token", ""));
+                        return true;
+                    }
+                });
+            }
+        });
+        searchResult.setOnTouchListener(touchListener);
+        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                closeSearchView(view);
+                User u = (User) searchResult.getItemAtPosition(i);
+                //in case if we would like to do sth with chosen user
+                String name = u.getUserName();
+                //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
+                friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
+
+                // do handler???????
+            }
+        });
+    }
+
+    public void closeSearchView(View view){
+        closeKeyboard(view);
+        searchView.setQuery("", false);
+        searchView.clearFocus();
+        toolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        binding.flSearchResult.setVisibility(View.GONE);
+        setting.setVisibility(View.VISIBLE);
+        cancel.setVisibility(View.GONE);
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private final View.OnTouchListener touchListener = (view, motionEvent) -> {
+        closeKeyboard(view);
+        return false;
+    };
+
     @Override
-    protected void onStop() {
-        sp.edit().putString("lastSongID",currentSongID).apply();
-        sp.edit().putInt("lastSongTimestamp",timestamp).apply();
-        sp.edit().putLong("realDuration",realDuration).apply();
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(COPA_RESULT));
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        doUnbindService();
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        doUnbindService();
+        super.onDestroy();
+    }
 
-    // TODO: This function should be placed somewhere else instead of MainActivity
-    public void playFile(View v){
-
-        //checks if there was a song being played before to stop the thread tracking the last songs progress
-        if (startingNewSong) {
-            player.pause();
-            playing = false;
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //creating desired descenation
-        // changing an icon
-        ImageView my_icon = findViewById(R.id.play_button);
-        my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
-
-        if(playing == false)  {
-            startingNewSong = false;
-            my_icon.setImageResource(R.drawable.ic_baseline_pause_24);
-            playing = true;
-
-            Uri uri = Uri.parse(url);
-            MediaItem mediaItem = MediaItem.fromUri(uri);
-
-            // Create a data source factory.
-            DataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
-            // Create a HLS media source pointing to a playlist uri.
-            HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem);
-
-            player.setMediaSource(hlsMediaSource);
-            player.seekTo(timestamp);
-            player.prepare();
-            player.play();
-            player.addListener(new ExoPlayer.Listener() {
-                @Override
-                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_READY) {
-                        realDuration = player.getDuration()/1000;
-                        progressBar.setMax((int) realDuration * 10);
-                        // Start long running operation in a background thread
-                        new Thread(new Runnable() {
-                            public void run() {
-                                while (progressStatus < realDuration * 10 && playing) {
-                                    progressStatus += 1;
-                                    timestamp += 100;
-                                    // Update the progress bar
-                                    handler.post(new Runnable() {
-                                        public void run() {
-                                            progressBar.setProgress(progressStatus);
-                                        }
-                                    });
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }).start();
-                    }
-                }
-            });
-            // after playing the song: information are send to the server and the progress bar is reset
-            player.addListener(new ExoPlayer.Listener() {
-                @Override
-                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_ENDED) {
-                        playing = false;
-                        //timestamp = (int) player.getContentDuration();
-                        try {
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        addSongToListenHistory();
-                        my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                        timestamp = 0;
-                        progressBar.setProgress(0);
-                        progressStatus = 0;
-                    }
-                }
-            });
-        }
-        else {
-            my_icon.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-            playing = false;
-            player.pause();
+    private void doUnbindService(){
+        if (isBound){
+            unbindService(playerServiceConnection);
+            isBound = false;
         }
     }
 
-    @Override
-    public void sendInput(String data) {
-        if (playing) {
-            startingNewSong = true;
-            if (timestamp > 10000) {
-                addSongToListenHistory();
-            }
+    // fetch songs to the playlist
+    private void createMediaItems(List<Songs> playlist) {
+        songInfo = playlist;
+        // if the app just started, the songs in the new releases are set as default playlist
+        if(playlist == null){
+            discoveryViewModel.getSongNames().observe(this, new Observer<ArrayList<Songs>>() {
+                @Override
+                public void onChanged(@Nullable final ArrayList<Songs> newName) {
+                    // binds the Adapter to the ListView
+                    songInfo = newName;
+                    for(int i = 0; i < newName.size(); i++){
+                        Songs s = newName.get(i);
+                        MediaMetadata m = new MediaMetadata.Builder()
+                                .setTitle((s.getSongName()))
+                                .setArtist(s.getArtist())
+                                .setDescription(s.getSongId())
+                                .build();
+                        MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+                                .setMediaMetadata(m)
+                                .build();
+                        mediaItems.add(mediaItem);
+                    }
+                    initializePlayer();
+                }
+            });
         }
-        url = "http://10.0.2.2:3000/songs/" + data + "/output.m3u8";
-        currentSongID = data;
-        timestamp = 0;
-        progressBar.setProgress(0);
-        progressStatus = 0;
-        playFile(null);
+        // otherwise, the parameter indicates the playlist
+        else{
+            mediaItems.clear();
+            for(int i = 0; i < playlist.size(); i++){
+                Songs s = playlist.get(i);
+                MediaMetadata m = new MediaMetadata.Builder()
+                        .setTitle((s.getSongName()))
+                        .setArtist(s.getArtist())
+                        .setDescription(s.getSongId())
+                        .build();
+                MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+//                        .setMediaId(Integer.toString(i))
+                        .setMediaMetadata(m)
+                        .build();
+                mediaItems.add(mediaItem);
+            }
+            initializePlayer();
+        }
+    }
+
+    protected boolean initializePlayer() {
+
+        if(!isBound){
+            startItemIndex = sp.getInt("startItemIndex", 0);
+            startPosition = sp.getLong("startPosition", 0);
+            doBindService();
+        }
+        else{
+            service.setSongInfo(songInfo);
+            service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
+        }
+        return true;
+    }
+
+    private void doBindService(){
+        Intent MusicbannerServiceIntent = new Intent(this, MusicbannerService.class);
+        bindService(MusicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection playerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
+            service = binder.getMusicbannerService();
+            player = service.player;
+            isBound = true;
+            //Get the initialized player from service
+            intent = new Intent(getApplicationContext(), MusicbannerService.class);
+            startService(intent);
+            service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
+            service.setSongInfo(songInfo);
+            control.setPlayer(player);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            System.out.println("the service was killed! ");
+        }
+    };
+
+    public MusicbannerService getService (){
+        return service;
+    }
+
+    @Override
+    public void playSong(List<Songs> playlist, int repeatMode, boolean shuffle) {
+        startAutoPlay = true;
+        startPosition = 0;
+        startItemIndex = 0;
+        createMediaItems(playlist);
+        player.setRepeatMode(repeatMode);
+        player.setShuffleModeEnabled(shuffle);
+    }
+
+    @Override
+    public void changePlayMode(int repeatMode, boolean shuffle) {
+        player.setRepeatMode(repeatMode);
+        player.setShuffleModeEnabled(shuffle);
     }
 
     public boolean isConnectedToServer(String url, int timeout) {
@@ -232,66 +562,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
-    public static void stopMusic() {
-        player.pause();
-    }
-
-    public void addSongToListenHistory() {
-        String urlListenHistory = "http://10.0.2.2:3000/account/addListenHistory?auth_token=" + sp.getString("token", "");
-        JSONObject heardSong = new JSONObject();
-        try {
-            heardSong.put("songID", currentSongID);
-        }catch (JSONException e) {
-            e.printStackTrace();
+    private void closeKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urlListenHistory, heardSong, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                //callBack.onSuccess(response);
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                //callBack.onError(error);
-            }
-        });
-        requestQueue.add(request);
-    }
-
-    @Override
-    public void repeatMode(ArrayList<Songs> listOfSongs, int repeatMode, boolean shuffle) {
-
-//        player.clearMediaItems();
-        startingNewSong = true;
-        for(Songs s : listOfSongs){
-            String url = "http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8";
-            Uri uri = Uri.parse(url);
-            MediaItem mediaItem = MediaItem.fromUri(uri);
-            player.addMediaItem(mediaItem);
-        }
-        player.setRepeatMode(repeatMode);
-        if (shuffle){
-            player.setShuffleModeEnabled(true);
-        }
-        player.prepare();
-        player.play();
-        player.addListener(new ExoPlayer.Listener() {
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playbackState == ExoPlayer.STATE_ENDED) {
-                    System.out.println("state end once!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//                    playing = false;
-                    //timestamp = (int) player.getContentDuration();
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 }

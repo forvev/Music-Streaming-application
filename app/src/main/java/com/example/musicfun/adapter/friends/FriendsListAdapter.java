@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 import static java.security.AccessController.getContext;

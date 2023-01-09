@@ -44,7 +44,7 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if(view == null){
-            view = layoutInflater.inflate(R.layout.genre_row_items, viewGroup, false);
+            view = layoutInflater.inflate(R.layout.row_genre, viewGroup, false);
         }
         TextView tv = view.findViewById(R.id.genreType);
         ImageView iv = view.findViewById(R.id.imageView);
