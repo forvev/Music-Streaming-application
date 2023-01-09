@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0'
 
     //For HLS streaming
     implementation 'com.google.android.exoplayer:exoplayer:2.18.0'

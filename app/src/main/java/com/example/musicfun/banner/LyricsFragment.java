@@ -40,6 +40,7 @@ import com.squareup.picasso.PicassoProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LyricsFragment extends Fragment {
 
@@ -98,10 +99,11 @@ public class LyricsFragment extends Fragment {
         tv_title.setText(title);
         String artist = arguments.getString("artist");
         tv_artist.setText(artist);
-        //todo: arguments songid
-        String id = player.getCurrentMediaItem().mediaMetadata.description.toString();
-        String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
-        Picasso.get().load(coverUrl).into(coverView);
+        if(player != null){
+            String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
+            String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+            Picasso.get().load(coverUrl).into(coverView);
+        }
         back = binding.scaleDownToBanner;
         back.setOnClickListener(backToPreviousFragment);
 
