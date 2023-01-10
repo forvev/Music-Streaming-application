@@ -66,6 +66,7 @@
     <string name="search_hint_friend">Find a friend</string>
     <string name="invite_friends">Invite friends</string>
     <string name="listen_together">Listen together</string>
+    <string name="participants">Participants</string>
 
 
 </resources>

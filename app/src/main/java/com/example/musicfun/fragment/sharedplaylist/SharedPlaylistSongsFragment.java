@@ -27,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
+import com.example.musicfun.databinding.FragmentSharedPlaylistSongsBinding;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
@@ -40,16 +41,13 @@ import java.util.ArrayList;
 
 public class SharedPlaylistSongsFragment extends Fragment {
 
-    private FragmentSongsBinding binding;
+    private FragmentSharedPlaylistSongsBinding binding;
     private SonglistViewModel viewModel;
     private ListView listView;
     private SongListAdapter adapter;
     private ArrayList<Songs> songList = new ArrayList<>();
     private String selected_playlist_id;
     private String song_id;
-    private ImageView playAllSongs;
-    private ImageView shuffle;
-    private boolean isShuffle;
     private PassDataInterface passData;
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
@@ -77,7 +75,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         viewModel = new ViewModelProvider(this).get(SonglistViewModel.class);
-        binding = FragmentSongsBinding.inflate(inflater, container, false);
+        binding = FragmentSharedPlaylistSongsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
     }
@@ -111,34 +109,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
             }
         });
 
-//        play all songs in this playlist
-        playAllSongs = binding.playAllSongs;
-        shuffle = binding.shuffle;
-        playAllSongs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                repeatMode: Player.REPEAT_MODE_OFF = 0, Player.REPEAT_MODE_ONE = 1, Player.REPEAT_MODE_ALL = 2
-//                TODO: enable all three modes in the app
-                passData.playSong(viewModel.getM_songlist().getValue(), 2, false);
-            }
-        });
-        shuffle.setOnClickListener(new View.OnClickListener() {
-            // TODO: save the state of shuffle
-            @Override
-            public void onClick(View view) {
-                if (!isShuffle){
-                    shuffle.setImageResource(R.drawable.ic_baseline_shuffle_24);
-                    passData.changePlayMode(2, false);
-                    isShuffle = true;
-                }
-                else{
-                    shuffle.setImageResource(R.drawable.ic_baseline_shuffle_on_24);
-                    passData.changePlayMode(2, true);
-                    isShuffle = false;
-                }
-            }
-        });
-        //         listen whether there is selected playlist id popped back from ChoosePlaylistFragment
+//         listen whether there is selected playlist id popped back from ChoosePlaylistFragment
         NavController navController = NavHostFragment.findNavController(SharedPlaylistSongsFragment.this);
         MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
         liveData.observe(getViewLifecycleOwner(), new Observer<String>() {

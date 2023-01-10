@@ -72,7 +72,6 @@ public class FriendsListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.friends_custom_view, null);
         TextView username = (TextView) view.findViewById(R.id.friends_custom_view_username);
-        ImageView profile = (ImageView) view.findViewById(R.id.friends_custom_view_profile);
         ImageView delete = (ImageView) view.findViewById(R.id.friends_custom_view_delete);
 
         RelativeLayout clickArea = (RelativeLayout) view.findViewById(R.id.user_and_id);

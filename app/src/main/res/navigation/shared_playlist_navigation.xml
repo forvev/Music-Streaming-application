@@ -9,7 +9,7 @@
         android:id="@+id/friends_friend"
         android:name="com.example.musicfun.ui.friends.Friends_friend_Fragment"
         android:label="Friends_friend_Fragment"
-        tools:layout="@layout/fragment_friends_friend_"/>
+        tools:layout="@layout/fragment_friends_friend"/>
 
     <fragment
         android:id="@+id/friends_sharedPlaylist"

@@ -64,7 +64,7 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),true, false);
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -87,11 +87,12 @@ public class PlaylistViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
+                    String currentUserId = response.getString("userId");
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), false);
-//                      TODO: Owner list
-//                      playlistObject.getJSONObject(i).getString("owner");
+                        String owner = playlistObject.getJSONObject(i).getString("owningUser");
+                        boolean isOwner = currentUserId.equals(owner);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), isOwner, false);
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -142,7 +143,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"), false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"),true, false));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -161,7 +162,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"), false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"),true, false));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -236,7 +237,7 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),true, false);
                         searchResult.add(p);
                     }
                     m_searchResult.setValue(searchResult);

@@ -3,7 +3,7 @@ package com.example.musicfun.datatype;
 public class Playlist {
     private String playlist_name;
     private String playlist_id;
-    private boolean owner;
+    private boolean isOwner;
     private boolean isDefault;
 
     public void setDefault(boolean aDefault) {
@@ -18,10 +18,11 @@ public class Playlist {
         this.playlist_id = playlist_id;
     }
 
-    public Playlist(String playlist_name, String playlist_id, boolean isDefault) {
+    public Playlist(String playlist_name, String playlist_id, boolean isOwner, boolean isDefault) {
         this.playlist_name = playlist_name;
         this.playlist_id = playlist_id;
         this.isDefault = isDefault;
+        this.isOwner = isOwner;
     }
 
     public boolean isDefault() {
@@ -36,10 +37,10 @@ public class Playlist {
     }
 
     public boolean isOwner() {
-        return owner;
+        return isOwner;
     }
 
     public void setOwner(boolean owner) {
-        this.owner = owner;
+        this.isOwner = owner;
     }
 }

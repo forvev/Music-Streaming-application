@@ -109,7 +109,7 @@ public class Friends_friend_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_friends_friend_, container, false);
+        View view = inflater.inflate(R.layout.fragment_friends_friend, container, false);
         return view;
     }
 

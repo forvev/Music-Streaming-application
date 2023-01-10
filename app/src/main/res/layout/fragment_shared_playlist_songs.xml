@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_search"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/see_members"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/participants"
+        android:textColor="@color/theme_purple_dark"
+        android:fontFamily="@font/merriweather_bold"
+        android:textSize="20sp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_centerInParent="true"
+        android:text="@string/empty_playlist"
+        android:visibility="gone"
+        />
+
+    <ListView
+        android:id="@+id/songlist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@color/theme_purple_light"
+        android:dividerHeight="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/see_members"
+         />
+</RelativeLayout>
