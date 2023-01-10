@@ -82,7 +82,8 @@ public class MyMusicFragment extends Fragment {
         @Override
         public void share(int position) {
             // send this playlist to friends
-            Toast.makeText(getContext(), "share playlist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Check out your playlist in Shared Playlist!", Toast.LENGTH_SHORT).show();
+            viewModel.setAsShare(position);
         }
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){

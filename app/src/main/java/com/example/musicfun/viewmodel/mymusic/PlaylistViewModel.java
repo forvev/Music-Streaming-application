@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlaylistViewModel extends AndroidViewModel {
 
@@ -31,6 +33,7 @@ public class PlaylistViewModel extends AndroidViewModel {
     private SharedPreferences sp;
 
     private String token;
+    private String username;
 
     public PlaylistViewModel(Application application) {
         super(application);
@@ -47,6 +50,7 @@ public class PlaylistViewModel extends AndroidViewModel {
 
         sp = getApplication().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
         token = sp.getString("token", "");
+        username = sp.getString("name", "");
     }
     public MutableLiveData<ArrayList<Playlist>> getM_playlist(){
         return m_playlist;
@@ -64,7 +68,7 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),true, false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), username, false);
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -87,12 +91,15 @@ public class PlaylistViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
-                    String currentUserId = response.getString("userId");
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
+                    JSONArray ownerObject = (JSONArray) response.get("listOfPlaylistOwners");
+                    ArrayList<String> listOfOwners = new ArrayList<>();
+                    for(int i = 0; i < ownerObject.length(); i++){
+                        listOfOwners.add(ownerObject.getString(i));
+                    }
+
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        String owner = playlistObject.getJSONObject(i).getString("owningUser");
-                        boolean isOwner = currentUserId.equals(owner);
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), isOwner, false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), listOfOwners.get(i), false);
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -143,7 +150,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"),true, false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -162,7 +169,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"),true, false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -184,7 +191,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-
+                Toast.makeText(application, "Sorry, only the playlist owner can rename it", Toast.LENGTH_SHORT).show();
             }
         }, playlist.get(position).getPlaylist_id(), name, token);
     }
@@ -224,7 +231,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-
+                Toast.makeText(application, "Sorry, only the playlist owner can delete it", Toast.LENGTH_SHORT).show();
             }
         }, id, token);
     }
@@ -237,7 +244,7 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),true, false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),username, false);
                         searchResult.add(p);
                     }
                     m_searchResult.setValue(searchResult);
@@ -250,6 +257,20 @@ public class PlaylistViewModel extends AndroidViewModel {
 
             }
         }, letter, token);
+    }
+
+    public void setAsShare(int position){
+        db.setAsShare(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token, playlist.get(position).getPlaylist_id());
     }
 
 }

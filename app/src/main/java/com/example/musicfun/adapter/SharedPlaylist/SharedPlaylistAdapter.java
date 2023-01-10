@@ -1,8 +1,11 @@
 package com.example.musicfun.adapter.SharedPlaylist;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,10 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.mymusic.PlaylistAdapter;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
@@ -31,6 +32,7 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
     private PopupMenu popup;
     private PlaylistMenuClick playlistMenuClick;
     private FragmentTransfer fragmentTransfer;
+    private SharedPreferences sp;
 
     public SharedPlaylistAdapter(Context context, List<Playlist> playlist, PlaylistMenuClick playlistMenuClick, FragmentTransfer fragmentTransfer) {
         mContext = context;
@@ -38,10 +40,12 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         inflater = LayoutInflater.from(mContext);
         this.playlistMenuClick = playlistMenuClick;
         this.fragmentTransfer = fragmentTransfer;
+        sp = context.getSharedPreferences("login", MODE_PRIVATE);
     }
 
     public class SharedPlaylistViewHolder {
-        TextView name;
+        TextView playlist_name;
+        TextView owner_name;
         ImageView imageView;
         LinearLayout linearLayout;
     }
@@ -66,9 +70,10 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         if (view == null) {
             holder = new SharedPlaylistAdapter.SharedPlaylistViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
-            view = inflater.inflate(R.layout.row_playlist, null);
-            holder.name = (TextView) view.findViewById(R.id.playlist_name);
-            holder.imageView = (ImageView) view.findViewById(R.id.playlist_menu);
+            view = inflater.inflate(R.layout.row_shared_playlist, null);
+            holder.playlist_name = (TextView) view.findViewById(R.id.shared_playlist_name);
+            holder.owner_name = (TextView) view.findViewById(R.id.shared_playlist_owner);
+            holder.imageView = (ImageView) view.findViewById(R.id.shared_playlist_menu);
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -137,7 +142,7 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         }
 
 
-        holder.linearLayout = view.findViewById(R.id.ll_playlist_name);
+        holder.linearLayout = view.findViewById(R.id.ll_shared_playlist_name);
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,8 +150,15 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
             }
         });
         // set list view content
-        holder.name.setText(playlist.get(position).getPlaylist_name());
-//                    TODO: set little figure if I am the owner of this list
+        holder.playlist_name.setText(playlist.get(position).getPlaylist_name());
+        if(playlist.get(position).getOwner().equals(sp.getString("name", ""))){
+            holder.owner_name.setText(sp.getString("name", ""));
+        }
+        else{
+            holder.owner_name.setText(playlist.get(position).getOwner());
+        }
+
+//       TODO: set little figure if I am the owner of this list
         if (playlist.get(position).isDefault()) {
 //            holder.pin.setVisibility(View.VISIBLE);
         } else {

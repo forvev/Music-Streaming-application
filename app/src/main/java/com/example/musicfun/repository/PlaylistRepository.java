@@ -29,11 +29,35 @@ public class PlaylistRepository {
 //      shared playlists relevant urls
      private String getSharedPlaylists = "http://10.0.2.2:3000/playlist/getUsersSharedPlaylists?auth_token=";
      private String createSharedPlaylist = "http://10.0.2.2:3000/playlist/createSharedPlaylist?auth_token=";
+     private String setAsShare = "http://10.0.2.2:3000/playlist/convertPlaylistToSharedPlaylist?auth_token=";
     Context context;
 
     public PlaylistRepository(Context context){
         this.context = context;
     }
+
+    public void setAsShare(ServerCallBack callback, String token, String playlist_id){
+        JSONObject shared_playlist = new JSONObject();
+        try {
+            shared_playlist.put("playlist_id", playlist_id);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, setAsShare + token, shared_playlist, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error setAsShare" + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
 
     public void getDefaultPlaylist(ServerCallBack callback, String token){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -122,8 +146,7 @@ public class PlaylistRepository {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-//                TODO: handel error code 404
-                System.out.println("Error renamePlaylist " + error.getMessage());
+                callback.onError(error);
             }
         });
         requestQueue.add(request);
@@ -145,8 +168,7 @@ public class PlaylistRepository {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-//                TODO: handel error code 404
-                System.out.println("Error deletePlaylist " + error.getMessage());
+                callback.onError(error);
             }
         });
         requestQueue.add(request);
