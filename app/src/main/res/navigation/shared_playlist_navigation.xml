@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shared_playlist_navigation"
+    app:startDestination="@id/friends_friend">
+
+    <fragment
+        android:id="@+id/friends_friend"
+        android:name="com.example.musicfun.ui.friends.Friends_friend_Fragment"
+        android:label="Friends_friend_Fragment"
+        tools:layout="@layout/fragment_friends_friend_"/>
+
+    <fragment
+        android:id="@+id/friends_sharedPlaylist"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragment"
+        android:label="SharedPlaylistFragment"
+        tools:layout="@layout/fragment_mymusic">
+        <action
+            android:id="@+id/action_sharedPlaylistFragment_to_sharedPlaylistSongsFragment"
+            app:destination="@id/sharedPlaylistSongsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sharedPlaylistSongsFragment"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistSongsFragment"
+        android:label="SharedPlaylistSongsFragment"
+        tools:layout="@layout/fragment_songs">
+        <argument
+            android:name="selected_shared_id"
+            app:argType="string" />
+    </fragment>
+</navigation>

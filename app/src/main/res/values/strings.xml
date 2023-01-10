@@ -64,6 +64,8 @@
     <string name="search_hint_playlist">Search in playlists</string>
     <string name="search_hint_song_in_playlist">Search in playlist</string>
     <string name="search_hint_friend">Find a friend</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="listen_together">Listen together</string>
 
 
 </resources>

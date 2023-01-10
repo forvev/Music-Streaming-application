@@ -79,8 +79,35 @@ public class PlaylistViewModel extends AndroidViewModel {
 
             }
         }, token);
-
     }
+
+    public void getSharedPlaylists() {
+        playlist.clear();
+        db.getSharedPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray playlistObject = (JSONArray) response.get("playlists");
+                    for (int i = 0; i < playlistObject.length(); i++) {
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), false);
+//                      TODO: Owner list
+//                      playlistObject.getJSONObject(i).getString("owner");
+                        playlist.add(p);
+                    }
+                    getDefaultPlaylist();
+                    m_playlist.setValue(playlist);
+                    m_searchResult.setValue(playlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token);
+    }
+
 
     public void getDefaultPlaylist(){
         db.getDefaultPlaylist(new ServerCallBack() {
@@ -111,6 +138,25 @@ public class PlaylistViewModel extends AndroidViewModel {
 
     public void createPlaylists(String name){
         db.createPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONObject playlist_info = response.getJSONObject("playlist");
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"), false));
+                    m_playlist.setValue(playlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, name, token);
+    }
+
+    public void createSharedPlaylist(String name){
+        db.createSharedPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
                 try {

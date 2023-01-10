@@ -61,6 +61,6 @@ public class Friends_shared_playlist_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends_shared_playlist_, container, false);
+        return inflater.inflate(R.layout.fragment_shared_playlist, container, false);
     }
 }

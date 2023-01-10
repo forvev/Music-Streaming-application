@@ -10,8 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +23,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.RegisterActivity;
@@ -34,8 +41,12 @@ import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.adapter.search.SearchUserResultAdapter;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
+import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirections;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FriendsFragment extends Fragment {
 
@@ -109,136 +120,126 @@ public class FriendsFragment extends Fragment {
         }
 
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
-        int state = sp.getInt("logged", 999);
-        binding.friendsSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent gotoSetting = new Intent(getActivity(), SettingActivity.class);
-//                System.out.println("state current = " + state);
-                if(state ==0){
-                    Intent gotoLogin = new Intent(getActivity(), RegisterActivity.class);
-                    sp.edit().putInt("logged", -1).apply();
-                    Toast.makeText(getContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
-//                    System.out.println("state after = " + sp.getInt("logged", 999));
-                    getActivity().startActivity(gotoLogin);
-                }
-                else{
-                    getActivity().startActivity(gotoSetting);
-                }
-            }
-        });
+//        int state = sp.getInt("logged", 999);
+//        binding.friendsSetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent gotoSetting = new Intent(getActivity(), SettingActivity.class);
+////                System.out.println("state current = " + state);
+//                if(state ==0){
+//                    Intent gotoLogin = new Intent(getActivity(), RegisterActivity.class);
+//                    sp.edit().putInt("logged", -1).apply();
+//                    Toast.makeText(getContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+////                    System.out.println("state after = " + sp.getInt("logged", 999));
+//                    getActivity().startActivity(gotoLogin);
+//                }
+//                else{
+//                    getActivity().startActivity(gotoSetting);
+//                }
+//            }
+//        });
 
 
         //Search view part
-        searchView = binding.friendsSearchView;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//        searchView = binding.friendsSearchView;
+//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if(listView != null){
+//                    listView.setVisibility(View.VISIBLE);
+//                }
+//                binding.friendsSetting.setVisibility(View.GONE);
+//                binding.friendsCancel.setVisibility(View.VISIBLE);
+//                // cancel the search
+//                binding.friendsCancel.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        closeKeyboard(view);
+//                        searchView.setQuery("", false);
+//                        searchView.clearFocus();
+//                        listView.setVisibility(View.INVISIBLE);
+//                        binding.FriendsNav.setVisibility(View.VISIBLE);
+//                        binding.friendsChildFragment.setVisibility((View.VISIBLE));
+//                        binding.friendsSetting.setVisibility(View.VISIBLE);
+//                        binding.friendsCancel.setVisibility(View.GONE);
+//                    }
+//                });
+//                friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
+//                binding.FriendsNav.setVisibility(View.INVISIBLE);
+//                binding.friendsChildFragment.setVisibility((View.INVISIBLE));
+//
+//                listView = binding.friendsList;
+//
+//                friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+//                    @Override
+//                    public void onChanged(@Nullable final ArrayList<User> users) {
+//                        adapter = new SearchUserResultAdapter(getActivity(), users);
+//                        // binds the Adapter to the ListView
+//                        listView.setAdapter(adapter);
+//                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+//
+//                            @Override
+//                            public boolean onQueryTextSubmit(String query) {
+//                                return false;
+//                            }
+//
+//                            @Override
+//                            public boolean onQueryTextChange(String newTest) {
+//                                String text = newTest;
+//                                friendsViewModel.filter(text, sp.getString("token", ""));
+//                                return true;
+//                            }
+//                        });
+//                    }
+//                });
+//
+//                listView.setOnTouchListener(new View.OnTouchListener() {
+//                    // hide soft keyboard if a user is scrolling the result list
+//                    @Override
+//                    public boolean onTouch(View view, MotionEvent motionEvent) {
+//                        closeKeyboard(view);
+//                        return false;
+//                    }
+//                });
+//                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        closeKeyboard(view);
+//                        User u = (User) listView.getItemAtPosition(i);
+//                        //in case if we would like to do sth with chosen user
+//                        String name = u.getUserName();
+//                        //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
+//                        friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
+//                        searchView.setQuery("", false);
+//                        searchView.clearFocus();
+//                        listView.setVisibility(View.INVISIBLE);
+//                        binding.FriendsNav.setVisibility(View.VISIBLE);
+//                        binding.friendsChildFragment.setVisibility(View.VISIBLE);
+//                        binding.friendsSetting.setVisibility(View.VISIBLE);
+//                        binding.friendsCancel.setVisibility(View.GONE);
+////                        (new Handler()).postDelayed(this::doChange, 1000);
+//
+//                    }
 
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(listView != null){
-                    listView.setVisibility(View.VISIBLE);
-                }
-                binding.friendsSetting.setVisibility(View.GONE);
-                binding.friendsCancel.setVisibility(View.VISIBLE);
-                // cancel the search
-                binding.friendsCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        closeKeyboard(view);
-                        searchView.setQuery("", false);
-                        searchView.clearFocus();
-                        listView.setVisibility(View.INVISIBLE);
-                        binding.FriendsNav.setVisibility(View.VISIBLE);
-                        binding.friendsChildFragment.setVisibility((View.VISIBLE));
-                        binding.friendsSetting.setVisibility(View.VISIBLE);
-                        binding.friendsCancel.setVisibility(View.GONE);
-                    }
-                });
-                friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
-                binding.FriendsNav.setVisibility(View.INVISIBLE);
-                binding.friendsChildFragment.setVisibility((View.INVISIBLE));
+//                    public void doChange(){
+//                        insertNestedFragment(new Friends_friend_Fragment());
+//                    }
 
-                listView = binding.friendsList;
+//                });
+//            }
+//        });
 
-                friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
-                    @Override
-                    public void onChanged(@Nullable final ArrayList<User> users) {
-                        adapter = new SearchUserResultAdapter(getActivity(), users);
-                        // binds the Adapter to the ListView
-                        listView.setAdapter(adapter);
-                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
-
-                            @Override
-                            public boolean onQueryTextSubmit(String query) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onQueryTextChange(String newTest) {
-                                String text = newTest;
-                                friendsViewModel.filter(text, sp.getString("token", ""));
-                                return true;
-                            }
-                        });
-                    }
-                });
-
-                listView.setOnTouchListener(new View.OnTouchListener() {
-                    // hide soft keyboard if a user is scrolling the result list
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        closeKeyboard(view);
-                        return false;
-                    }
-                });
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        closeKeyboard(view);
-                        User u = (User) listView.getItemAtPosition(i);
-                        //in case if we would like to do sth with chosen user
-                        String name = u.getUserName();
-                        //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
-                        friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
-                        searchView.setQuery("", false);
-                        searchView.clearFocus();
-                        listView.setVisibility(View.INVISIBLE);
-                        binding.FriendsNav.setVisibility(View.VISIBLE);
-                        binding.friendsChildFragment.setVisibility(View.VISIBLE);
-                        binding.friendsSetting.setVisibility(View.VISIBLE);
-                        binding.friendsCancel.setVisibility(View.GONE);
-                        (new Handler()).postDelayed(this::doChange, 1000);
-
-                    }
-
-                    public void doChange(){
-                        insertNestedFragment(new Friends_friend_Fragment());
-                    }
-
-                });
-            }
-        });
-
-        insertNestedFragment(new Friends_friend_Fragment());
-        binding.FriendsNav.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.friends_friend:
-                    insertNestedFragment(new Friends_friend_Fragment());
-                    break;
-                case R.id.friends_sharedPlaylist:
-                    insertNestedFragment(new Friends_shared_playlist_Fragment());
-                    break;
-            }
-            return true;
-        });
+        NavController navController = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_friends));
+        NavigationUI.setupWithNavController(binding.FriendsNav, navController);
 
 
     }
 
     private void insertNestedFragment(Fragment childFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.friends_childFragment, childFragment).commit();
+        transaction.replace(R.id.nav_host_friends, childFragment).commit();
     }
 
     private void closeKeyboard(View view) {

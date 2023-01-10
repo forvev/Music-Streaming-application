@@ -4,8 +4,7 @@
     android:id="@+id/rl_search"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    tools:context=".fragment.mymusic.MyMusicFragment">
+    android:padding="16dp">
 
     <ListView
         android:id="@+id/search_songlist_result"

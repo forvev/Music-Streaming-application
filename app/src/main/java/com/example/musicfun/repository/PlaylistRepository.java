@@ -25,6 +25,10 @@ public class PlaylistRepository {
     private String addSongToPlaylist = "http://10.0.2.2:3000/playlist/addSong?auth_token=";
     private String searchSongListByName = "http://10.0.2.2:3000/playlist/getSongsFromPlaylistByName?auth_token=";
     private String createPlaylist = "http://10.0.2.2:3000/playlist/createPlaylist?auth_token=";
+
+//      shared playlists relevant urls
+     private String getSharedPlaylists = "http://10.0.2.2:3000/playlist/getUsersSharedPlaylists?auth_token=";
+     private String createSharedPlaylist = "http://10.0.2.2:3000/playlist/createSharedPlaylist?auth_token=";
     Context context;
 
     public PlaylistRepository(Context context){
@@ -58,6 +62,22 @@ public class PlaylistRepository {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("Error getAllPlaylists" + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void getSharedPlaylist(ServerCallBack callback, String token){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getSharedPlaylists + token, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error getSharedPlaylist " + error.getMessage());
             }
         });
         requestQueue.add(request);
@@ -102,7 +122,8 @@ public class PlaylistRepository {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Error renamePlaylist" + error.getMessage());
+//                TODO: handel error code 404
+                System.out.println("Error renamePlaylist " + error.getMessage());
             }
         });
         requestQueue.add(request);
@@ -124,7 +145,8 @@ public class PlaylistRepository {
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Error deletePlaylist" + error.getMessage());
+//                TODO: handel error code 404
+                System.out.println("Error deletePlaylist " + error.getMessage());
             }
         });
         requestQueue.add(request);
@@ -244,7 +266,6 @@ public class PlaylistRepository {
     }
 
     public void createPlaylist(ServerCallBack callback, String name, String token){
-
         JSONObject create_playlist = new JSONObject();
         try {
             if(name.isEmpty()){
@@ -258,6 +279,33 @@ public class PlaylistRepository {
         }
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, createPlaylist + token, create_playlist, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error createPlaylist" + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void createSharedPlaylist(ServerCallBack callback, String name, String token){
+        JSONObject create_playlist = new JSONObject();
+        try {
+            if(name.isEmpty()){
+                create_playlist = null;
+            }
+            else{
+                create_playlist.put("playlist_name", name);
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, createSharedPlaylist + token, create_playlist, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);
