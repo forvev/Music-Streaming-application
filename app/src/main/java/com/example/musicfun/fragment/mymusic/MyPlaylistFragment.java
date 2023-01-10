@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -81,7 +83,14 @@ public class MyPlaylistFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         selected_playlist_id = MyPlaylistFragmentArgs.fromBundle(getArguments()).getSelectedPlaylistId();
+        // TODO: override onBackPressed
+        // TODO: https://www.geeksforgeeks.org/how-to-implement-onbackpressed-in-fragments-in-android/
+
+
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){

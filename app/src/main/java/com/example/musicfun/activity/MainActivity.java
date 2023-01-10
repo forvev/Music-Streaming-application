@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         toolbar = binding.toolbar;
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
 //       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
