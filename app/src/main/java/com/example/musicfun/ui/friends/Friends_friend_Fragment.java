@@ -146,7 +146,6 @@ public class Friends_friend_Fragment extends Fragment {
                 adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
                 //adapter.notifyDataSetChanged(); Not working like that!
-
             }
         });
 

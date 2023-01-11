@@ -37,6 +37,7 @@ import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 public class FriendsFragment extends Fragment {
 
@@ -211,7 +212,6 @@ public class FriendsFragment extends Fragment {
                         binding.friendsSetting.setVisibility(View.VISIBLE);
                         binding.friendsCancel.setVisibility(View.GONE);
                         (new Handler()).postDelayed(this::doChange, 1000);
-
                     }
 
                     public void doChange(){
