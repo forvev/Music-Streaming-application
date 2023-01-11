@@ -25,11 +25,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Message> mMessageList;
     private String chatPartnerName;
+    //private String actualDate;
+    //private int[] positionChecked;//wurde diese position bereits Überpüft?0 = Nein, 1 = Ja
+    //TODO: Muss auf Serverseite mit datum geprüft werden weil hier RecyclerView ist
 
     public MessageListAdapter(Context context, List<Message> messageList, String chatPartnerName){
         mContext = context;
         mMessageList = messageList;
         this.chatPartnerName = chatPartnerName;
+        //actualDate = "01.01.2000";
+        //positionChecked = new int[messageList.size()];
     }
 
     @Override
@@ -76,10 +81,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
-                ((SentMessageHolder) holder).bind(message);
+                ((SentMessageHolder) holder).bind(message, position);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                ((ReceivedMessageHolder) holder).bind(message);
+                ((ReceivedMessageHolder) holder).bind(message, position);
         }
     }
 
@@ -94,11 +99,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             dateText = (TextView) itemView.findViewById(R.id.text_gchat_date_other);
         }
 
-        void bind(Message message) {
+        void bind(Message message, int pos) {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
+            //TODO: iwie checken ob der aktuelle Tag ist
+
+            // if(message.getDate().equals(actualDate) && positionChecked[pos] == 0){
+            //     dateText.setVisibility(View.GONE);
+            //     positionChecked[pos] = 1;
+            // }
             dateText.setText(message.getDate());
+            //actualDate = message.getDate();
             timeText.setText(message.getTime());
             nameText.setText(message.getSender());
 
@@ -116,12 +128,19 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             dateText = (TextView) itemView.findViewById(R.id.text_gchat_date_me);
         }
 
-        void bind(Message message) {
+        void bind(Message message, int pos) {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.getTime());
+
+           // if(message.getDate().equals(actualDate) && positionChecked[pos] == 0){
+           //     dateText.setVisibility(View.GONE);
+           //     positionChecked[pos] = 1;
+           // }
+            //Log.d("DateStyle", positionChecked[pos] + "");
             dateText.setText(message.getDate());
+            //actualDate = message.getDate();
         }
     }
 

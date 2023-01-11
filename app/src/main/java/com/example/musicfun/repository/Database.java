@@ -25,6 +25,7 @@ public class Database {
     private String searchUrl = "http://10.0.2.2:3000/get/titleStartsWith?string=";
     private String searchUserUrl = "http://10.0.2.2:3000/get/userStartsWith?auth_token=";
     private String getChatUrl = "http://10.0.2.2:3000/get/chat?auth_token=";
+    private String sendChatMsgUrl = "http://10.0.2.2:3000/get/storeMessage?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -101,6 +102,33 @@ public class Database {
 
     }
 
+    public void sendChatMsg(ServerCallBack callBack, String token, String partner, String message){
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("chatPartner", partner);
+            msg.put("message", message);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //Log.d("onSuccess", message);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, sendChatMsgUrl + token, msg, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //Log.d("disTest", "Hello");
+                callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Log.d("disTest", "Fehlgeschlagen" + error.getMessage());
+                callBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
+
+    }
+
 
 
     public void search(ServerCallBack callback, String url) {
@@ -134,6 +162,7 @@ public class Database {
         });
         requestQueue.add(request);
     }
+
 
 
 

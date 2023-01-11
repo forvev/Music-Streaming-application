@@ -1,6 +1,7 @@
 package com.example.musicfun.viewmodel.chat;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ChatViewModel extends AndroidViewModel {
 
@@ -69,6 +72,39 @@ public class ChatViewModel extends AndroidViewModel {
 
     }
 
+    public void sendMsg(String token, String partner, String message, String ownName){
+        db.sendChatMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                //TODO: Warten bis Dominik JSonObject aus Antwort macht und Datum und Zeit zurückgibt
+                try{
+                    //Log.d("SocketStuff", result.getString("date"));
+                    String theMessage = message;
+                    if (message.equals("Your chat partner used a bad word.")){
+                        theMessage = "Don't use bad words!";
+                    };
+                    Message msg = new Message(theMessage, result.getString("date"), result.getString("time"), ownName);
+                    messageArrayList.add(msg);
+                    messagesList.setValue(messageArrayList);
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token, partner, message);
+    }
+
     public MutableLiveData<ArrayList<Message>> getMessages() {return messagesList;}
+
+    public void activeAdd(Message msg){
+        messageArrayList.add(msg);
+        messagesList.postValue(messageArrayList);
+        //messagesList.setValue(messageArrayList); funktioniert nicht weil aufgerufen aus asynchrounus Thread
+    }
 
 }
