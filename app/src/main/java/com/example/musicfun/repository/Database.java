@@ -103,10 +103,15 @@ public class Database {
     }
 
     public void sendChatMsg(ServerCallBack callBack, String token, String partner, String message){
+        //TODO: store messages with neutral warning like this
+        String theMessage = message;
+        if (message.equals("Your chat partner used a bad word.")){
+            theMessage = "Message censored - Bad word used";
+        };
         JSONObject msg = new JSONObject();
         try {
             msg.put("chatPartner", partner);
-            msg.put("message", message);
+            msg.put("message", theMessage);
         }catch (JSONException e) {
             e.printStackTrace();
         }
