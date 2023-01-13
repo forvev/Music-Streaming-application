@@ -81,9 +81,10 @@ public class List_of_friends_fragment extends Fragment {
         }
 
         @Override
-        public void startChat(int i) {
+        public void startChat(String name) {
 
         }
+
     };
 
     @Override

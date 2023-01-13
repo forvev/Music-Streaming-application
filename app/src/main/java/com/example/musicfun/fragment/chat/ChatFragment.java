@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,11 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MessageListActivity;
 import com.example.musicfun.adapter.MessageListAdapter;
 import com.example.musicfun.databinding.FragmentChatBinding;
 import com.example.musicfun.datatype.Message;
 import com.example.musicfun.datatype.SocketIOClient;
-import com.example.musicfun.ui.friends.FriendsViewModel;
 import com.example.musicfun.viewmodel.chat.ChatViewModel;
 
 import org.json.JSONException;
@@ -37,7 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -56,6 +56,7 @@ public class ChatFragment extends Fragment {
     private SharedPreferences sp;
     private String chatPartnerName;
     ChatViewModel chatViewModel;
+    private Toolbar toolbar;
 
 
     public EditText editText;
@@ -96,6 +97,12 @@ public class ChatFragment extends Fragment {
         String token = sp.getString("token", "");
         //Log.d("disTest", sp.getString("token", ""));
         //Log.d("SocketStuff", sp.getString("name",""));
+
+        toolbar = binding.toolbarGchannel;
+        toolbar.setTitle(chatPartnerName);
+        ((MessageListActivity)getActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((MessageListActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(((MessageListActivity) getActivity()).getBackPress());
 
         chatViewModel.init(token, chatPartnerName);
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.recycler_gchat);
@@ -147,8 +154,6 @@ public class ChatFragment extends Fragment {
                 editText.setText("");
             }
         });
-
-
 
     }
 

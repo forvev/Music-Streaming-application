@@ -27,8 +27,7 @@ import android.widget.Toast;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MessageListActivity;
-import com.example.musicfun.adapter.FriendsListAdapter;
-import com.example.musicfun.databinding.FragmentFriendsBinding;
+import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 

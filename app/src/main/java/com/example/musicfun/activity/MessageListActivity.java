@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.musicfun.R;
@@ -22,7 +24,6 @@ public class MessageListActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-
         Intent intent = getIntent();
         String name = intent.getStringExtra(Friends_friend_Fragment.ARG_PARAM_NAME);
         //Log.d("disTest", name);
@@ -32,11 +33,17 @@ public class MessageListActivity extends AppCompatActivity {
         ChatFragment myChat = new ChatFragment();
         myChat.setArguments(data);
 
-        //change Title of Actionbar
-        getSupportActionBar().setTitle(name);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.chat_container, myChat).commit();
+    }
 
+    private View.OnClickListener backPress = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            onBackPressed();
+        }
+    };
 
+    public View.OnClickListener getBackPress (){
+        return backPress;
     }
 }
