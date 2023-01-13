@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,7 +47,9 @@ import com.example.musicfun.datatype.User;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.ui.friends.FriendsFragment;
 import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
@@ -95,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private TextView cancel;
     public NavController navController;
     private String playlistId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,18 +381,19 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 });
             }
         });
+
         searchResult.setOnTouchListener(touchListener);
         searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                closeSearchView(view);
                 User u = (User) searchResult.getItemAtPosition(i);
                 //in case if we would like to do sth with chosen user
                 String name = u.getUserName();
                 //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
                 friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
-
+                closeSearchView(view);
                 // do handler???????
+                //TODO: reload FriendslistFragment or easy way to let observer recognize the change
             }
         });
     }

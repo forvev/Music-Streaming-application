@@ -80,8 +80,7 @@ public class ChatFragment extends Fragment {
         if (data != null){
             chatPartnerName = data.getString("Username");
         }
-        //TODO: Hier SocketVerbindung aufbauen
-        //socketIOClient.mSocket = socketIOClient.getSocket();
+       //Connection to Socket
         connectToSocketIO();
 
 
@@ -95,8 +94,7 @@ public class ChatFragment extends Fragment {
 
         int state = sp.getInt("logged", 999);
         String token = sp.getString("token", "");
-        //Log.d("disTest", sp.getString("token", ""));
-        //Log.d("SocketStuff", sp.getString("name",""));
+
 
         toolbar = binding.toolbarGchannel;
         toolbar.setTitle(chatPartnerName);
@@ -141,7 +139,6 @@ public class ChatFragment extends Fragment {
 
                 chatViewModel.sendMsg(token,chatPartnerName,newMessage, sp.getString("name",""));
 
-                //Log.d("DatTest", newMessage);
                 JSONObject mess = new JSONObject();
                 try{
                     mess.put("username", chatPartnerName);
@@ -173,8 +170,6 @@ public class ChatFragment extends Fragment {
             JSONObject answer = (JSONObject) args[0];
             Message msg = new Message(answer.getString("message"), "0", answer.getString("time"), chatPartnerName);
             chatViewModel.activeAdd(msg);
-            //Log.d("SocketStuff", answer.getString("date"));
-            //Message msg = new Message(answer.getString("message"), answer.getString("date"), answer.getString("time"), chatPartnerName);
             }catch(JSONException e){
             e.printStackTrace();
             }
@@ -186,7 +181,7 @@ public class ChatFragment extends Fragment {
         socketIOClient.mSocket = socketIOClient.getSocket();
         socketIOClient.mSocket.on("new_msg",onNewMessage);
         socketIOClient.mSocket.connect();
-        //Log.d("SocketStuff",room);
+
         try{
             channelName.put("channel", room);
         }catch(JSONException e){
@@ -202,7 +197,7 @@ public class ChatFragment extends Fragment {
         List<String> badWordsList = Arrays.asList(badWords);
         for(int i = 0; i < parts.length; i++){
             if(badWordsList.contains(parts[i])){
-                return  "Your chat partner used a bad word.";
+                return  "Message censored - Bad word used";
             }
         }
         return toTest;
@@ -213,7 +208,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //TODO: Hier bei schließen Socket verbindung trennen
         socketIOClient.mSocket.emit("end");
         socketIOClient.mSocket.disconnect();
     }

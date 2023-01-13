@@ -112,7 +112,6 @@ public class Database {
         }catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d("onSuccess", message);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, sendChatMsgUrl + token, msg, new Response.Listener<JSONObject>() {
             @Override

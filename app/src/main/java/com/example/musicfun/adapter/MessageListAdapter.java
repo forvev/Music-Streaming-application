@@ -25,7 +25,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Message> mMessageList;
     private String chatPartnerName;
-    //TODO: Muss auf Serverseite mit datum geprüft werden weil hier RecyclerView ist
 
     public MessageListAdapter(Context context, List<Message> messageList, String chatPartnerName){
         mContext = context;
@@ -99,7 +98,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            //TODO: iwie checken ob der aktuelle Tag ist
 
              if(message.getDate().equals("0")){
                  dateText.setVisibility(View.GONE);
@@ -109,10 +107,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             dateText.setText(message.getDate());
             timeText.setText(message.getTime());
             nameText.setText(message.getSender());
-            //Log.d("DateProb",""+ message.getDate());
-            //Log.d("DateProb",""+ message.getDate().equals("0"));
-            //Log.d("DateProb",""+ dateText.getVisibility());
-            //Log.d("DateProb","--------------------------");
         }
     }
 
@@ -139,10 +133,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 dateText.setVisibility(View.VISIBLE);
             }
             dateText.setText(message.getDate());
-            //Log.d("DateProb",""+ message.getDate());
-            //Log.d("DateProb",""+ message.getDate().equals("0"));
-            //Log.d("DateProb",""+ dateText.getVisibility());
-            //Log.d("DateProb","--------------------------");
         }
     }
 

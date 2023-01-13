@@ -152,8 +152,6 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
     public void sendMsgWithBodyAdd(String url, String userToBeAdded){
-        //db.test();
-        //Log.d("onSuccess", url + " " + user);
 
         db.addMsg(new ServerCallBack() {
             @Override
@@ -161,7 +159,10 @@ public class FriendsViewModel extends AndroidViewModel {
 
                 try{
                     String answer = result.getString("message");
-
+                    //User user = new User(userToBeAdded);
+                    //userArrayList.add(user);
+                    //userNames.setValue(userArrayList);
+                    //userNames.notifyAll();
                     //maybe thinnk on how to automatically add user
                 }catch (JSONException e){
                     e.printStackTrace();
@@ -170,7 +171,11 @@ public class FriendsViewModel extends AndroidViewModel {
 
             @Override
             public void onError(VolleyError error) {
-
+                User user = new User(userToBeAdded);
+                userArrayList.add(user);
+                userNames.postValue(userArrayList);
+                //executed but does not work
+                Log.d("searchFail", error.getMessage());
             }
         }, url, userToBeAdded);
     }
