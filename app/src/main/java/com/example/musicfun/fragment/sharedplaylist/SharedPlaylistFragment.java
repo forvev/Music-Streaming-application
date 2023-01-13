@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
@@ -30,6 +36,9 @@ import com.example.musicfun.databinding.FragmentMymusicBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
+import com.example.musicfun.ui.friends.FriendsFragment;
+import com.example.musicfun.ui.friends.Friends_friend_Fragment;
+import com.example.musicfun.ui.friends.List_of_friends_fragment;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
@@ -65,8 +74,10 @@ public class SharedPlaylistFragment extends Fragment {
 
         @Override
         public void share(int position) {
-            // send this playlist to friends
-            Toast.makeText(getContext(), "share playlist", Toast.LENGTH_SHORT).show();
+            //Using navigation approach move to another fragment
+            NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment();
+            Navigation.findNavController(getView()).navigate(action);
+
         }
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){

@@ -5,6 +5,7 @@ public class Playlist {
     private String playlist_id;
     private String owner;
     private boolean isDefault;
+    private boolean isShared;
 
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
@@ -18,11 +19,12 @@ public class Playlist {
         this.playlist_id = playlist_id;
     }
 
-    public Playlist(String playlist_name, String playlist_id, String owner, boolean isDefault) {
+    public Playlist(String playlist_name, String playlist_id, String owner, boolean isDefault, boolean isShared) {
         this.playlist_name = playlist_name;
         this.playlist_id = playlist_id;
         this.isDefault = isDefault;
         this.owner = owner;
+        this.isShared = isShared;
     }
 
     public boolean isDefault() {
@@ -38,6 +40,10 @@ public class Playlist {
 
     public String getOwner() {
         return owner;
+    }
+
+    public boolean isShared() {
+        return isShared;
     }
 
     public void setOwner(String owner) {
