@@ -52,7 +52,7 @@ public class SearchPlaylistAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.row_playlist, null);
             holder.name = (TextView) view.findViewById(R.id.playlist_name);
             holder.playlist_menu = (ImageView) view.findViewById(R.id.playlist_menu);
-            holder.playlist_menu.setVisibility(View.GONE);
+            holder.playlist_menu.setVisibility(View.INVISIBLE);
             view.setTag(holder);
         } else {
             holder = (SearchPlaylistViewHolder) view.getTag();

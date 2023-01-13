@@ -53,18 +53,7 @@ public class SharedPlaylistFragment extends Fragment {
 
         @Override
         public void setDefaultPlaylist(int position, boolean isDefault) {
-            // send playlist_id to server as default playlist
-            if(!isDefault){
-                if(position == 0){
-                    Toast.makeText(getContext(), "You need to have a default playlist!", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    viewModel.setAsDefault(0);
-                }
-            }
-            else{
-                viewModel.setAsDefault(position);
-            }
+
         }
 
         @Override
@@ -113,9 +102,11 @@ public class SharedPlaylistFragment extends Fragment {
         viewModel.getM_playlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Playlist>>(){
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {
-                listView = binding.playlist;
-                playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
-                listView.setAdapter(playlistAdapter);
+                if(!playlists.isEmpty()){
+                    listView = binding.playlist;
+                    playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
+                    listView.setAdapter(playlistAdapter);
+                }
             }
         });
     }

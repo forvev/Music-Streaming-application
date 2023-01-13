@@ -54,7 +54,7 @@ public class SearchSonglistAdapter extends BaseAdapter {
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist_name);
             holder.songlist_menu = (ImageView) view.findViewById(R.id.add_to_default);
-            holder.songlist_menu.setVisibility(View.GONE);
+            holder.songlist_menu.setVisibility(View.INVISIBLE);
             view.setTag(holder);
         } else {
             holder = (SearchSonglistViewHolder) view.getTag();

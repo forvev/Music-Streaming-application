@@ -55,7 +55,6 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             isBound = true;
-            System.out.println("service is bound!!!!!");
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service.setValue(binder.getMusicbannerService());
         }

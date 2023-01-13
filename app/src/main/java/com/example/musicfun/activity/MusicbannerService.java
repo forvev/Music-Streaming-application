@@ -238,6 +238,7 @@ public class MusicbannerService extends Service {
         intent1.putExtra("title", title);
         intent1.putExtra("artist", artist);
         intent1.putExtra("coverUrl", coverUrl);
+//        System.out.println("send Song Info through broadcast!!!");
         broadcaster.sendBroadcast(intent1);
     }
 

@@ -94,6 +94,14 @@ public class PlaylistViewModel extends AndroidViewModel {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     JSONArray ownerObject = (JSONArray) response.get("listOfPlaylistOwners");
                     ArrayList<String> listOfOwners = new ArrayList<>();
+
+                    if(playlistObject.length() != ownerObject.length()){
+                        System.out.println("Error! Playlist length is not equal to owner name list!");
+                    }
+                    if(playlistObject.length() == 0 || ownerObject.length() == 0){
+                        m_playlist.setValue(playlist);
+                        return;
+                    }
                     for(int i = 0; i < ownerObject.length(); i++){
                         listOfOwners.add(ownerObject.getString(i));
                     }
@@ -104,7 +112,6 @@ public class PlaylistViewModel extends AndroidViewModel {
                     }
                     getDefaultPlaylist();
                     m_playlist.setValue(playlist);
-                    m_searchResult.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

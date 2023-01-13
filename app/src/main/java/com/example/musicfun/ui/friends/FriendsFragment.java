@@ -53,12 +53,7 @@ public class FriendsFragment extends Fragment {
     private SharedPreferences sp;
     private FragmentFriendsBinding binding;
 
-    //search view part
-    SearchView searchView;
-    ListView listView;
     FriendsViewModel friendsViewModel;
-    SearchUserResultAdapter adapter;
-    //----
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

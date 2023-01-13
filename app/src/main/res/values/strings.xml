@@ -67,6 +67,8 @@
     <string name="invite_friends">Invite friends</string>
     <string name="listen_together">Listen together</string>
     <string name="participants">Participants</string>
+    <string name="current_title">Current title</string>
+    <string name="coming_next">Coming next</string>
 
 
 </resources>

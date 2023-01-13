@@ -1,22 +1,23 @@
-package com.example.musicfun.banner;
+package com.example.musicfun.fragment.banner;
 
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,18 +26,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.MainActivity;
+import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.activity.MusicbannerService;
 import com.example.musicfun.databinding.FragmentLyricsBinding;
 import com.example.musicfun.datatype.Lyrics;
 import com.example.musicfun.datatype.RelativeSizeColorSpan;
+import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +56,12 @@ public class LyricsFragment extends Fragment {
 
     private StyledPlayerControlView controlView;
     private TextView tv_title;
+    private String title = "";
     private TextView tv_artist;
-    private ImageView back;
+    private String artist = "";
     private ImageView coverView;
+    private ImageView btn_currentPlaylist;
+    private ImageView btn_active_guests;
 
     // views and variables for the canvas
     private List<Lyrics> lyricsList;
@@ -68,6 +75,8 @@ public class LyricsFragment extends Fragment {
     private RelativeSizeColorSpan highlight = new RelativeSizeColorSpan (1.3f, spanColorHighlight);
     private Spannable spannableText;
     private ScrollingMovementMethod scrolltext = new ScrollingMovementMethod();
+
+    private boolean isBound;
 
 
     @Nullable
@@ -86,33 +95,29 @@ public class LyricsFragment extends Fragment {
         isVisible = true;
         controlView = binding.playerView;
         controlView.setShowTimeoutMs(0);
-        service = ((MainActivity)getActivity()).getService();
-        player = service.player;
-        controlView.setPlayer(player);
 
-//      Initialize the views
+//        Initialize the views
+//        update title and artist
         tv_title = getView().findViewById(R.id.styled_player_song_name);
         tv_artist = getView().findViewById(R.id.styled_player_artist);
         coverView = getView().findViewById(R.id.imageView2);
-        Bundle arguments = getArguments();
-        String title = arguments.getString("title");
-        tv_title.setText(title);
-        String artist = arguments.getString("artist");
-        tv_artist.setText(artist);
-        if(player != null){
-            String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
-            String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
-            Picasso.get().load(coverUrl).into(coverView);
-        }
-        back = binding.scaleDownToBanner;
-        back.setOnClickListener(backToPreviousFragment);
 
-//        update title and artist
+//        lyrics relevant
+        tv_lyrics = binding.lyrics;
+        tv_lyrics.setMovementMethod(scrolltext);
+
+        btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
+        btn_currentPlaylist.setOnClickListener(showCurrentPlaylist);
+//        TODO: check who called this fragment
+//        TODO: if it is from friends, then show active_guests button. Otherwise, hide this button
+        btn_active_guests = getView().findViewById(R.id.active_participants);
+        btn_active_guests.setOnClickListener(showActiveGuests);
+
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                String title = intent.getStringExtra("title");
-                String artist = intent.getStringExtra("artist");
+                title = intent.getStringExtra("title");
+                artist = intent.getStringExtra("artist");
                 tv_title.setText(title);
                 tv_artist.setText(artist);
                 String coverUrl = intent.getStringExtra("coverUrl");
@@ -120,33 +125,99 @@ public class LyricsFragment extends Fragment {
             }
         };
 
-//        lyrics relevant
-        tv_lyrics = binding.lyrics;
-//        scrollView = binding.svLyrics;
-        tv_lyrics.setMovementMethod(scrolltext);
-        updateLyricsFile();
+        System.out.println("hey title is not empty " + tv_title==null + " ... " + title);
     }
 
-    private View.OnClickListener backToPreviousFragment = new View.OnClickListener() {
+//    Bind service from fragment to make sure the service is bound on time
+    private ServiceConnection playerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            isBound = true;
+            MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
+            service = binder.getMusicbannerService();
+
+            player = service.player;
+            controlView.setPlayer(player);
+
+            if(player != null){
+                String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
+                String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+                Picasso.get().load(coverUrl).into(coverView);
+                ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            tv_title.setText(s);
+                        }
+                    }
+                });
+                ((LyricsActivity)getActivity()).getSongArtist().observe(getViewLifecycleOwner(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            tv_artist.setText(s);
+                        }
+                    }
+                });
+                updateLyricsFile();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
+    private View.OnClickListener showActiveGuests = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Hide the layout. The fragment is not paused!!!!
-            FrameLayout frameLayout = getActivity().findViewById(R.id.fl_lyrics);
-            frameLayout.setVisibility(View.GONE);
-            isVisible =false;
+            // TODO: inform main activity to switch fragments
+
+        }
+    };
+
+    private View.OnClickListener showCurrentPlaylist = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int startItemIndex = player.getCurrentMediaItemIndex();
+            List<Songs> songInfo = service.getSongInfo();
+            List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+            Gson gson = new Gson();
+            String json = gson.toJson(restOfPlaylist);
+
+            NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToCurrentPlaylistFragment(json);
+            Navigation.findNavController(getView()).navigate(action);
+            isVisible = false;
         }
     };
 
     @Override
     public void onStart() {
         super.onStart();
+        Intent musicbannerServiceIntent = new Intent(getActivity(), MusicbannerService.class);
+        getActivity().bindService(musicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver((broadcastReceiver), new IntentFilter(COPA_RESULT));
     }
 
     @Override
     public void onStop() {
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+        doUnbindService();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        doUnbindService();
+        super.onDestroy();
+    }
+
+    private void doUnbindService(){
+        if (isBound){
+            getActivity().unbindService(playerServiceConnection);
+            isBound = false;
+        }
     }
 
     private void updateLyricsFile(){
@@ -171,29 +242,31 @@ public class LyricsFragment extends Fragment {
 
     // checks the current player position every 500ms
     private void getCurrentPlayerPosition() {
-        // if there is no need to scroll, scrollAmount will be <=0
-        if (player.isPlaying() && isVisible) {
+        if(isVisible){
             long time = player.getCurrentPosition();
             int newLine = findLine(time);
-            // update UI if line index has been changed
-            if (newLine != currentLine){
-                // remove all existing span (old span)
-                spannableText.removeSpan(highlight);
-                // set span for the new line
-                int[] startEnd = currentStartPoint(newLine);
-                spannableText.setSpan(highlight, startEnd[0], startEnd[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showFiveLines(newLine);
-                currentLine = newLine;
-            }
-            controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PLAYING);
-        }
-        else if (isVisible){
-            long time = player.getCurrentPosition();
-            int newLine = findLine(time);
-            showFiveLines(newLine);
+            showCurrentLines(newLine);
             int[] startEnd = currentStartPoint(newLine);
             spannableText.setSpan(highlight, startEnd[0], startEnd[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             currentLine = newLine;
+
+            if (player.isPlaying()) {
+                time = player.getCurrentPosition();
+                newLine = findLine(time);
+                // update UI if line index has been changed
+                if (newLine != currentLine){
+                    // remove all existing span (old span)
+                    spannableText.removeSpan(highlight);
+                    // set span for the new line
+                    startEnd = currentStartPoint(newLine);
+                    spannableText.setSpan(highlight, startEnd[0], startEnd[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    showCurrentLines(newLine);
+                    currentLine = newLine;
+                }
+            }
+            controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PLAYING);
+        }
+        else{
             controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PAUSED);
         }
     }
@@ -216,7 +289,7 @@ public class LyricsFragment extends Fragment {
     }
 
     // Move the textview (including the hidden lines) so that the current line is always in the middle of the screen
-    private void showFiveLines(int i){
+    private void showCurrentLines(int i){
         int middleOfTextviewHeight = tv_lyrics.getHeight() / 2;
         tv_lyrics.scrollTo(0, -middleOfTextviewHeight + tv_lyrics.getLayout().getLineTop(i));
     }

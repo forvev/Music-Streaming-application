@@ -43,12 +43,10 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
-import com.example.musicfun.banner.LyricsFragment;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.ui.friends.FriendsViewModel;
-import com.example.musicfun.viewmodel.MainActivityViewModel;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
-    private MainActivityViewModel mainActivityViewModel;
     private DiscoveryViewModel discoveryViewModel;
     private TextView tv_title;
     private TextView tv_artist;
@@ -137,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         tv_title = findViewById(R.id.banner_song_title);
         tv_artist = findViewById(R.id.banner_artist);
         control = binding.controls;
-        mainActivityViewModel = new MainActivityViewModel(getApplication());
         discoveryViewModel = new DiscoveryViewModel(getApplication());
 
         //update UI from based on the information passed from service
@@ -184,18 +180,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         binding.controls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.flLyrics.setVisibility(View.VISIBLE);
-                LyricsFragment playerViewFragment = new LyricsFragment();
-                Bundle arguments = new Bundle();
-                arguments.putString("title" , tv_title.getText().toString());
-                arguments.putString("artist" , tv_artist.getText().toString());
-                playerViewFragment.setArguments(arguments);
-                String fragmentTag = playerViewFragment.getClass().getName();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.nav_host_fragment_container, playerViewFragment)
-                        .addToBackStack(fragmentTag)
-                        .commit();
+                Intent i = new Intent(MainActivity.this, LyricsActivity.class);
+                startActivity(i);
             }
         });
     }

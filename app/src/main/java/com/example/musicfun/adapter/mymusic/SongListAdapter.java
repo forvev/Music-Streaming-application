@@ -38,6 +38,12 @@ public class SongListAdapter extends BaseAdapter {
         this.songlistMenuClick = songlistMenuClick;
     }
 
+    public SongListAdapter(Context context, List<Songs> songList){
+        mContext = context;
+        this.songList = songList;
+        inflater = LayoutInflater.from(mContext);
+    }
+
     public class SonglistViewHolder {
         TextView name;
         TextView artist;
@@ -68,53 +74,63 @@ public class SongListAdapter extends BaseAdapter {
             holder.name = (TextView) view.findViewById(R.id.song_name);
             holder.artist = (TextView) view.findViewById(R.id.artist_name);
             holder.imageView = (ImageView) view.findViewById(R.id.add_to_default) ;
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    popup = new PopupMenu(mContext, view);
-                    MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.songlist_option_menu, popup.getMenu());
-                    popup.show();
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.remove_from_playlist:
-                                    AlertDialog.Builder adb=new AlertDialog.Builder(mContext);
-                                    adb.setTitle(R.string.delete_playlist);
-                                    adb.setMessage(mContext.getString(R.string.sure_delete_song));
-                                    final int positionToRemove = position;
-                                    adb.setNegativeButton("Cancel", null);
-                                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            songlistMenuClick.removeFromPlaylist(position);
-                                        }});
-                                    adb.show();
-                                    break;
-                                case R.id.add_to_playlist:
-                                    songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
-                                    break;
-                                case R.id.share_song:
-                                    songlistMenuClick.share(position);
-                                    break;
+            if (songlistMenuClick != null){
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        popup = new PopupMenu(mContext, view);
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.songlist_option_menu, popup.getMenu());
+                        popup.show();
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.remove_from_playlist:
+                                        AlertDialog.Builder adb=new AlertDialog.Builder(mContext);
+                                        adb.setTitle(R.string.delete_playlist);
+                                        adb.setMessage(mContext.getString(R.string.sure_delete_song));
+                                        final int positionToRemove = position;
+                                        adb.setNegativeButton("Cancel", null);
+                                        adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                songlistMenuClick.removeFromPlaylist(position);
+                                            }});
+                                        adb.show();
+                                        break;
+                                    case R.id.add_to_playlist:
+                                        songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
+                                        break;
+                                    case R.id.share_song:
+                                        songlistMenuClick.share(position);
+                                        break;
+                                }
+                                return false;
                             }
-                            return false;
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
+            else{
+                holder.imageView.setVisibility(View.INVISIBLE);
+            }
             view.setTag(holder);
         } else {
             holder = (SonglistViewHolder) view.getTag();
         }
-        mOnInputListner = (PassDataInterface) mContext;
         holder.rl_clickable_song = view.findViewById(R.id.rl_clickable_song);
-        holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL, false);
-            }
-        });
+        if (songlistMenuClick != null){
+            mOnInputListner = (PassDataInterface) mContext;
+            holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL, false);
+                }
+            });
+        }
+        else{
+            holder.rl_clickable_song.setClickable(false);
+        }
 
         // set the results into TextViews
         holder.name.setText(songList.get(position).getSongName());
