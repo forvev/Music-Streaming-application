@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -46,6 +48,7 @@ import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirect
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Objects;
 
 public class FriendsFragment extends Fragment {

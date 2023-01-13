@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -17,13 +18,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
+import android.os.Debug;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.friends.FriendsListAdapter;
+import com.example.musicfun.activity.MessageListActivity;
+import com.example.musicfun.adapter.FriendsListAdapter;
+import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 
@@ -45,6 +50,7 @@ public class Friends_friend_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final String ARG_PARAM_NAME = "chatPartnerName";
 
     // TODO: Rename and change types of parameters
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
@@ -66,7 +72,11 @@ public class Friends_friend_Fragment extends Fragment {
         }
 
         @Override
-        public void startChat(int i) {
+        public void startChat(String name) {
+            //Log.d("disTest", name);
+            Intent goChat = new Intent(getActivity(), MessageListActivity.class);
+            goChat.putExtra(ARG_PARAM_NAME, name);
+            getActivity().startActivity(goChat);
 
         }
     };
