@@ -161,7 +161,6 @@ public class FriendsViewModel extends AndroidViewModel {
 
                 try{
                     String answer = result.getString("message");
-                    Log.d("onSuccess", answer);
 
                     //maybe thinnk on how to automatically add user
                 }catch (JSONException e){
@@ -177,4 +176,5 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}
+
 }
