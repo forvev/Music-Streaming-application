@@ -166,9 +166,10 @@ public class ChatFragment extends Fragment {
         public void call(Object... args) {
             try{
             JSONObject answer = (JSONObject) args[0];
-            //Log.d("SocketStuff", answer.getString("date"));
-            Message msg = new Message(answer.getString("message"), answer.getString("date"), answer.getString("time"), chatPartnerName);
+            Message msg = new Message(answer.getString("message"), "0", answer.getString("time"), chatPartnerName);
             chatViewModel.activeAdd(msg);
+            //Log.d("SocketStuff", answer.getString("date"));
+            //Message msg = new Message(answer.getString("message"), answer.getString("date"), answer.getString("time"), chatPartnerName);
             }catch(JSONException e){
             e.printStackTrace();
             }

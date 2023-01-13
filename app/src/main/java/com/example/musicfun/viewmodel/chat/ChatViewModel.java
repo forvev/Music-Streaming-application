@@ -83,7 +83,8 @@ public class ChatViewModel extends AndroidViewModel {
                     if (message.equals("Your chat partner used a bad word.")){
                         theMessage = "Don't use bad words!";
                     };
-                    Message msg = new Message(theMessage, result.getString("date"), result.getString("time"), ownName);
+                    //Message msg = new Message(theMessage, result.getString("date"), result.getString("time"), ownName);
+                    Message msg = new Message(theMessage, "0", result.getString("time"), ownName);
                     messageArrayList.add(msg);
                     messagesList.setValue(messageArrayList);
                 }catch(JSONException e){
