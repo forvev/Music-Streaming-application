@@ -65,7 +65,7 @@ public class ChoosePlaylistFragment extends Fragment {
                 createPlaylist();
             }
         });
-        viewModel.getAllPlaylists();
+        viewModel.getAllOwnedPlaylists();
         viewModel.getM_playlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Playlist>>(){
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {

@@ -48,6 +48,7 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         TextView owner_name;
         ImageView imageView;
         LinearLayout linearLayout;
+        ImageView playlist_owner_icon;
     }
 
     @Override
@@ -74,17 +75,17 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
             holder.playlist_name = (TextView) view.findViewById(R.id.shared_playlist_name);
             holder.owner_name = (TextView) view.findViewById(R.id.shared_playlist_owner);
             holder.imageView = (ImageView) view.findViewById(R.id.shared_playlist_menu);
+            holder.playlist_owner_icon = (ImageView) view.findViewById(R.id.playlist_owner_icon);
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     popup = new PopupMenu(mContext, view);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.shared_playlist_option_menu, popup.getMenu());
-//                    TODO: set little figure if I am the owner of this list
-                    if (playlist.get(position).isDefault()) {
-//                        popup.getMenu().getItem(1).setTitle(R.string.unpin);
+                    if (playlist.get(position).getOwner().equals(sp.getString("name", ""))) {
+                        holder.playlist_owner_icon.setVisibility(View.VISIBLE);
                     } else {
-//                        popup.getMenu().getItem(1).setTitle(R.string.set_as_default);
+                        holder.playlist_owner_icon.setVisibility(View.GONE);
                     }
                     popup.show();
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -153,16 +154,11 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         holder.playlist_name.setText(playlist.get(position).getPlaylist_name());
         if(playlist.get(position).getOwner().equals(sp.getString("name", ""))){
             holder.owner_name.setText(sp.getString("name", ""));
+            holder.playlist_owner_icon.setVisibility(View.VISIBLE);
         }
         else{
             holder.owner_name.setText(playlist.get(position).getOwner());
-        }
-
-//       TODO: set little figure if I am the owner of this list
-        if (playlist.get(position).isDefault()) {
-//            holder.pin.setVisibility(View.VISIBLE);
-        } else {
-//            holder.pin.setVisibility(View.GONE);
+            holder.playlist_owner_icon.setVisibility(View.GONE);
         }
         return view;
     }
