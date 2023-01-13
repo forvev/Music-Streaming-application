@@ -43,7 +43,7 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         sp = context.getSharedPreferences("login", MODE_PRIVATE);
     }
 
-    public class SharedPlaylistViewHolder {
+    private class SharedPlaylistViewHolder {
         TextView playlist_name;
         TextView owner_name;
         ImageView imageView;

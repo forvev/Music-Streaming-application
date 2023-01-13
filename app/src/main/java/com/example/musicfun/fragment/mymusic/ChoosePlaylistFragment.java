@@ -29,6 +29,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.mymusic.ChoosePlaylistAdapter;
 import com.example.musicfun.adapter.search.SearchPlaylistAdapter;
 import com.example.musicfun.databinding.FragmentChoosePlaylistBinding;
 import com.example.musicfun.datatype.Playlist;
@@ -43,6 +44,7 @@ public class ChoosePlaylistFragment extends Fragment {
     private ListView listView;
     private LinearLayout create_new_playlist;
     private ArrayAdapter<String> arrayAdapter;
+    private ChoosePlaylistAdapter adapter;
 
     @Nullable
     @Override
@@ -75,7 +77,8 @@ public class ChoosePlaylistFragment extends Fragment {
                     playlistNames.add(playlists.get(i).getPlaylist_name());
                 }
                 arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_single_choice, playlistNames);
-                listView.setAdapter(arrayAdapter);
+//                adapter = new ChoosePlaylistAdapter(getContext(), playlists);
+//                listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

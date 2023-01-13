@@ -26,14 +26,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.LyricsActivity;
+import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.fragment.banner.CurrentPlaylistFragment;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MyPlaylistFragment extends Fragment {
 
@@ -86,10 +90,9 @@ public class MyPlaylistFragment extends Fragment {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((MainActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(closeFragment);
         selected_playlist_id = MyPlaylistFragmentArgs.fromBundle(getArguments()).getSelectedPlaylistId();
-        // TODO: override onBackPressed
-        // TODO: https://www.geeksforgeeks.org/how-to-implement-onbackpressed-in-fragments-in-android/
-
 
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
@@ -149,6 +152,14 @@ public class MyPlaylistFragment extends Fragment {
             }
         });
     }
+
+    private View.OnClickListener closeFragment = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            NavController navController = NavHostFragment.findNavController(MyPlaylistFragment.this);
+            navController.popBackStack();
+        }
+    };
 
     @Override
     public void onAttach(Context context){
