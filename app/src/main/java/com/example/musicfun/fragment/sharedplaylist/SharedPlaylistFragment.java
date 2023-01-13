@@ -113,9 +113,11 @@ public class SharedPlaylistFragment extends Fragment {
         viewModel.getM_playlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Playlist>>(){
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {
-                listView = binding.playlist;
-                playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
-                listView.setAdapter(playlistAdapter);
+                if(!playlists.isEmpty()){
+                    listView = binding.playlist;
+                    playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
+                    listView.setAdapter(playlistAdapter);
+                }
             }
         });
     }

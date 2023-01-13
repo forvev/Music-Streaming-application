@@ -25,6 +25,7 @@ public class PlaylistRepository {
     private String addSongToPlaylist = "http://10.0.2.2:3000/playlist/addSong?auth_token=";
     private String searchSongListByName = "http://10.0.2.2:3000/playlist/getSongsFromPlaylistByName?auth_token=";
     private String createPlaylist = "http://10.0.2.2:3000/playlist/createPlaylist?auth_token=";
+    private String getAllOwnedPlaylists = "http://10.0.2.2:3000/playlist/getAllUsersOwnedPlaylists?auth_token=";
 
 //      shared playlists relevant urls
      private String getSharedPlaylists = "http://10.0.2.2:3000/playlist/getUsersSharedPlaylists?auth_token=";
@@ -78,6 +79,22 @@ public class PlaylistRepository {
     public void getAllPlaylists(ServerCallBack callback, String token){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getAllPlaylists + token, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error getAllPlaylists" + error.getMessage());
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void getAllOwnedPlaylists(ServerCallBack callback, String token){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getAllOwnedPlaylists + token, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);

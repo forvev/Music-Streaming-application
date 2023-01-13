@@ -68,7 +68,32 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), username, false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), username, false, playlistObject.getJSONObject(i).getBoolean("isSharedPlaylist"));
+                        playlist.add(p);
+                    }
+                    getDefaultPlaylist();
+                    m_playlist.setValue(playlist);
+                    m_searchResult.setValue(playlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token);
+    }
+
+    public void getAllOwnedPlaylists() {
+        playlist.clear();
+        db.getAllOwnedPlaylists(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray playlistObject = (JSONArray) response.get("playlists");
+                    for (int i = 0; i < playlistObject.length(); i++) {
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), username, false, playlistObject.getJSONObject(i).getBoolean("isSharedPlaylist"));
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -94,12 +119,21 @@ public class PlaylistViewModel extends AndroidViewModel {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     JSONArray ownerObject = (JSONArray) response.get("listOfPlaylistOwners");
                     ArrayList<String> listOfOwners = new ArrayList<>();
+
+                    if(playlistObject.length() != ownerObject.length()){
+                        System.out.println("Error! Playlist length is not equal to owner name list!");
+                    }
+                    if(playlistObject.length() == 0 || ownerObject.length() == 0){
+                        m_playlist.setValue(playlist);
+                        m_searchResult.setValue(playlist);
+                        return;
+                    }
                     for(int i = 0; i < ownerObject.length(); i++){
                         listOfOwners.add(ownerObject.getString(i));
                     }
 
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), listOfOwners.get(i), false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"), listOfOwners.get(i), false, playlistObject.getJSONObject(i).getBoolean("isSharedPlaylist"));
                         playlist.add(p);
                     }
                     getDefaultPlaylist();
@@ -150,7 +184,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false, false));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -169,7 +203,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject response) {
                 try {
                     JSONObject playlist_info = response.getJSONObject("playlist");
-                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false));
+                    playlist.add(new Playlist(name, playlist_info.getString("_id"), username, false, true));
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -244,7 +278,7 @@ public class PlaylistViewModel extends AndroidViewModel {
                 try {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
-                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),username, false);
+                        Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),username, false, playlistObject.getJSONObject(i).getBoolean("isSharedPlaylist"));
                         searchResult.add(p);
                     }
                     m_searchResult.setValue(searchResult);
