@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityLyricsBinding;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.fragment.login.SettingFragment;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -63,6 +64,12 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
                 onBackPressed();
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            title.setValue(extras.getString("title"));
+            artist.setValue(extras.getString("artist"));
+        }
     }
 
     ServiceConnection playerServiceConnection = new ServiceConnection() {

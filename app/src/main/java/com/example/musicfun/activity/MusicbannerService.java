@@ -94,7 +94,6 @@ public class MusicbannerService extends Service {
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
                     // TODO: add listen history UI to setting activity
-//                    System.out.println("playbackStats.getTotalPlayTimeMs() = " + playbackStats.getTotalPlayTimeMs());
                 }));
 
         sp = getSharedPreferences("login",MODE_PRIVATE);
@@ -238,7 +237,6 @@ public class MusicbannerService extends Service {
         intent1.putExtra("title", title);
         intent1.putExtra("artist", artist);
         intent1.putExtra("coverUrl", coverUrl);
-//        System.out.println("send Song Info through broadcast!!!");
         broadcaster.sendBroadcast(intent1);
     }
 

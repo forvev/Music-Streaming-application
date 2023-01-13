@@ -101,6 +101,10 @@ public class LyricsFragment extends Fragment {
         tv_title = getView().findViewById(R.id.styled_player_song_name);
         tv_artist = getView().findViewById(R.id.styled_player_artist);
         coverView = getView().findViewById(R.id.imageView2);
+        if(title != ""){
+            tv_title.setText(title);
+            tv_artist.setText(artist);
+        }
 
 //        lyrics relevant
         tv_lyrics = binding.lyrics;
@@ -125,7 +129,6 @@ public class LyricsFragment extends Fragment {
             }
         };
 
-        System.out.println("hey title is not empty " + tv_title==null + " ... " + title);
     }
 
 //    Bind service from fragment to make sure the service is bound on time
@@ -143,22 +146,24 @@ public class LyricsFragment extends Fragment {
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
                 String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
-                ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        if (!s.isEmpty()){
-                            tv_title.setText(s);
+                if (title.equals("") && artist.equals("")){
+                    ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            if (!s.isEmpty()){
+                                tv_title.setText(s);
+                            }
                         }
-                    }
-                });
-                ((LyricsActivity)getActivity()).getSongArtist().observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        if (!s.isEmpty()){
-                            tv_artist.setText(s);
+                    });
+                    ((LyricsActivity)getActivity()).getSongArtist().observe(getViewLifecycleOwner(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            if (!s.isEmpty()){
+                                tv_artist.setText(s);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 updateLyricsFile();
             }
         }

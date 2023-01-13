@@ -80,7 +80,7 @@ public class CurrentPlaylistFragment extends Fragment {
             SongListAdapter second_adapter = new SongListAdapter(getActivity(), nextTitles);
             lv_next.setAdapter(second_adapter);
         }
-
+//      TODO: bind service here. If broadcast receive intent, update listview
 
     }
 

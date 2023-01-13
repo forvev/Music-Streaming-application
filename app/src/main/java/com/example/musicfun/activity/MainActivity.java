@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, LyricsActivity.class);
+                i.putExtra("title",tv_title.getText());
+                i.putExtra("artist",tv_artist.getText());
                 startActivity(i);
             }
         });
