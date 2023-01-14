@@ -557,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     @Override
     public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
-        startAutoPlay = true;
+        startAutoPlay = false;
         this.startPosition = startPosition;
         this.startItemIndex = startItemIndex;
         createMediaItems(playlist);

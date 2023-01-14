@@ -14,6 +14,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -50,6 +51,7 @@ import com.example.musicfun.datatype.RelativeSizeColorSpan;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -109,6 +111,12 @@ public class LyricsFragment extends Fragment {
     private boolean isSession;
 
     private SharedPreferences sp;
+
+    //syncrhonized playback
+    private boolean playerseek = false;
+    private boolean playerpause = false;
+    String songID;
+    String timestamp;
 
     @Nullable
     @Override
@@ -184,6 +192,54 @@ public class LyricsFragment extends Fragment {
             service = binder.getMusicbannerService();
 
             player = service.player;
+            player.addListener(new Player.Listener() {
+                @Override
+                public void onIsPlayingChanged(boolean isPlaying) {
+                    if (!playerseek) {
+                        Log.d("test", "onIsPlayingChanged");
+                        if (isPlaying) {
+                            sendPlayerstate("play", "");
+                        } else {
+                            playerpause = true;
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    Log.d("test", !isPlaying + "");
+                                    Log.d("test", playerpause + "");
+                                    if (!player.isPlaying() && playerpause) {
+                                        sendPlayerstate("pause", "");
+                                    }
+                                    playerpause = false;
+                                }
+                            }, 200);
+                        }
+                    }
+                    playerseek = false;
+                }
+
+                @Override
+                public void onRepeatModeChanged(int repeatMode) {
+                    sendPlayerstate("repeat", Integer.toString(repeatMode));
+                }
+
+                @Override
+                public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, int reason) {
+                    if (reason == Player.DISCONTINUITY_REASON_SEEK) {
+                        if (playerseek == true) {
+                            playerseek = false;
+                        }
+                        else {
+                            Log.d("test", "onPositionDiscontinuity");
+                            if (oldPosition.mediaItemIndex == newPosition.mediaItemIndex) {
+                                sendPlayerstate("syncTime", Long.toString(newPosition.positionMs));
+                            }
+                            else {
+                                sendPlayerstate("syncSong", Integer.toString(newPosition.mediaItemIndex));
+                            }
+                        }
+                    }
+                }
+            });
             controlView.setPlayer(player);
 
             if(player != null){
@@ -217,6 +273,7 @@ public class LyricsFragment extends Fragment {
                                     public void onChanged(String s) {
                                         if (!s.isEmpty()){
                                             room = s;
+                                            controlView.setShowShuffleButton(false);
                                             connectToSocketIO();
                                             JSONObject mess = new JSONObject();
                                             try{
@@ -226,6 +283,33 @@ public class LyricsFragment extends Fragment {
                                                 e.printStackTrace();
                                             }
                                             socketIOClient.mSocket.emit("activeUsers",  mess);
+                                            Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    if (usernames.size() > 1) {
+                                                        String person2;
+                                                        if (usernames.get(0).equals(sp.getString("name", ""))) {
+                                                            person2 = usernames.get(1);
+                                                        }
+                                                        else {
+                                                            person2 = usernames.get(0);
+                                                        }
+                                                        JSONObject mess2 = new JSONObject();
+                                                        try{
+                                                            mess2.put("msg", "syncJoin");
+                                                            mess2.put("song", "");
+                                                            mess2.put("time", "");
+                                                            mess2.put("person", person2);
+                                                            mess2.put("person2", sp.getString("name", ""));
+                                                            mess2.put("username", room);
+                                                            mess2.put("playPlaying", false);
+                                                        }catch(JSONException e){
+                                                            e.printStackTrace();
+                                                        }
+                                                        socketIOClient.mSocket.emit("syncOnJoin",  mess2);
+                                                    }
+                                                }
+                                            }, 1000);
                                         }
                                     }
                                 });
@@ -294,6 +378,14 @@ public class LyricsFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        JSONObject mess = new JSONObject();
+        try{
+            mess.put("msg", "send usernames");
+            mess.put("username", room);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        socketIOClient.mSocket.emit("activeUsers",  mess);
         socketIOClient.mSocket.emit("end");
         socketIOClient.mSocket.disconnect();
         doUnbindService();
@@ -424,11 +516,70 @@ public class LyricsFragment extends Fragment {
         }
     };
 
+    private void sendPlayerstate(String message, String info) {
+        JSONObject mess = new JSONObject();
+        try{
+            mess.put("msg", message);
+            mess.put("info", info);
+            mess.put("username", room);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        socketIOClient.mSocket.emit("sendPlayerstate",  mess);
+    }
 
     private Emitter.Listener onNewPlayerstate = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-
+            JSONObject jsonmessage = (JSONObject) args[0];
+            String message = "";
+            String info = "";
+            try {
+                message = jsonmessage.getString("message");
+                info = jsonmessage.getString("info");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (message.equals("play")) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.play();
+                    }
+                });
+            }
+            if (message.equals("pause")) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.pause();
+                    }
+                });
+            }
+            if (message.equals("syncSong")) {
+                int finalInfo = Integer.parseInt(info);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        playerseek = true;
+                        player.seekTo(finalInfo, 0);
+                    }
+                });
+            }
+            if (message.equals("syncTime")) {
+                long finalInfo = Long.parseLong(info);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        playerseek = true;
+                        player.seekTo(finalInfo);
+                    }
+                });
+            }
+            if (message.equals("repeat")) {
+                Integer finalInfo = Integer.parseInt(info);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.setRepeatMode(finalInfo);
+                    }
+                });
+            }
         }
     };
 
@@ -458,9 +609,70 @@ public class LyricsFragment extends Fragment {
                usernames.add(message);
                usernames = filterNames(usernames);
 
-               Log.d("test", usernames.size() + " in other");
                //usernamesLive.postValue(usernames);
            }
+        }
+    };
+
+    private Emitter.Listener onNewSyncOnJoin = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            String username = sp.getString("name", "");
+            JSONObject jsonmessage = (JSONObject) args[0];
+            String message = "";
+            String song = "";
+            String time = "";
+            String person = "";
+            String person2 = "";
+            Boolean playerPlaying  = false;
+            try {
+                message = jsonmessage.getString("message");
+                song = jsonmessage.getString("song");
+                time = jsonmessage.getString("time");
+                person = jsonmessage.getString("person");
+                person2 = jsonmessage.getString("person2");
+                playerPlaying = jsonmessage.getBoolean("player");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (message.equals("syncJoin") && username.equals(person)) {
+                String finalPerson = person2;
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        songID = Integer.toString(player.getCurrentMediaItemIndex());
+                        Log.d("test", "songID " + songID);
+                        timestamp = Long.toString(player.getCurrentPosition());
+                        JSONObject mess = new JSONObject();
+                        try{
+                            mess.put("msg", "syncJoinBack");
+                            mess.put("song", songID);
+                            mess.put("time", timestamp);
+                            mess.put("person", "");
+                            mess.put("player", player.isPlaying());
+                            mess.put("person2", finalPerson);
+                            mess.put("username", room);
+                        }catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                        socketIOClient.mSocket.emit("syncOnJoin",  mess);
+                    }
+                });
+            }
+            if (message.equals("syncJoinBack") && person2.equals(username)) {
+                Integer finalSong = Integer.parseInt(song);
+                Long finalTime = Long.parseLong(time);
+                Boolean finalPlayerPlaying = playerPlaying;
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d("test", "syncJoinBack");
+                        playerseek = true;
+                        player.seekTo(finalSong, finalTime);
+                        if (finalPlayerPlaying) {
+                            player.setPlayWhenReady(true);
+                        }
+                    }
+                });
+            }
         }
     };
 
@@ -481,6 +693,7 @@ public class LyricsFragment extends Fragment {
         socketIOClient.mSocket = socketIOClient.getSocket();
         socketIOClient.mSocket.on("new_playerstate",onNewPlayerstate);
         socketIOClient.mSocket.on("new_activeUsers",onNewActiveUsers);
+        socketIOClient.mSocket.on("new_syncOnJoin",onNewSyncOnJoin);
         socketIOClient.mSocket.connect();
         try{
             channelName.put("channel", room);
