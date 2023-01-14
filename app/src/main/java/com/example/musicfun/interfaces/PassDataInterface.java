@@ -10,4 +10,5 @@ public interface PassDataInterface {
  */
     void playSong(List<Songs> playlist, int repeatMode, boolean shuffle);
     void changePlayMode(int repeatMode, boolean shuffle);
+    void seek (List<Songs> playlist, long startPosition, int startItemIndex);
 }

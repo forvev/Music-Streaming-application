@@ -2,9 +2,11 @@ package com.example.musicfun.fragment.banner;
 
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -17,17 +19,23 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.LyricsActivity;
@@ -63,12 +71,11 @@ public class LyricsFragment extends Fragment {
     private ImageView btn_currentPlaylist;
     private ImageView btn_active_guests;
 
-    // views and variables for the canvas
+    // views and variables for the lyrics
     private List<Lyrics> lyricsList;
     private int currentLine = -1;   // current singing row , should be highlighted.
     private TextView tv_lyrics;
     private boolean isVisible;
-
     private final int POLL_INTERVAL_MS_PLAYING = 1000;
     private final int POLL_INTERVAL_MS_PAUSED = 3000;
     int spanColorHighlight = Color.parseColor("#311B92");
@@ -76,8 +83,10 @@ public class LyricsFragment extends Fragment {
     private Spannable spannableText;
     private ScrollingMovementMethod scrolltext = new ScrollingMovementMethod();
 
+//    Toolbar and buttons
+    private Toolbar toolbar;
     private boolean isBound;
-
+    private boolean isSession;
 
     @Nullable
     @Override
@@ -96,12 +105,19 @@ public class LyricsFragment extends Fragment {
         controlView = binding.playerView;
         controlView.setShowTimeoutMs(0);
 
+        toolbar = binding.toolbarLyrics;
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_downward_24));
+        ((LyricsActivity)getActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((LyricsActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(closeFragment);
+
 //        Initialize the views
 //        update title and artist
         tv_title = getView().findViewById(R.id.styled_player_song_name);
         tv_artist = getView().findViewById(R.id.styled_player_artist);
         coverView = getView().findViewById(R.id.imageView2);
-        if(title != ""){
+        if(!Objects.equals(title, "")){
             tv_title.setText(title);
             tv_artist.setText(artist);
         }
@@ -112,10 +128,14 @@ public class LyricsFragment extends Fragment {
 
         btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
         btn_currentPlaylist.setOnClickListener(showCurrentPlaylist);
-//        TODO: check who called this fragment
-//        TODO: if it is from friends, then show active_guests button. Otherwise, hide this button
-        btn_active_guests = getView().findViewById(R.id.active_participants);
-        btn_active_guests.setOnClickListener(showActiveGuests);
+        btn_active_guests = binding.activeListeners;
+        if (isSession) {
+            btn_active_guests.setVisibility(View.VISIBLE);
+            btn_active_guests.setOnClickListener(showActiveGuests);
+        }
+        else {
+            btn_active_guests.setVisibility(View.GONE);
+        }
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -163,6 +183,19 @@ public class LyricsFragment extends Fragment {
                             }
                         }
                     });
+                    ((LyricsActivity)getActivity()).getSession().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean b) {
+                            isSession = b;
+                            if(btn_active_guests != null && isSession){
+                                btn_active_guests.setVisibility(View.VISIBLE);
+                                btn_active_guests.setOnClickListener(showActiveGuests);
+                            }
+                            else if (btn_active_guests != null){
+                                btn_active_guests.setVisibility(View.GONE);
+                            }
+                        }
+                    });
                 }
                 updateLyricsFile();
             }
@@ -170,14 +203,6 @@ public class LyricsFragment extends Fragment {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
-
-    private View.OnClickListener showActiveGuests = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // TODO: inform main activity to switch fragments
 
         }
     };
@@ -194,6 +219,16 @@ public class LyricsFragment extends Fragment {
             NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToCurrentPlaylistFragment(json);
             Navigation.findNavController(getView()).navigate(action);
             isVisible = false;
+        }
+    };
+
+
+    private View.OnClickListener showActiveGuests = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            Toast.makeText(getContext(), "active listeners clicked!", Toast.LENGTH_SHORT).show();
+            NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToActiveListenerFragment();
+            Navigation.findNavController(getView()).navigate(action);
         }
     };
 
@@ -316,4 +351,25 @@ public class LyricsFragment extends Fragment {
     public void changeCover(String url){
         Picasso.get().load(url).into(coverView);
     }
+
+    private View.OnClickListener closeFragment = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(isSession){
+                AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
+                adb.setMessage("Are you sure to leave the room?");
+                adb.setNegativeButton("Cancel", null);
+                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().finish();
+                    }
+                });
+                adb.show();
+            }
+            else{
+                getActivity().finish();
+            }
+        }
+    };
+
 }

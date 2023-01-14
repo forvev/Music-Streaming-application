@@ -56,13 +56,13 @@
                 android:src="@drawable/ic_baseline_playlist_play_24"
                 android:padding="4dp"/>
 
-            <ImageView
-                android:id="@+id/active_participants"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_baseline_emoji_people_24"
-                android:padding="4dp"
-                android:layout_toLeftOf="@id/current_playlist"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/active_participants"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:src="@drawable/ic_baseline_emoji_people_24"-->
+<!--                android:padding="4dp"-->
+<!--                android:layout_toLeftOf="@id/current_playlist"/>-->
 
         </RelativeLayout>
 

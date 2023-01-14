@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 Intent i = new Intent(MainActivity.this, LyricsActivity.class);
                 i.putExtra("title",tv_title.getText());
                 i.putExtra("artist",tv_artist.getText());
+                i.putExtra("listenTogether", false);
                 startActivity(i);
             }
         });
@@ -551,6 +552,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     public void changePlayMode(int repeatMode, boolean shuffle) {
         player.setRepeatMode(repeatMode);
         player.setShuffleModeEnabled(shuffle);
+    }
+
+    @Override
+    public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
+        startAutoPlay = true;
+        this.startPosition = startPosition;
+        this.startItemIndex = startItemIndex;
+        createMediaItems(playlist);
     }
 
     public boolean isConnectedToServer(String url, int timeout) {

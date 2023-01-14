@@ -3,6 +3,7 @@ package com.example.musicfun.fragment.sharedplaylist;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
 import com.example.musicfun.databinding.FragmentSharedPlaylistSongsBinding;
 import com.example.musicfun.databinding.FragmentSongsBinding;
@@ -36,8 +39,12 @@ import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
+import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPlaylistSongsFragment extends Fragment {
 
@@ -45,10 +52,11 @@ public class SharedPlaylistSongsFragment extends Fragment {
     private SonglistViewModel viewModel;
     private ListView listView;
     private SongListAdapter adapter;
-    private ArrayList<Songs> songList = new ArrayList<>();
+//    private ArrayList<Songs> songList = new ArrayList<>();
     private String selected_playlist_id;
     private String song_id;
     private PassDataInterface passData;
+    private TextView tv_listenTogether;
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
@@ -84,11 +92,8 @@ public class SharedPlaylistSongsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tv_listenTogether = binding.listenTogether;
         selected_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
-        // TODO: override onBackPressed
-        // TODO: https://www.geeksforgeeks.org/how-to-implement-onbackpressed-in-fragments-in-android/
-
-
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
@@ -99,8 +104,26 @@ public class SharedPlaylistSongsFragment extends Fragment {
                 listView.setAdapter(adapter);
                 if (songs.size() != 0){
                     binding.empty.setVisibility(View.GONE);
+                    tv_listenTogether.setVisibility(View.VISIBLE);
+                    tv_listenTogether.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            TODO: get current position and current item index from server
+                            passData.seek(songs, 0, 0);
+
+                            Intent intent = new Intent(getActivity(), LyricsActivity.class);
+//                            Gson gson = new Gson();
+//                            String json = gson.toJson(songs);
+                            intent.putExtra("title", songs.get(0).getSongName());
+                            intent.putExtra("artist", songs.get(0).getArtist());
+                            intent.putExtra("listenTogether", true);
+//                            intent.putExtra("playlist", json);
+                            startActivity(intent);
+                        }
+                    });
                 }
                 else{
+                    tv_listenTogether.setVisibility(View.GONE);
                     binding.empty.setVisibility(View.VISIBLE);
                 }
             }
@@ -117,6 +140,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
                 }
             }
         });
+
     }
 
     @Override

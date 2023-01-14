@@ -10,8 +10,4 @@
     <item
         android:id="@+id/add_friend"
         android:title="@string/invite_friends" />
-
-    <item
-        android:id="@+id/listen_together"
-        android:title="@string/listen_together" />
 </menu>
