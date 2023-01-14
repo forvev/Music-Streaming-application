@@ -80,33 +80,33 @@ public class SongListAdapter extends BaseAdapter {
             holder.share.setOnClickListener(share -> shareSong());
 
             holder.imageView = (ImageView) view.findViewById(R.id.custom_menu);
-            holder.imageView.setOnClickListener(view1 -> {
-                popup = new PopupMenu(mContext, view1);
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.discovery_menu, popup.getMenu());
-                popup.show();
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.add_to_playlist:
-                                Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-                                songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
-                                break;
-                            case R.id.share_song:
-                                Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-                                songlistMenuClick.share(i);
-                                break;
-                        }
-                        return false;
-                    }
-                });
-            });
+
             view.setTag(holder);
         }
         else{
             holder = (SongListViewHolder) view.getTag();
         }
+        holder.imageView.setOnClickListener(view1 -> {
+            popup = new PopupMenu(mContext, view1);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.discovery_menu, popup.getMenu());
+            popup.show();
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.add_to_playlist:
+                            songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
+                            break;
+                        case R.id.share_song:
+                            Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                            songlistMenuClick.share(i);
+                            break;
+                    }
+                    return false;
+                }
+            });
+        });
         holder.clickField.setOnClickListener(click -> {
             playSong(i);
         });

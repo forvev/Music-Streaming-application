@@ -18,8 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.discovery.SongListAdapter;
@@ -41,6 +46,9 @@ public class MostHeardFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
+    private String song_id;
+    private boolean isVisible = true;
+
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
         public void removeFromPlaylist(int position) {
@@ -49,8 +57,13 @@ public class MostHeardFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-//            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
-//            Navigation.findNavController(getView()).navigate(action);
+            setSong_id(songId);
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.GONE);
+            isVisible = false;
+            NavDirections action = MostHeardFragmentDirections.actionMostHeardFragmentToChoosePlaylistFragment();
+            Navigation.findNavController(getView()).navigate(action);
         }
 
         @Override
@@ -117,6 +130,12 @@ public class MostHeardFragment extends Fragment {
             System.out.println("Network not connected!!!");
             return;
         }
+        if(!isVisible){
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.VISIBLE);
+            isVisible = true;
+        }
 
         discoveryViewModel.init("get/popularSongsAmongFriends?auth_token=" + sp.getString("token", ""));
 
@@ -129,7 +148,22 @@ public class MostHeardFragment extends Fragment {
                 listView.setAdapter(adapter);
             }
         });
+        NavController navController = NavHostFragment.findNavController(MostHeardFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && song_id != null){
+                    discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
+                }
+            }
+        });
     }
+
+    private void setSong_id (String song_id){
+        this.song_id = song_id;
+    }
+
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network nw = connectivityManager.getActiveNetwork();

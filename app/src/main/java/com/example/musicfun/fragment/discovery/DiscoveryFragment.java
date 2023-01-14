@@ -29,6 +29,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
@@ -109,26 +112,8 @@ public class DiscoveryFragment extends Fragment {
         }
 
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
-
-        // link to other song list fragments
-        insertNestedFragment(new NewReleaseFragment());
-        binding.DiscoveryNav.setOnItemSelectedListener(item ->{
-            switch (item.getItemId()){
-                case  R.id.new_releases:
-                    insertNestedFragment(new NewReleaseFragment());
-                    break;
-                case R.id.most_heard:
-                    insertNestedFragment(new MostHeardFragment());
-                    break;
-                case R.id.charts:
-                    insertNestedFragment(new ChartsFragment());
-                    break;
-                case R.id.may_like:
-                    insertNestedFragment(new MayLikeFragment());
-                    break;
-            }
-            return true;
-        });
+        NavController navController = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
+        NavigationUI.setupWithNavController(binding.DiscoveryNav, navController);
     }
 
     private Boolean isNetworkAvailable(Application application) {
@@ -137,11 +122,6 @@ public class DiscoveryFragment extends Fragment {
         if (nw == null) return false;
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
-    }
-
-    private void insertNestedFragment(Fragment childFragment) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.discovery_childFragment, childFragment).commit();
     }
 
     // rewrite onAttach to send item clicked in the list back to main activity
@@ -161,5 +141,8 @@ public class DiscoveryFragment extends Fragment {
         binding = null;
     }
 
+    public View getContainer(){
+        return getView().findViewById(R.id.DiscoveryNav);
+    }
 
 }

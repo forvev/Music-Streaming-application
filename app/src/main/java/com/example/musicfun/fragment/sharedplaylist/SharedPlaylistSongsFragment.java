@@ -84,9 +84,6 @@ public class SharedPlaylistSongsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-//        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         selected_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
         // TODO: override onBackPressed
         // TODO: https://www.geeksforgeeks.org/how-to-implement-onbackpressed-in-fragments-in-android/

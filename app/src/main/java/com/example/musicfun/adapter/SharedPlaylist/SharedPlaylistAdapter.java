@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.musicfun.R;
@@ -44,11 +45,11 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
     }
 
     private class SharedPlaylistViewHolder {
-        TextView playlist_name;
-        TextView owner_name;
-        ImageView imageView;
-        LinearLayout linearLayout;
-        ImageView playlist_owner_icon;
+        private TextView playlist_name;
+        private TextView owner_name;
+        private ImageView menu;
+        private ImageView playlist_owner_icon;
+        private LinearLayout linearLayout;
     }
 
     @Override
@@ -72,11 +73,14 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
             holder = new SharedPlaylistAdapter.SharedPlaylistViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
             view = inflater.inflate(R.layout.row_shared_playlist, null);
+            view.findViewById(R.id.btn_select).setVisibility(View.GONE);
+            view.findViewById(R.id.default_icon).setVisibility(View.GONE);
             holder.playlist_name = (TextView) view.findViewById(R.id.shared_playlist_name);
             holder.owner_name = (TextView) view.findViewById(R.id.shared_playlist_owner);
-            holder.imageView = (ImageView) view.findViewById(R.id.shared_playlist_menu);
+            holder.menu = (ImageView) view.findViewById(R.id.shared_playlist_menu);
+            holder.menu.setVisibility(View.VISIBLE);
             holder.playlist_owner_icon = (ImageView) view.findViewById(R.id.playlist_owner_icon);
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
+            holder.menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     popup = new PopupMenu(mContext, view);

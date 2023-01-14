@@ -17,11 +17,18 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.discovery.SongListAdapter;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentArgs;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.SonglistMenuClick;
@@ -40,6 +47,9 @@ public class ChartsFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
+    private String song_id;
+    private boolean isVisible = true;
+
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
         public void removeFromPlaylist(int position) {
@@ -48,8 +58,13 @@ public class ChartsFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-//            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
-//            Navigation.findNavController(getView()).navigate(action);
+            setSong_id(songId);
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.GONE);
+            isVisible = false;
+            NavDirections action = ChartsFragmentDirections.actionChartsFragment2ToChoosePlaylistFragment();
+            Navigation.findNavController(getView()).navigate(action);
         }
 
         @Override
@@ -118,6 +133,13 @@ public class ChartsFragment extends Fragment {
             return;
         }
 
+        if(!isVisible){
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.VISIBLE);
+            isVisible = true;
+        }
+
         discoveryViewModel.init("get/mostPopularSongs");
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
@@ -129,7 +151,20 @@ public class ChartsFragment extends Fragment {
                 listView.setAdapter(adapter);
             }
         });
+        NavController navController = NavHostFragment.findNavController(ChartsFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && song_id != null){
+                    discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
+                }
+            }
+        });
+    }
 
+    private void setSong_id (String song_id){
+        this.song_id = song_id;
     }
 
     private Boolean isNetworkAvailable(Application application) {

@@ -13,7 +13,7 @@
         android:padding="4dp"
         android:src="@drawable/ic_baseline_perm_identity_24"
         android:layout_gravity="center_vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_push_pin_24"
         android:layout_gravity="center_vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
     <LinearLayout
@@ -40,7 +40,7 @@
             android:gravity="center_vertical"
             android:text="Playlist 1"
             android:fontFamily="@font/merriweather"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/purple_900"/>
 
         <TextView
@@ -49,10 +49,16 @@
             android:layout_height="wrap_content"
             android:text="Owner 1"
             android:fontFamily="@font/merriweather"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/purple_900"/>
 
     </LinearLayout>
+
+    <RadioButton
+        android:id="@+id/btn_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/shared_playlist_menu"
@@ -62,7 +68,9 @@
         android:padding="4dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_baseline_more_horiz_24"
+        android:visibility="gone"
         />
+
 
 
 
