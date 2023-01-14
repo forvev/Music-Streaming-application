@@ -32,7 +32,11 @@
     <fragment
         android:id="@+id/activeListenerFragment"
         android:name="com.example.musicfun.fragment.banner.ActiveListenerFragment"
-        android:label="ActiveListenerFragment" />
+        android:label="ActiveListenerFragment" >
+        <argument
+            android:name="usernames"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/choosePlaylistFragment2"
         android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"

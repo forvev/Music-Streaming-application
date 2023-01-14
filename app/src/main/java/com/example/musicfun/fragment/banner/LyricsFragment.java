@@ -1,5 +1,6 @@
 package com.example.musicfun.fragment.banner;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.app.AlertDialog;
@@ -10,12 +11,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +52,11 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.example.musicfun.datatype.SocketIOClient;
+import io.socket.emitter.Emitter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +79,10 @@ public class LyricsFragment extends Fragment {
     private ImageView btn_currentPlaylist;
     private ImageView btn_active_guests;
 
+    //Socket IO
+    SocketIOClient socketIOClient = new SocketIOClient();
+    private String room = "test";
+
     // views and variables for the lyrics
     private List<Lyrics> lyricsList;
     private int currentLine = -1;   // current singing row , should be highlighted.
@@ -83,10 +95,15 @@ public class LyricsFragment extends Fragment {
     private Spannable spannableText;
     private ScrollingMovementMethod scrolltext = new ScrollingMovementMethod();
 
+    //list of connected usernames in synchronized playback
+    private List<String> usernames = new ArrayList<>();
+
 //    Toolbar and buttons
     private Toolbar toolbar;
     private boolean isBound;
     private boolean isSession;
+
+    private SharedPreferences sp;
 
     @Nullable
     @Override
@@ -95,6 +112,7 @@ public class LyricsFragment extends Fragment {
         binding = FragmentLyricsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
         return root;
     }
 
@@ -187,6 +205,25 @@ public class LyricsFragment extends Fragment {
                         @Override
                         public void onChanged(Boolean b) {
                             isSession = b;
+                            if (isSession) {
+                                ((LyricsActivity)getActivity()).getPlaylistID().observe(getViewLifecycleOwner(), new Observer<String>() {
+                                    @Override
+                                    public void onChanged(String s) {
+                                        if (!s.isEmpty()){
+                                            room = s;
+                                            connectToSocketIO();
+                                            JSONObject mess = new JSONObject();
+                                            try{
+                                                mess.put("msg", "send usernames");
+                                                mess.put("username", room);
+                                            }catch(JSONException e){
+                                                e.printStackTrace();
+                                            }
+                                            socketIOClient.mSocket.emit("activeUsers",  mess);
+                                        }
+                                    }
+                                });
+                            }
                             if(btn_active_guests != null && isSession){
                                 btn_active_guests.setVisibility(View.VISIBLE);
                                 btn_active_guests.setOnClickListener(showActiveGuests);
@@ -227,7 +264,9 @@ public class LyricsFragment extends Fragment {
         @Override
         public void onClick(View view) {
 //            Toast.makeText(getContext(), "active listeners clicked!", Toast.LENGTH_SHORT).show();
-            NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToActiveListenerFragment();
+            Gson gson = new Gson();
+            String json = gson.toJson(usernames);
+            NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToActiveListenerFragment(json);
             Navigation.findNavController(getView()).navigate(action);
         }
     };
@@ -249,6 +288,8 @@ public class LyricsFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        socketIOClient.mSocket.emit("end");
+        socketIOClient.mSocket.disconnect();
         doUnbindService();
         super.onDestroy();
     }
@@ -372,4 +413,53 @@ public class LyricsFragment extends Fragment {
         }
     };
 
+
+    private Emitter.Listener onNewPlayerstate = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+
+        }
+    };
+
+    private Emitter.Listener onNewActiveUsers = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            String username = sp.getString("name", "");
+            JSONObject jsonmessage = (JSONObject) args[0];
+            String message = "";
+            try {
+                message = jsonmessage.getString("message");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+           if (message.equals("send usernames")) {
+               usernames.clear();
+               JSONObject mess = new JSONObject();
+               try{
+                   mess.put("msg", username);
+                   mess.put("username", room);
+               }catch(JSONException e){
+                   e.printStackTrace();
+               }
+               socketIOClient.mSocket.emit("activeUsers",  mess);
+           }
+           else {
+               usernames.add(message);
+           }
+        }
+    };
+
+    private void connectToSocketIO() {
+        JSONObject channelName = new JSONObject();
+        socketIOClient.mSocket = socketIOClient.getSocket();
+        socketIOClient.mSocket.on("new_playerstate",onNewPlayerstate);
+        socketIOClient.mSocket.on("new_activeUsers",onNewActiveUsers);
+        socketIOClient.mSocket.connect();
+        try{
+            channelName.put("channel", room);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        socketIOClient.mSocket.emit("join", channelName);
+    }
 }

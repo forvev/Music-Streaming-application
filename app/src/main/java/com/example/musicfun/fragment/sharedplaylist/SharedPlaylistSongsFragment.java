@@ -117,6 +117,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
                             intent.putExtra("title", songs.get(0).getSongName());
                             intent.putExtra("artist", songs.get(0).getArtist());
                             intent.putExtra("listenTogether", true);
+                            intent.putExtra("playlistID", selected_playlist_id + "");
 //                            intent.putExtra("playlist", json);
                             startActivity(intent);
                         }

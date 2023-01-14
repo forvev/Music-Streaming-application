@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,6 +35,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private MutableLiveData<String> title = new MutableLiveData<>();
     private MutableLiveData<String> artist = new MutableLiveData<>();
     private MutableLiveData<Boolean> session = new MutableLiveData<>();
+    private MutableLiveData<String> playlistID = new MutableLiveData<>();
     private MutableLiveData<List<Songs>> m_playlist = new MutableLiveData<>();
     private List<Songs> playlist = new ArrayList<>();
 
@@ -59,6 +61,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
             title.setValue(extras.getString("title"));
             artist.setValue(extras.getString("artist"));
             session.setValue(extras.getBoolean("listenTogether"));
+            playlistID.setValue(extras.getString("playlistID"));
         }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_lyrics);
@@ -83,6 +86,10 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
     public MutableLiveData<String> getSongTitle(){
         return title;
+    }
+
+    public MutableLiveData<String> getPlaylistID(){
+        return playlistID;
     }
 
     public MutableLiveData<String> getSongArtist(){

@@ -18,7 +18,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.musicfun.R;
 import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.databinding.FragmentActiveListenersBinding;
+import com.example.musicfun.datatype.Songs;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 
 public class ActiveListenerFragment extends Fragment {
@@ -46,7 +51,7 @@ public class ActiveListenerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //       Toolbar handeling:
         toolbar = binding.toolbarLyrics;
-        toolbar.setTitle("");
+        toolbar.setTitle("Active users");
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_close_24));
         ((LyricsActivity)getActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((LyricsActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -55,7 +60,13 @@ public class ActiveListenerFragment extends Fragment {
         lv_acitveListeners =  binding.lvActiveListeners;
         noActive = binding.noActiveListeners;
 //        TODO: set list adapter and fetch active users
-//        If active users != 0, hide textview
+        String json = ActiveListenerFragmentArgs.fromBundle(getArguments()).getUsernames();
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<String>>(){}.getType();
+        List<String> usernames = gson.fromJson(json, type);
+        if(!usernames.isEmpty()) {
+            noActive.setVisibility(View.GONE);
+        }
 
     }
 
