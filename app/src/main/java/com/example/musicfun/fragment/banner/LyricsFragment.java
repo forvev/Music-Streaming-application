@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -59,8 +60,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class LyricsFragment extends Fragment {
 
@@ -96,7 +99,8 @@ public class LyricsFragment extends Fragment {
     private ScrollingMovementMethod scrolltext = new ScrollingMovementMethod();
 
     //list of connected usernames in synchronized playback
-    private List<String> usernames = new ArrayList<>();
+    private ArrayList<String> usernames = new ArrayList<>();
+    MutableLiveData<ArrayList<String>> usernamesLive = new MutableLiveData<ArrayList<String>>();
 
 //    Toolbar and buttons
     private Toolbar toolbar;
@@ -445,9 +449,25 @@ public class LyricsFragment extends Fragment {
            }
            else {
                usernames.add(message);
+               usernames = filterNames(usernames);
+
+               Log.d("test", usernames.size() + " in other");
+               //usernamesLive.postValue(usernames);
            }
         }
     };
+
+    public ArrayList<String> filterNames(ArrayList<String> theList){
+        Set<String> s = new LinkedHashSet<>(theList);
+        ArrayList<String> newList = new ArrayList<>();
+        newList.addAll(s);
+        return newList;
+    }
+
+    public MutableLiveData<ArrayList<String>> getUsernamesLive(){
+        return usernamesLive;
+    }
+
 
     private void connectToSocketIO() {
         JSONObject channelName = new JSONObject();
