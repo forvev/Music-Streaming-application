@@ -48,6 +48,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void fetchLyrics (String song_id){
+        songLrc.clear();
         db.fetchLyrics(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {

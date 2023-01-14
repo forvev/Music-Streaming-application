@@ -76,6 +76,7 @@ public class LyricsFragment extends Fragment {
     private int currentLine = -1;   // current singing row , should be highlighted.
     private TextView tv_lyrics;
     private boolean isVisible;
+    private boolean lyricsExist;
     private final int POLL_INTERVAL_MS_PLAYING = 1000;
     private final int POLL_INTERVAL_MS_PAUSED = 3000;
     int spanColorHighlight = Color.parseColor("#311B92");
@@ -146,6 +147,7 @@ public class LyricsFragment extends Fragment {
                 tv_artist.setText(artist);
                 String coverUrl = intent.getStringExtra("coverUrl");
                 changeCover(coverUrl);
+                updateLyricsFile();
             }
         };
 
@@ -267,6 +269,7 @@ public class LyricsFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Lyrics> lyrics) {
                 if(lyrics.size() != 0){
+                    lyricsExist = true;
                     lyricsList = lyrics;
                     String allText = "";
                     for (Lyrics l : lyrics){
@@ -276,13 +279,17 @@ public class LyricsFragment extends Fragment {
                     spannableText = (Spannable) tv_lyrics.getText();
                     getCurrentPlayerPosition();
                 }
+                else{
+                    lyricsExist = false;
+                    tv_lyrics.setText("No Lyrics");
+                }
             }
         });
     }
 
     // checks the current player position every 500ms
     private void getCurrentPlayerPosition() {
-        if(isVisible){
+        if(isVisible && lyricsExist){
             long time = player.getCurrentPosition();
             int newLine = findLine(time);
             showCurrentLines(newLine);
@@ -306,7 +313,7 @@ public class LyricsFragment extends Fragment {
             }
             controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PLAYING);
         }
-        else{
+        else if (lyricsExist){
             controlView.postDelayed(this::getCurrentPlayerPosition, POLL_INTERVAL_MS_PAUSED);
         }
     }
