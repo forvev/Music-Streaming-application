@@ -48,7 +48,9 @@ import com.example.musicfun.datatype.User;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.ui.friends.FriendsFragment;
 import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
@@ -393,13 +395,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                closeSearchView(view);
                 User u = (User) searchResult.getItemAtPosition(i);
                 //in case if we would like to do sth with chosen user
                 String name = u.getUserName();
                 //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
                 friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
-
+                closeSearchView(view);
                 // do handler???????
             }
         });

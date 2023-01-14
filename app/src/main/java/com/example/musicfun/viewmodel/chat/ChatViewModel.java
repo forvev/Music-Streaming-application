@@ -76,15 +76,8 @@ public class ChatViewModel extends AndroidViewModel {
         db.sendChatMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
-                //TODO: Warten bis Dominik JSonObject aus Antwort macht und Datum und Zeit zurückgibt
                 try{
-                    //Log.d("SocketStuff", result.getString("date"));
-                    String theMessage = message;
-                    if (message.equals("Your chat partner used a bad word.")){
-                        theMessage = "Don't use bad words!";
-                    };
-                    //Message msg = new Message(theMessage, result.getString("date"), result.getString("time"), ownName);
-                    Message msg = new Message(theMessage, "0", result.getString("time"), ownName);
+                    Message msg = new Message(message, "0", result.getString("time"), ownName);
                     messageArrayList.add(msg);
                     messagesList.setValue(messageArrayList);
                 }catch(JSONException e){
