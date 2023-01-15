@@ -119,6 +119,7 @@ public class LyricsFragment extends Fragment {
     private boolean playerpause = false;
     String songID;
     String timestamp;
+    String lastTimestamp;
 
     @Nullable
     @Override
@@ -213,7 +214,7 @@ public class LyricsFragment extends Fragment {
                                     }
                                     playerpause = false;
                                 }
-                            }, 200);
+                            }, 500);
                         }
                     }
                     playerseek = false;
@@ -581,7 +582,8 @@ public class LyricsFragment extends Fragment {
                     }
                 });
             }
-            if (message.equals("syncTime")) {
+            if (message.equals("syncTime") && !info.equals(lastTimestamp)) {
+                lastTimestamp = info;
                 long finalInfo = Long.parseLong(info);
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
