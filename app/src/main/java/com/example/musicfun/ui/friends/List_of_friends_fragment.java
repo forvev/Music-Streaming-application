@@ -127,7 +127,11 @@ public class List_of_friends_fragment extends Fragment {
         //TODO: change it into
         //TODO: add friend from the friend view
         //TODO: check out the search friends
-        friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        //Find selected playlist id for the request to db
+        selected_shared_id_2 = List_of_friends_fragmentArgs.fromBundle(getArguments()).getSelectedSharedId2();
+        Log.i("play_id", selected_shared_id_2);
+        //friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_shared_id_2);
         listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
@@ -140,9 +144,6 @@ public class List_of_friends_fragment extends Fragment {
 
             }
         });
-
-        //Find selected playlist id for the request to db
-        selected_shared_id_2 = List_of_friends_fragmentArgs.fromBundle(getArguments()).getSelectedSharedId2();
 
         Button my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
         my_button.setVisibility(View.INVISIBLE);

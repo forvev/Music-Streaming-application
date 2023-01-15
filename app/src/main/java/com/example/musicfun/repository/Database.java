@@ -231,4 +231,28 @@ public class Database {
         });
         requestQueue.add(request);
     }
+
+    public void all_friends_to_shared_playlist(ServerCallBack serverCallBack, String url, String playlist_id){
+        JSONObject user_search = new JSONObject();
+
+        try {
+            user_search.put("playlist_id",playlist_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, baseUrl + url, user_search, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                serverCallBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                serverCallBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
+    }
 }
