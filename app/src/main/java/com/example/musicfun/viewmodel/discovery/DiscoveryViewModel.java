@@ -57,6 +57,9 @@ public class DiscoveryViewModel extends AndroidViewModel {
                         Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
                         songsArrayList.add(s);
                     }
+                    if(url.equals("get/songRecommendations?auth_token=" + token)){
+                        System.out.println("in viewmodel = " + songsArrayList.size());
+                    }
                     songNames.setValue(songsArrayList);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -45,7 +45,6 @@ public class SongListAdapter extends BaseAdapter {
     private class SongListViewHolder {
         TextView name;
         TextView artist;
-        ImageView share;
         ImageView imageView;
         RelativeLayout clickField;
     }
@@ -75,9 +74,6 @@ public class SongListAdapter extends BaseAdapter {
             holder.artist = (TextView) view.findViewById(R.id.custom_view_songartist);
             holder.artist.setSelected(true);
             holder.clickField = view.findViewById(R.id.song_and_artist);
-
-            holder.share = (ImageView) view.findViewById(R.id.custom_view_songshare);
-            holder.share.setOnClickListener(share -> shareSong());
 
             holder.imageView = (ImageView) view.findViewById(R.id.custom_menu);
 

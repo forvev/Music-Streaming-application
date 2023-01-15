@@ -46,6 +46,7 @@ public class ChoosePlaylistFragment extends Fragment {
     private LinearLayout create_new_playlist;
     private ChoosePlaylistAdapter adapter;
     private Button save;
+    private Button cancel;
     private int selected_pos;
 
     @Nullable
@@ -78,12 +79,20 @@ public class ChoosePlaylistFragment extends Fragment {
                     adapter = new ChoosePlaylistAdapter(getContext(), playlists, selectPlaylistInterface);
                     listView.setAdapter(adapter);
                     save = binding.savePlaylist;
+                    cancel = binding.cancelSelection;
                     save.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 //                            Limitation: Only one item can be transfered back to the previous fragment
                             NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
                             navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", playlists.get(selected_pos).getPlaylist_id());
+                            navController.popBackStack();
+                        }
+                    });
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
                             navController.popBackStack();
                         }
                     });

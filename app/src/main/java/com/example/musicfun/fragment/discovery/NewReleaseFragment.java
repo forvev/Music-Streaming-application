@@ -48,6 +48,9 @@ public class NewReleaseFragment extends Fragment {
     DiscoveryViewModel discoveryViewModel;
     private String song_id;
     private boolean isVisible = true;
+    private String added_PlaylistId = "";
+    private String added_SongId = "";
+    private boolean hasAdded = false;
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
@@ -57,11 +60,12 @@ public class NewReleaseFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-            setSong_id(songId);
+            song_id = songId;
             NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
             Fragment parent = (Fragment) navHostFragment.getParentFragment();
             parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.GONE);
             isVisible = false;
+            hasAdded = false;
             NavDirections action = NewReleaseFragmentDirections.actionNewReleaseFragmentToChoosePlaylistFragment();
             Navigation.findNavController(getView()).navigate(action);
         }
@@ -155,15 +159,17 @@ public class NewReleaseFragment extends Fragment {
         liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String playlist_position) {
-                if(playlist_position != null && song_id != null){
+                if(playlist_position != null && song_id != null && (!playlist_position.equals(added_PlaylistId) || !song_id.equals(added_PlaylistId)) && !hasAdded){
+                    hasAdded = true;
+                    added_PlaylistId = playlist_position;
+                    added_SongId = song_id;
                     discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
+                }
+                else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
+                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    private void setSong_id (String song_id){
-        this.song_id = song_id;
     }
 
     private Boolean isNetworkAvailable(Application application) {

@@ -30,8 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         app:defaultNavHost="true"
         android:layout_below="@+id/DiscoveryNav"
         app:navGraph="@navigation/discovery_navigation" />
