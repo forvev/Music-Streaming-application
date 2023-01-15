@@ -70,26 +70,27 @@ public class SearchResultAdapter extends BaseAdapter {
             holder.clickField = view.findViewById(R.id.rl_clickable_song);
 
             holder.setDefault = (ImageView) view.findViewById(R.id.add_to_default);
-            holder.setDefault.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!click){
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
-                        click = true;
-                        discoveryItemClick.addToDefault(songsList.get(position).getSongId());
-                    }
-                    else{
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
-                        click = false;
-                        discoveryItemClick.removeFromDefault(songsList.get(position).getSongId());
-                    }
-                }
-            });
+
             view.setTag(holder);
         }
         else{
             holder = (ViewHolder) view.getTag();
         }
+        holder.setDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!click){
+                    holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
+                    click = true;
+                    discoveryItemClick.addToDefault(songsList.get(position).getSongId());
+                }
+                else{
+                    holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
+                    click = false;
+                    discoveryItemClick.removeFromDefault(songsList.get(position).getSongId());
+                }
+            }
+        });
         holder.clickField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

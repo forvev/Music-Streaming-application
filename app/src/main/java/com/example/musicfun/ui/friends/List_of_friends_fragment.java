@@ -112,7 +112,7 @@ public class List_of_friends_fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        friendsViewModel.init();
         listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override

@@ -1,5 +1,7 @@
 package com.example.musicfun.ui.friends;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -20,25 +22,28 @@ import java.util.ArrayList;
 
 public class FriendsViewModel extends AndroidViewModel {
 
-    private MutableLiveData<ArrayList<User>> userNames = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<User>> m_userNames = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<User>> m_searchUserResult = new MutableLiveData<>();
     private ArrayList<User> userArrayList;
+    private ArrayList<User> searchUserResult;
     Database db;
     Application application;
     SharedPreferences sp;
-    private String serverAnswer;
-
-    String user;
+    String token;
 
     public FriendsViewModel(Application application) {
         super(application);
-        userNames = new MutableLiveData<>();
         this.application = application;
         db = new Database(application.getApplicationContext());
         userArrayList = new ArrayList<>();
-        userNames.setValue(userArrayList);
+        searchUserResult = new ArrayList<>();
+        m_userNames.setValue(userArrayList);
+        m_searchUserResult.setValue(searchUserResult);
+        sp = getApplication().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
+        token = sp.getString("token", "");
     }
 
-    public void init(String url){
+    public void init(){
         userArrayList.clear();
         db.sendMsg(new ServerCallBack() {
             @Override
@@ -49,25 +54,20 @@ public class FriendsViewModel extends AndroidViewModel {
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getJSONObject(i).getString("username"));
                         userArrayList.add(user);
-
                     }
-                    userNames.setValue(userArrayList);
-
+                    m_userNames.setValue(userArrayList);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
             }
-
-            }
-
             @Override
             public void onError(VolleyError error) {
-
             }
-        }, url);
+        }, "user/allFriends?auth_token=" + token);
     }
 
-    public void initSearch(String url){
-        userArrayList.clear();
+    public void initSearch(){
+        searchUserResult.clear();
         db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -77,27 +77,22 @@ public class FriendsViewModel extends AndroidViewModel {
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getString(i));
-                        userArrayList.add(user);
-
+                        searchUserResult.add(user);
                     }
-                    userNames.setValue(userArrayList);
+                    m_searchUserResult.setValue(searchUserResult);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onError(VolleyError error) {
-
             }
-        }, url);
+        }, "get/allUsers?auth_token=" + token);
     }
 
-
     public void filter(String name, String token){
-        userArrayList.clear();
+        searchUserResult.clear();
         db.searchUser(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -106,80 +101,90 @@ public class FriendsViewModel extends AndroidViewModel {
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getString(i));
-                        userArrayList.add(user);
-
+                        searchUserResult.add(user);
                     }
-                    userNames.setValue(userArrayList);
-
+                    m_searchUserResult.setValue(searchUserResult);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void onError(VolleyError error) {
-
             }
         }, name, token);
     }
 
     public void sendMsgWithBodyDelete(String url, int i){
-        //db.test();
-        //Log.d("onSuccess", url + " " + user);
-
-        db.addMsg(new ServerCallBack() {
+        userArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames1 = (JSONArray) result.get("friends");
+                    for(int i=0; i< userNames1.length(); i++){
+                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        userArrayList.add(user);
+                    }
+                    String toDelete = userArrayList.get(i).getUserName();
+                    db.addMsg(new ServerCallBack() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            userArrayList.remove(i);
+                            m_userNames.setValue(userArrayList);
+                        }
 
-                try{
-                    String answer = result.getString("message");
-                    Log.d("onSuccess", answer);
-                    userArrayList.remove(i);
-                    userNames.setValue(userArrayList);
+                        @Override
+                        public void onError(VolleyError error) {
+                        }
+                    }, url, toDelete);
 
-                    //maybe thinnk on how to automatically add user
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onError(VolleyError error) {
-
             }
-        }, url, userArrayList.get(i).getUserName());
+        }, "user/allFriends?auth_token=" + token);
     }
 
-    public void sendMsgWithBodyAdd(String url, String userToBeAdded){
-
-        db.addMsg(new ServerCallBack() {
+    public void sendMsgWithBodyAdd(String userToBeAdded){
+        userArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames1 = (JSONArray) result.get("friends");
+                    for(int i=0; i< userNames1.length(); i++){
+                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        userArrayList.add(user);
+                    }
+                    db.addMsg(new ServerCallBack() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            userArrayList.add(new User(userToBeAdded));
+                            m_userNames.setValue(userArrayList);
+                        }
+                        @Override
+                        public void onError(VolleyError error) {
+                        }
+                    }, "user/addFriend?auth_token=" + token, userToBeAdded);
 
-                try{
-                    String answer = result.getString("message");
-                    //User user = new User(userToBeAdded);
-                    //userArrayList.add(user);
-                    //userNames.setValue(userArrayList);
-                    //userNames.notifyAll();
-                    //maybe thinnk on how to automatically add user
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onError(VolleyError error) {
-                User user = new User(userToBeAdded);
-                userArrayList.add(user);
-                userNames.postValue(userArrayList);
-                //executed but does not work
-                Log.d("searchFail", error.getMessage());
             }
-        }, url, userToBeAdded);
+        }, "user/allFriends?auth_token=" + token);
+
     }
 
-    public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}
+    public MutableLiveData<ArrayList<User>> getUserNames() {
+        return m_userNames;
+    }
+    public MutableLiveData<ArrayList<User>> getM_searchUserResult() {return m_searchUserResult;}
 
 }
