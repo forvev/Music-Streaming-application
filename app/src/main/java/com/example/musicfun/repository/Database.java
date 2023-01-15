@@ -28,6 +28,7 @@ public class Database {
     private String fetchlyrics = "http://10.0.2.2:3000/get/lyrics";
     private String getChatUrl = "http://10.0.2.2:3000/get/chat?auth_token=";
     private String sendChatMsgUrl = "http://10.0.2.2:3000/get/storeMessage?auth_token=";
+    private String addUsrToSharedPlaylist = "http://10.0.2.2:3000/get/storeMessage?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -204,5 +205,30 @@ public class Database {
         });
         requestQueue.add(request);
 
+    }
+
+    public void add_friends_to_playlist(ServerCallBack serverCallBack, String url, String user_id, String playlist_id){
+        JSONObject added_friend = new JSONObject();
+
+        try {
+            added_friend.put("user_id",user_id);
+            added_friend.put("playlist_id", playlist_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl + url, added_friend, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                serverCallBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                serverCallBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
     }
 }

@@ -6,6 +6,11 @@
     app:startDestination="@id/friends_friend">
 
     <fragment
+        android:id="@+id/friends_sharedPlaylist2"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragment"
+        android:label="SharedPlaylistFragment"
+        tools:layout="@layout/fragment_mymusic"/>
+    <fragment
         android:id="@+id/friends_friend"
         android:name="com.example.musicfun.ui.friends.Friends_friend_Fragment"
         android:label="Friends_friend_Fragment"
@@ -37,7 +42,14 @@
         android:id="@+id/list_of_friends_fragment"
         android:name="com.example.musicfun.ui.friends.List_of_friends_fragment"
         android:label="fragment_friends_shared_playlist"
-        tools:layout="@layout/fragment_friends_shared_playlist" />
+        tools:layout="@layout/fragment_friends_shared_playlist" >
+        <action
+            android:id="@+id/action_list_of_friends_fragment_to_friends_sharedPlaylist4"
+            app:destination="@id/friends_sharedPlaylist" />
+        <argument
+            android:name="selected_shared_id_2"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

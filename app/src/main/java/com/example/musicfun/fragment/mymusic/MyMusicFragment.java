@@ -39,6 +39,7 @@ import com.example.musicfun.interfaces.PlaylistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyMusicFragment extends Fragment {
     private FragmentMymusicBinding binding;
@@ -80,7 +81,7 @@ public class MyMusicFragment extends Fragment {
         }
 
         @Override
-        public void share(int position) {
+        public void share(List<Playlist> my_playlists, int position) {
             // send this playlist to friends
             Toast.makeText(getContext(), "Check out your playlist in Shared Playlist!", Toast.LENGTH_SHORT).show();
             viewModel.setAsShare(position);

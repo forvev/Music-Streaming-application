@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,11 +18,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.mymusic.PlaylistAdapter;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
+import com.example.musicfun.ui.friends.Friends_friend_Fragment;
+import com.example.musicfun.ui.friends.List_of_friends_fragment;
 
 import java.util.List;
 
@@ -125,11 +134,13 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
                                     adb.show();
                                     break;
                                 case R.id.add_friend:
-                                    playlistMenuClick.share(position);
+                                    playlistMenuClick.share(playlist, position);
+
+
                                     break;
 
                                 case R.id.listen_together:
-//                                    playlistMenuClick.share(position);
+//
                                     break;
                             }
                             return false;

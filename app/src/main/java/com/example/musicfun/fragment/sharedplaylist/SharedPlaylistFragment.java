@@ -42,6 +42,7 @@ import com.example.musicfun.ui.friends.List_of_friends_fragment;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPlaylistFragment extends Fragment {
 
@@ -50,6 +51,7 @@ public class SharedPlaylistFragment extends Fragment {
     private ListView listView;
     private SharedPlaylistAdapter playlistAdapter;
     private ImageView add_playlist;
+
 
     private PlaylistMenuClick playlistMenuClick = new PlaylistMenuClick(){
         @Override
@@ -73,9 +75,9 @@ public class SharedPlaylistFragment extends Fragment {
         }
 
         @Override
-        public void share(int position) {
+        public void share(List<Playlist> my_playlists, int position) {
             //Using navigation approach move to another fragment
-            NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment();
+            NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment(my_playlists.get(position).getPlaylist_id());
             Navigation.findNavController(getView()).navigate(action);
 
         }
@@ -83,6 +85,7 @@ public class SharedPlaylistFragment extends Fragment {
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
         public void transferFragment(String selected_shared_id) {
+            //selected_shared_id -> we pass by the id selected playlist to another fragment
             ((MainActivity)getActivity()).setPlaylistId(selected_shared_id);
             NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id);
             Navigation.findNavController(getView()).navigate(action);

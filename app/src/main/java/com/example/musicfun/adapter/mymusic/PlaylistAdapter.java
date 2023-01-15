@@ -150,7 +150,7 @@ public class PlaylistAdapter extends BaseAdapter {
                                     }
                                     break;
                                 case R.id.share_playlist:
-                                    playlistMenuClick.share(position);
+                                    playlistMenuClick.share(playlist,position);
                                     break;
                             }
                             return false;

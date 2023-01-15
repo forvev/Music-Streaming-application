@@ -6,17 +6,13 @@
     android:padding="10dip"
     android:orientation="horizontal">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <!--        android:gravity="center"-->
         <RelativeLayout
             android:id="@+id/user_and_id"
             android:layout_width="0dp"
             android:layout_height="30dip"
             android:layout_weight="1">
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -37,8 +33,5 @@
 
             </LinearLayout>
         </RelativeLayout>
-
-
-    </LinearLayout>
 
 </LinearLayout>

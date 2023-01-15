@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,15 +8,22 @@
     tools:context=".ui.friends.List_of_friends_fragment"
     android:background="@color/cardview_light_background">
 
+    <Button
+        android:id="@+id/buttonSharedFriends"
+        android:layout_width="51dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_baseline_arrow_forward_24" />
+
     <ListView
         android:id="@+id/list_v_shared_playlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/shared_playlist_friends_custom_v"
+        android:layout_height="701dp"
+        android:clickable="false"
         android:divider="@color/black"
         android:dividerHeight="2dp"
-        android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:listSelector="@android:color/transparent"/>
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/shared_playlist_friends_custom_v" />
 </LinearLayout>

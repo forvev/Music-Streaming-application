@@ -47,7 +47,7 @@ public class FriendsViewModel extends AndroidViewModel {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for(int i=0; i< userNames1.length(); i++){
                         //TODO: ask server side about the names
-                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        User user = new User(userNames1.getJSONObject(i).getString("username"), userNames1.getJSONObject(i).getString("_id"));
                         userArrayList.add(user);
 
                     }
@@ -178,6 +178,20 @@ public class FriendsViewModel extends AndroidViewModel {
                 Log.d("searchFail", error.getMessage());
             }
         }, url, userToBeAdded);
+    }
+
+    public void add_user_to_shared_playlist(String url, String user_id, String playlist_id){
+        db.add_friends_to_playlist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        },url, user_id, playlist_id);
     }
 
     public MutableLiveData<ArrayList<User>> getUserNames() {return userNames;}
