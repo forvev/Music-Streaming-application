@@ -20,9 +20,11 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -406,6 +408,7 @@ public class LyricsFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Lyrics> lyrics) {
                 if(lyrics.size() != 0){
+                    tv_lyrics.setGravity(Gravity.CENTER_HORIZONTAL);
                     lyricsExist = true;
                     lyricsList = lyrics;
                     String allText = "";
@@ -417,7 +420,9 @@ public class LyricsFragment extends Fragment {
                     getCurrentPlayerPosition();
                 }
                 else{
+                    tv_lyrics.scrollTo(0, 0);
                     lyricsExist = false;
+                    tv_lyrics.setGravity(Gravity.CENTER);
                     tv_lyrics.setText("No Lyrics");
                 }
             }
@@ -457,8 +462,21 @@ public class LyricsFragment extends Fragment {
 
     // find the start and end point of the current line. This helps to highlight the lyrics.
     private int[] currentStartPoint(int line){
-        int start = 0;
         int[] result = new int[2];
+//        if(lyricsExist){
+//            int start = 0;
+//            if (line == 0){
+//                result[0] = 0;
+//                result[1] = lyricsList.get(0).getLength() + 1;
+//                return result;
+//            }
+//            for (int i = 0; i < line; i++){
+//                start = start + lyricsList.get(i).getLength() + 1;
+//            }
+//            result[0] = start;
+//            result[1] = start + lyricsList.get(line).getLength();
+//        }
+        int start = 0;
         if (line == 0){
             result[0] = 0;
             result[1] = lyricsList.get(0).getLength() + 1;
