@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +45,8 @@ public class List_of_friends_fragment extends Fragment {
 
     //private HashSet<String> selectedItems = new HashSet<>();
     private ArrayList<String> selected_users_list;
+    private long mLastClickTime = 0;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -124,9 +127,6 @@ public class List_of_friends_fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TODO: change it into
-        //TODO: add friend from the friend view
-        //TODO: check out the search friends
         //Find selected playlist id for the request to db
         selected_shared_id_2 = List_of_friends_fragmentArgs.fromBundle(getArguments()).getSelectedSharedId2();
         Log.i("play_id", selected_shared_id_2);
@@ -152,6 +152,12 @@ public class List_of_friends_fragment extends Fragment {
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
+
+                // mis-clicking prevention, using threshold of 500 ms
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                    return false;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
                 int position = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
                 if (position == -1){

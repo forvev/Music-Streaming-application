@@ -240,9 +240,9 @@ public class Database {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i("play_list_id", String.valueOf(user_search));
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, baseUrl + url, user_search, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl + url, user_search, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 serverCallBack.onSuccess(response);
