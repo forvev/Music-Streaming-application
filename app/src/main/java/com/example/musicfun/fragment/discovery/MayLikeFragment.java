@@ -154,7 +154,6 @@ public class MayLikeFragment extends Fragment {
                     adapter = new SongListAdapter(getActivity(), newName, songlistMenuClick);
                     listView.setAdapter(adapter);
                 }
-                System.out.println("newName = " + newName.size());
             }
         });
         NavController navController = NavHostFragment.findNavController(MayLikeFragment.this);
