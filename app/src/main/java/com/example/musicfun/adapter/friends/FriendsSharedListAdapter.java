@@ -2,11 +2,13 @@ package com.example.musicfun.adapter.friends;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +56,10 @@ public class FriendsSharedListAdapter extends BaseAdapter {
         return i;
     }
 
+    public class SharedPlaylistParticipantsHolder {
+        ListView listView;
+        ImageView imageView_delete;
+    }
     //TODO: move this class to FriendslistAdapter. The problem is with the view below,
     //because I need to invoke different one.
     //Adapters call the getView() method which returns a view for each item within the adapter view.
@@ -63,6 +69,13 @@ public class FriendsSharedListAdapter extends BaseAdapter {
         TextView username = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username);
 
         username.setText(userList.get(i).getUserName());
+
+        final SharedPlaylistParticipantsHolder holder = new FriendsSharedListAdapter.SharedPlaylistParticipantsHolder();
+
+        //holder.listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
+        holder.imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
+
+        //holder.imageView_delete.setOnClickListener(click ->fi.deleteFriend());
 
         return view;
     }

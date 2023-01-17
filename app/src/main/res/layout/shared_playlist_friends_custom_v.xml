@@ -6,7 +6,12 @@
     android:padding="10dip"
     android:orientation="horizontal">
 
-        <!--        android:gravity="center"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
         <RelativeLayout
             android:id="@+id/user_and_id"
             android:layout_width="0dp"
@@ -33,5 +38,14 @@
 
             </LinearLayout>
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/shared_playlist_friends_custom_delete"
+            android:layout_width="33dip"
+            android:layout_height="33dip"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_delete_24" />
+
+    </LinearLayout>
 
 </LinearLayout>

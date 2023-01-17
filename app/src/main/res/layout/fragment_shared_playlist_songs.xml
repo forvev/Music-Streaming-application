@@ -3,17 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_search"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context="fragment.sharedplaylist.SharedPlaylistSongsFragment">
 
-    <TextView
-        android:id="@+id/see_members"
+<!--    <TextView-->
+<!--        android:id="@+id/see_members"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/participants"-->
+<!--        android:textColor="@color/theme_purple_dark"-->
+<!--        android:fontFamily="@font/merriweather_bold"-->
+<!--        android:textSize="20sp"-->
+<!--        android:layout_alignParentEnd="true" />-->
+
+    <Button
+        android:id="@+id/button_participants"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@android:color/white"
+        android:fontFamily="@font/merriweather_bold"
         android:text="@string/participants"
         android:textColor="@color/theme_purple_dark"
-        android:fontFamily="@font/merriweather_bold"
-        android:textSize="20sp"
-        android:layout_alignParentEnd="true" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/empty"
@@ -27,11 +39,10 @@
 
     <ListView
         android:id="@+id/songlist"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="683dp"
+        android:layout_below="@+id/button_participants"
+        android:layout_marginTop="0dp"
         android:divider="@color/theme_purple_light"
-        android:dividerHeight="2dp"
-        android:layout_marginTop="8dp"
-        android:layout_below="@+id/see_members"
-         />
+        android:dividerHeight="2dp" />
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,15 +30,18 @@ import com.example.musicfun.R;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
 import com.example.musicfun.databinding.FragmentSharedPlaylistSongsBinding;
 import com.example.musicfun.databinding.FragmentSongsBinding;
+import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentArgs;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.interfaces.PlaylistMenuClick;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPlaylistSongsFragment extends Fragment {
 
@@ -78,6 +82,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
         binding = FragmentSharedPlaylistSongsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
+        //return inflater.inflate(R.layout.fragment_shared_playlist_songs, container, false);
     }
 
     @Override
@@ -118,6 +123,22 @@ public class SharedPlaylistSongsFragment extends Fragment {
                 if(playlist_position != null){
                     viewModel.addSongToPlaylist(playlist_position, song_id);
                 }
+            }
+        });
+
+        Button my_button = (Button) view.findViewById(R.id.button_participants);
+
+        my_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants();
+                Log.i("view", String.valueOf(view));
+
+                String passed_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
+                NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id);
+
+                Navigation.findNavController(getView()).navigate(action);
+
             }
         });
     }
