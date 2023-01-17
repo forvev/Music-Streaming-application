@@ -11,9 +11,9 @@
     <ListView
         android:id="@+id/list_v_shared_playlist"
         android:layout_width="match_parent"
-        android:layout_height="701dp"
+        android:layout_height="match_parent"
         android:clickable="false"
-        android:divider="@color/black"
+        android:divider="@color/purple_200"
         android:dividerHeight="2dp"
         android:focusable="false"
         android:focusableInTouchMode="false"

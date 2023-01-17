@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/friends_custom_view"
-        android:divider="@color/black"
+        android:divider="@color/purple_200"
         android:dividerHeight="2dp"
         android:clickable="false"
         android:focusable="false"

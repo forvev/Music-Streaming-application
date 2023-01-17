@@ -64,18 +64,18 @@ public class FriendsSharedListAdapter extends BaseAdapter {
     //because I need to invoke different one.
     //Adapters call the getView() method which returns a view for each item within the adapter view.
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int position, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.shared_playlist_friends_custom_v, null);
         TextView username = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username);
 
-        username.setText(userList.get(i).getUserName());
+        username.setText(userList.get(position).getUserName());
 
         final SharedPlaylistParticipantsHolder holder = new FriendsSharedListAdapter.SharedPlaylistParticipantsHolder();
 
         //holder.listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
         holder.imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
 
-        //holder.imageView_delete.setOnClickListener(click ->fi.deleteFriend());
+        holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
 
         return view;
     }

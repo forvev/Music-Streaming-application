@@ -41,6 +41,7 @@ public class SharedPlaylistParticipants extends Fragment {
     SharedPreferences sp;
     ListView listView;
     FriendsSharedListAdapter adapter;
+    String passed_playlist_id;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,10 +76,23 @@ public class SharedPlaylistParticipants extends Fragment {
 
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int i) {
+        public void deleteFriend(int position) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
 
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+            //friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+            //friendsViewModel.sendMsgWithBodyDelete("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""),);
+
+        }
+
+        @Override
+        public void deleteFirend(int position, String user_id, String playlist_id) {
+            playlist_id = passed_playlist_id;
+            Log.i("guest:",user_id);
+            Log.i("play_list_idddd",playlist_id);
+            //playlist/addUserToSharedPlaylist
+            //friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
+            friendsViewModel.add_user_to_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
+            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -122,7 +136,7 @@ public class SharedPlaylistParticipants extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String passed_playlist_id = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getSelectedSharedId3();
+        passed_playlist_id = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getSelectedSharedId3();
         Log.i("passed",passed_playlist_id);
         friendsViewModel.fetch_shared_friends("playlist/getUsersFromSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
         //friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
