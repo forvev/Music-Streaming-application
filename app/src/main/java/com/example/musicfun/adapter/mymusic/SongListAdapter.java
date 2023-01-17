@@ -101,9 +101,9 @@ public class SongListAdapter extends BaseAdapter {
                                     case R.id.add_to_playlist:
                                         songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
                                         break;
-                                    case R.id.share_song:
-                                        songlistMenuClick.share(position);
-                                        break;
+//                                    case R.id.share_song:
+//                                        songlistMenuClick.share(position);
+//                                        break;
                                 }
                                 return false;
                             }

@@ -166,9 +166,11 @@ public class LyricsFragment extends Fragment {
         if (isSession) {
             btn_active_guests.setVisibility(View.VISIBLE);
             btn_active_guests.setOnClickListener(showActiveGuests);
+            controlView.setShowShuffleButton(false);
         }
         else {
             btn_active_guests.setVisibility(View.GONE);
+            controlView.setShowShuffleButton(true);
         }
 
         broadcastReceiver = new BroadcastReceiver() {
@@ -199,7 +201,7 @@ public class LyricsFragment extends Fragment {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (!playerseek) {
-                        Log.d("test", "onIsPlayingChanged");
+//                        Log.d("test", "onIsPlayingChanged");
                         if (isPlaying) {
                             sendPlayerstate("play", "");
                         } else {
@@ -207,8 +209,8 @@ public class LyricsFragment extends Fragment {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
-                                    Log.d("test", !isPlaying + "");
-                                    Log.d("test", playerpause + "");
+//                                    Log.d("test", !isPlaying + "");
+//                                    Log.d("test", playerpause + "");
                                     if (!player.isPlaying() && playerpause) {
                                         sendPlayerstate("pause", "");
                                     }
@@ -232,7 +234,7 @@ public class LyricsFragment extends Fragment {
                             playerseek = false;
                         }
                         else {
-                            Log.d("test", "onPositionDiscontinuity");
+//                            Log.d("test", "onPositionDiscontinuity");
                             if (oldPosition.mediaItemIndex == newPosition.mediaItemIndex) {
                                 sendPlayerstate("syncTime", Long.toString(newPosition.positionMs));
                             }
@@ -660,7 +662,7 @@ public class LyricsFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         songID = Integer.toString(player.getCurrentMediaItemIndex());
-                        Log.d("test", "songID " + songID);
+//                        Log.d("test", "songID " + songID);
                         timestamp = Long.toString(player.getCurrentPosition());
                         JSONObject mess = new JSONObject();
                         try{
@@ -684,7 +686,7 @@ public class LyricsFragment extends Fragment {
                 Boolean finalPlayerPlaying = playerPlaying;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Log.d("test", "syncJoinBack");
+//                        Log.d("test", "syncJoinBack");
                         playerseek = true;
                         player.seekTo(finalSong, finalTime);
                         if (finalPlayerPlaying) {

@@ -144,7 +144,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
             }
         });
 
-        Button my_button = (Button) view.findViewById(R.id.button_participants);
+        TextView my_button = (TextView) view.findViewById(R.id.button_participants);
 
         my_button.setOnClickListener(new View.OnClickListener() {
             @Override

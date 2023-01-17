@@ -94,10 +94,10 @@ public class SongListAdapter extends BaseAdapter {
                         case R.id.add_to_playlist:
                             songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
                             break;
-                        case R.id.share_song:
-                            Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-                            songlistMenuClick.share(i);
-                            break;
+//                        case R.id.share_song:
+//                            Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+//                            songlistMenuClick.share(i);
+//                            break;
                     }
                     return false;
                 }
