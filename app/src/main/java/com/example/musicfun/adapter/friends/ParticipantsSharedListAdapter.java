@@ -2,14 +2,12 @@ package com.example.musicfun.adapter.friends;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.musicfun.R;
@@ -20,7 +18,7 @@ import com.example.musicfun.ui.friends.Friends_DBAccess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsSharedListAdapter extends BaseAdapter {
+public class ParticipantsSharedListAdapter extends BaseAdapter {
 
     Context mContext;
     LayoutInflater inflater;
@@ -31,7 +29,7 @@ public class FriendsSharedListAdapter extends BaseAdapter {
     FriendFragmentInterface fi;
 
 
-    public FriendsSharedListAdapter(Context context, List<User> userList, FriendFragmentInterface fi){
+    public ParticipantsSharedListAdapter(Context context, List<User> userList, FriendFragmentInterface fi){
         mContext = context;
         this.userList = userList;
         inflater = LayoutInflater.from(mContext);
@@ -66,10 +64,20 @@ public class FriendsSharedListAdapter extends BaseAdapter {
     //Adapters call the getView() method which returns a view for each item within the adapter view.
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        view = inflater.inflate(R.layout.shared_playlist_friends_custom_v, null);
-        TextView username = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username);
+    view = inflater.inflate(R.layout.row_participants_shared_playlist, null);
 
-        username.setText(userList.get(position).getUserName());
-        return view;
+    TextView username = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username_participants);
+
+    username.setText(userList.get(position).getUserName());
+
+    final SharedPlaylistParticipantsHolder holder = new ParticipantsSharedListAdapter.SharedPlaylistParticipantsHolder();
+
+    //holder.listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
+    holder.imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
+
+    holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
+    view.setTag(holder);
+
+    return view;
     }
 }

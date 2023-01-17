@@ -9,7 +9,7 @@
     android:background="@color/cardview_light_background">
 
     <ListView
-        android:id="@+id/list_v_shared_playlist"
+        android:id="@+id/list_v_shared_playlist_participants"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
@@ -18,5 +18,5 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:listSelector="@android:color/transparent"
-        tools:listitem="@layout/shared_playlist_friends_custom_v" />
+        tools:listitem="@layout/row_participants_shared_playlist" />
 </LinearLayout>

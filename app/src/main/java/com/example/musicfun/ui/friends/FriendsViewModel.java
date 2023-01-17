@@ -194,6 +194,21 @@ public class FriendsViewModel extends AndroidViewModel {
         },url, user_id, playlist_id);
     }
 
+    public void delete_user_from_shared_playlist(String url, String user_id, String playlist_id, int position){
+        db.add_friends_to_playlist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                userArrayList.remove(position);
+                userNames.setValue(userArrayList);
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        },url, user_id, playlist_id);
+    }
+
     public void fetch_shared_friends(String url, String playlist_id){
         userArrayList.clear();
         db.all_friends_to_shared_playlist(new ServerCallBack() {

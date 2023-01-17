@@ -42,4 +42,5 @@
         android:id="@+id/friends"
         android:name="com.example.musicfun.ui.friends.FriendsFragment"
         tools:layout="@layout/fragment_friends" />
+
 </navigation>

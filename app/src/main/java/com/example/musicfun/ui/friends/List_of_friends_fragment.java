@@ -87,6 +87,11 @@ public class List_of_friends_fragment extends Fragment {
         }
 
         @Override
+        public void deleteFirend(int position, String user_id, String playlist_id) {
+
+        }
+
+        @Override
         public void addFriend(String name) {
 
         }
@@ -154,7 +159,7 @@ public class List_of_friends_fragment extends Fragment {
             public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
 
                 // mis-clicking prevention, using threshold of 500 ms
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 100){
                     return false;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -201,7 +206,9 @@ public class List_of_friends_fragment extends Fragment {
                     Log.i("user:",selected_users_list.get(i));
                     friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_users_list.get(i), selected_shared_id_2);
                 }
+
                 NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToFriendsSharedPlaylist4();
+                //NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToSharedPlaylistParticipants2();
                 Navigation.findNavController(getView()).navigate(action);
             }
         });

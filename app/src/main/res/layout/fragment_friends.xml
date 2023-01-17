@@ -69,10 +69,10 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/FriendsNav"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:defaultNavHost="true"
-        android:layout_below="@+id/FriendsNav"
         app:navGraph="@navigation/shared_playlist_navigation" />
 
 </RelativeLayout>

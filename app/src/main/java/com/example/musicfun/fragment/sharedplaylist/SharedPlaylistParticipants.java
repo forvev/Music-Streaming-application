@@ -26,6 +26,7 @@ import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
+import com.example.musicfun.adapter.friends.ParticipantsSharedListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 import com.example.musicfun.ui.friends.FriendsViewModel;
@@ -40,7 +41,7 @@ public class SharedPlaylistParticipants extends Fragment {
     FriendsViewModel friendsViewModel;
     SharedPreferences sp;
     ListView listView;
-    FriendsSharedListAdapter adapter;
+    ParticipantsSharedListAdapter adapter;
     String passed_playlist_id;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -77,22 +78,16 @@ public class SharedPlaylistParticipants extends Fragment {
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
         public void deleteFriend(int position) {
-            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
-
-            //friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
-            //friendsViewModel.sendMsgWithBodyDelete("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""),);
-
         }
 
         @Override
         public void deleteFirend(int position, String user_id, String playlist_id) {
             playlist_id = passed_playlist_id;
-            Log.i("guest:",user_id);
-            Log.i("play_list_idddd",playlist_id);
-            //playlist/addUserToSharedPlaylist
+
             //friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
-            friendsViewModel.add_user_to_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
-            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+            //friendsViewModel.add_user_to_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
+            friendsViewModel.delete_user_from_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id, position);
+            Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -143,12 +138,12 @@ public class SharedPlaylistParticipants extends Fragment {
 
         //user/allFriendsForSharedPlaylist
         //playlist/getUsersFromSharedPlaylist
-        listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
+        listView = (ListView) view.findViewById(R.id.list_v_shared_playlist_participants);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 Log.i("users:",String.valueOf(users));
-                adapter = new FriendsSharedListAdapter(getActivity(), users, friendFragmentInterface);
+                adapter = new ParticipantsSharedListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
             }
         });

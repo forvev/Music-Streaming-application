@@ -255,4 +255,29 @@ public class Database {
         });
         requestQueue.add(request);
     }
+
+    public void get_users_from_shared_playlist(ServerCallBack serverCallBack, String url, String playlist_id){
+        JSONObject user_search = new JSONObject();
+
+        try {
+            user_search.put("playlist_id",playlist_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("play_list_id", String.valueOf(user_search));
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl + url, user_search, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                serverCallBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                serverCallBack.onError(error);
+            }
+        });
+        requestQueue.add(request);
+    }
+
 }
