@@ -23,14 +23,15 @@
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-    <FrameLayout
-        android:id="@+id/discovery_childFragment"
+    <fragment
+        android:id="@+id/nav_host_discovery"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/DiscoveryNav">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:defaultNavHost="true"
+        android:layout_below="@+id/DiscoveryNav"
+        app:navGraph="@navigation/discovery_navigation" />
 
-    </FrameLayout>
 </RelativeLayout>

@@ -77,16 +77,16 @@ public class MyMusicFragment extends Fragment {
         public void deletePlaylist(int position) {
             // remove this playlist from server
             viewModel.deletePlaylist(position);
-            //Toast.makeText(getContext(), "remove playlist", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void share(List<Playlist> my_playlists, int position) {
             // send this playlist to friends
-            Toast.makeText(getContext(), "Check out your playlist in Shared Playlist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "This playlist is now shared!", Toast.LENGTH_SHORT).show();
             viewModel.setAsShare(position);
         }
     };
+
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
         public void transferFragment(String selected_playlist_id) {

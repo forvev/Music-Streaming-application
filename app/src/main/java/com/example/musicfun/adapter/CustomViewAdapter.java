@@ -52,9 +52,6 @@ public class CustomViewAdapter extends BaseAdapter {
         TextView songTitle = (TextView) view.findViewById(R.id.custom_view_songtitle);
         TextView songArtist = (TextView) view.findViewById(R.id.custom_view_songartist);
 
-        ImageView songShare = (ImageView) view.findViewById(R.id.custom_view_songshare);
-        songShare.setOnClickListener(share -> shareSong());
-
         ImageView songAdd = (ImageView) view.findViewById(R.id.custom_menu);
         songAdd.setOnClickListener(add -> addSong());
 
@@ -69,10 +66,5 @@ public class CustomViewAdapter extends BaseAdapter {
 
     private void addSong() {
         Toast.makeText(inflater.getContext(), "Clicked: Add", Toast.LENGTH_SHORT).show();
-    }
-
-    private void shareSong() {
-        Toast.makeText(inflater.getContext(), "Clicked: Share", Toast.LENGTH_SHORT).show();
-
     }
 }

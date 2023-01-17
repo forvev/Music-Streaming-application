@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_lyricsFragment_to_currentPlaylistFragment"
             app:destination="@id/currentPlaylistFragment" />
+        <action
+            android:id="@+id/action_lyricsFragment_to_activeListenerFragment"
+            app:destination="@id/activeListenerFragment" />
+        <action
+            android:id="@+id/action_lyricsFragment_to_choosePlaylistFragment2"
+            app:destination="@id/choosePlaylistFragment2" />
     </fragment>
     <fragment
         android:id="@+id/currentPlaylistFragment"
@@ -23,4 +29,16 @@
             android:name="playlist"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/activeListenerFragment"
+        android:name="com.example.musicfun.fragment.banner.ActiveListenerFragment"
+        android:label="ActiveListenerFragment" >
+        <argument
+            android:name="usernames"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/choosePlaylistFragment2"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="ChoosePlaylistFragment" />
 </navigation>

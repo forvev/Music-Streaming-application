@@ -15,8 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.discovery.SongListAdapter;
@@ -40,6 +46,12 @@ public class NewReleaseFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
+    private String song_id;
+    private boolean isVisible = true;
+    private String added_PlaylistId = "";
+    private String added_SongId = "";
+    private boolean hasAdded = false;
+
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
         public void removeFromPlaylist(int position) {
@@ -48,8 +60,14 @@ public class NewReleaseFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-//            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
-//            Navigation.findNavController(getView()).navigate(action);
+            song_id = songId;
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.GONE);
+            isVisible = false;
+            hasAdded = false;
+            NavDirections action = NewReleaseFragmentDirections.actionNewReleaseFragmentToChoosePlaylistFragment();
+            Navigation.findNavController(getView()).navigate(action);
         }
 
         @Override
@@ -105,7 +123,7 @@ public class NewReleaseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_simple_discovery, container, false);
+        View view = inflater.inflate(R.layout.fragment_discovery_new_releases, container, false);
         return view;
     }
 
@@ -117,6 +135,12 @@ public class NewReleaseFragment extends Fragment {
         if(!temp){
             System.out.println("Network not connected!!!");
             return;
+        }
+        if(!isVisible){
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            Fragment parent = (Fragment) navHostFragment.getParentFragment();
+            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.VISIBLE);
+            isVisible = true;
         }
 
         discoveryViewModel.init("get/recentlyUploadedSongs");
@@ -130,8 +154,24 @@ public class NewReleaseFragment extends Fragment {
                 listView.setAdapter(adapter);
             }
         });
-
+        NavController navController = NavHostFragment.findNavController(NewReleaseFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && song_id != null && (!playlist_position.equals(added_PlaylistId) || !song_id.equals(added_PlaylistId)) && !hasAdded){
+                    hasAdded = true;
+                    added_PlaylistId = playlist_position;
+                    added_SongId = song_id;
+                    discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
+                }
+                else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
+                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network nw = connectivityManager.getActiveNetwork();

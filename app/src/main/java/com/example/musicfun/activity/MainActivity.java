@@ -12,7 +12,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,10 +23,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
@@ -47,9 +49,8 @@ import com.example.musicfun.datatype.User;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
-import com.example.musicfun.ui.friends.FriendsFragment;
+import com.example.musicfun.interfaces.CloseSearchViewInterface;
 import com.example.musicfun.ui.friends.FriendsViewModel;
-import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
@@ -58,6 +59,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -99,7 +101,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     public NavController navController;
     private String playlistId;
 
-
+//    For searching friends. The changes of MutableLiveData will be sent back to MainActivity.
+//    Friends_friend_Fragment should also listen to changes here in MainActivity.
+//    Otherwise the view will not be updated
+    public MutableLiveData<ArrayList<User>> reply = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<User>> getReply() {return reply;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +140,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             binding.navView.getMenu().removeItem(R.id.my_music);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
+        binding.navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                NavigationUI.onNavDestinationSelected(item, navController);
+                return true;
+            }
+        });
 
         // initialize the relative UI components
         tv_title = findViewById(R.id.banner_song_title);
@@ -186,6 +199,9 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, LyricsActivity.class);
+                i.putExtra("title",tv_title.getText());
+                i.putExtra("artist",tv_artist.getText());
+                i.putExtra("listenTogether", false);
                 startActivity(i);
             }
         });
@@ -359,12 +375,18 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     private void searchFriend(){
         FriendsViewModel friendsViewModel = new FriendsViewModel(getApplication());
-        friendsViewModel.initSearch("get/allUsers?auth_token="  + sp.getString("token", ""));
-        friendsViewModel.getUserNames().observe(MainActivity.this, new Observer<ArrayList<User>>() {
+        friendsViewModel.initSearch();
+        friendsViewModel.getM_searchUserResult().observe(MainActivity.this, new Observer<ArrayList<User>>() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public void onChanged(@Nullable final ArrayList<User> users) {
-                SearchUserResultAdapter adapter = new SearchUserResultAdapter(getApplicationContext(), users);
+                CloseSearchViewInterface closeSearchViewInterface = new CloseSearchViewInterface() {
+                    @Override
+                    public void updateView(View view) {
+                        closeSearchView(view);
+                    }
+                };
+                SearchUserResultAdapter adapter = new SearchUserResultAdapter(getApplicationContext(), users, friendsViewModel, closeSearchViewInterface);
                 // binds the Adapter to the ListView
                 searchResult.setAdapter(adapter);
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
@@ -381,22 +403,18 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                 });
             }
         });
-
         searchResult.setOnTouchListener(touchListener);
-        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        friendsViewModel.getUserNames().observe(MainActivity.this, new Observer<ArrayList<User>>() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                User u = (User) searchResult.getItemAtPosition(i);
-                //in case if we would like to do sth with chosen user
-                String name = u.getUserName();
-                //Toast.makeText(getContext(),name, Toast.LENGTH_SHORT).show();
-                friendsViewModel.sendMsgWithBodyAdd("user/addFriend?auth_token=" + sp.getString("token", ""), name);
-                closeSearchView(view);
-                // do handler???????
-                //TODO: reload FriendslistFragment or easy way to let observer recognize the change
+            public void onChanged(ArrayList<User> users) {
+                if(users != null && users.size() != 0){
+                    reply.setValue(users);
+                }
             }
         });
     }
+
+
 
     public void closeSearchView(View view){
         closeKeyboard(view);
@@ -512,6 +530,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service = binder.getMusicbannerService();
             player = service.player;
+
             isBound = true;
             //Get the initialized player from service
             intent = new Intent(getApplicationContext(), MusicbannerService.class);
@@ -545,6 +564,14 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     public void changePlayMode(int repeatMode, boolean shuffle) {
         player.setRepeatMode(repeatMode);
         player.setShuffleModeEnabled(shuffle);
+    }
+
+    @Override
+    public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
+        startAutoPlay = false;
+        this.startPosition = startPosition;
+        this.startItemIndex = startItemIndex;
+        createMediaItems(playlist);
     }
 
     public boolean isConnectedToServer(String url, int timeout) {

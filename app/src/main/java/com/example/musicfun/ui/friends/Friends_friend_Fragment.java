@@ -18,14 +18,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
-import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.activity.MessageListActivity;
 import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.datatype.User;
@@ -56,7 +55,6 @@ public class Friends_friend_Fragment extends Fragment {
         @Override
         public void deleteFriend(int i) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
-
             friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
         }
 
@@ -67,7 +65,6 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void addFriend(String name) {
-
         }
 
         @Override
@@ -137,23 +134,27 @@ public class Friends_friend_Fragment extends Fragment {
             return;
         }
 
-
-        friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
+        friendsViewModel.init();
         listView = (ListView) view.findViewById(R.id.lvfriends);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
-                //adapter.notifyDataSetChanged(); Not working like that!
-
+            }
+        });
+//        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
+//        Those changes should also be observed here.
+//        Otherwise the view will not be updated.
+        ((MainActivity)getActivity()).getReply().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                listView.setAdapter(adapter);
             }
         });
 
-
-
     }
-
 
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -162,5 +163,4 @@ public class Friends_friend_Fragment extends Fragment {
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
-
 }

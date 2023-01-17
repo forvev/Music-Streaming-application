@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityLyricsBinding;
@@ -24,16 +26,18 @@ import com.google.android.exoplayer2.MediaMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class LyricsActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityLyricsBinding binding;
-    private Toolbar toolbar;
     private MusicbannerService service;
     private boolean isBound;
     private MutableLiveData<String> title = new MutableLiveData<>();
     private MutableLiveData<String> artist = new MutableLiveData<>();
+    private MutableLiveData<Boolean> session = new MutableLiveData<>();
+    private MutableLiveData<String> playlistID = new MutableLiveData<>();
+    private MutableLiveData<List<Songs>> m_playlist = new MutableLiveData<>();
+    private List<Songs> playlist = new ArrayList<>();
 
     private ExoPlayer player;
     private boolean startAutoPlay;
@@ -52,17 +56,17 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         binding = ActivityLyricsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        toolbar = binding.toolbar;
-        toolbar.setTitle("");
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_downward_24));
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            title.setValue(extras.getString("title"));
+            artist.setValue(extras.getString("artist"));
+            session.setValue(extras.getBoolean("listenTogether"));
+            playlistID.setValue(extras.getString("playlistID"));
+        }
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_lyrics);
+        navController.navigate(R.id.lyricsFragment);
+
     }
 
     ServiceConnection playerServiceConnection = new ServiceConnection() {
@@ -84,9 +88,15 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         return title;
     }
 
+    public MutableLiveData<String> getPlaylistID(){
+        return playlistID;
+    }
+
     public MutableLiveData<String> getSongArtist(){
         return artist;
     }
+
+    public MutableLiveData<Boolean> getSession() {return session;}
 
     @Override
     public void onStart() {
@@ -153,6 +163,14 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         player.setShuffleModeEnabled(shuffle);
     }
 
+    @Override
+    public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
+        this.startAutoPlay = true;
+        this.startPosition = startPosition;
+        this.startItemIndex = 0;
+        createMediaItems(playlist);
+    }
+
     private View.OnClickListener backPress = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -163,4 +181,5 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     public View.OnClickListener getBackPress (){
         return backPress;
     }
+
 }

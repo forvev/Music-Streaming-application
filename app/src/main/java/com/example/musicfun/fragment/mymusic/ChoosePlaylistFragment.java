@@ -29,9 +29,11 @@ import androidx.navigation.fragment.NavHostFragment;
 
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.mymusic.ChoosePlaylistAdapter;
 import com.example.musicfun.adapter.search.SearchPlaylistAdapter;
 import com.example.musicfun.databinding.FragmentChoosePlaylistBinding;
 import com.example.musicfun.datatype.Playlist;
+import com.example.musicfun.interfaces.SelectPlaylistInterface;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
@@ -42,7 +44,10 @@ public class ChoosePlaylistFragment extends Fragment {
     private PlaylistViewModel viewModel;
     private ListView listView;
     private LinearLayout create_new_playlist;
-    private ArrayAdapter<String> arrayAdapter;
+    private ChoosePlaylistAdapter adapter;
+    private Button save;
+    private Button cancel;
+    private int selected_pos;
 
     @Nullable
     @Override
@@ -69,24 +74,40 @@ public class ChoosePlaylistFragment extends Fragment {
         viewModel.getM_playlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Playlist>>(){
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {
-                listView = binding.chooseOnePlaylist;
-                ArrayList<String> playlistNames = new ArrayList<>();
-                for (int i = 0; i < playlists.size(); i++){
-                    playlistNames.add(playlists.get(i).getPlaylist_name());
+                if(!playlists.isEmpty()){
+                    listView = binding.chooseOnePlaylist;
+                    adapter = new ChoosePlaylistAdapter(getContext(), playlists, selectPlaylistInterface);
+                    listView.setAdapter(adapter);
+                    save = binding.savePlaylist;
+                    cancel = binding.cancelSelection;
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            Limitation: Only one item can be transfered back to the previous fragment
+                            NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
+                            navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", playlists.get(selected_pos).getPlaylist_id());
+                            navController.popBackStack();
+                        }
+                    });
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
+                            navController.popBackStack();
+                        }
+                    });
                 }
-                arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_single_choice, playlistNames);
-                listView.setAdapter(arrayAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
-                        navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", playlists.get(position).getPlaylist_id());
-                        navController.popBackStack();
-                    }
-                });
             }
         });
+
     }
+
+    SelectPlaylistInterface selectPlaylistInterface = new SelectPlaylistInterface() {
+        public void setSelectedPlaylistIndex(int pos){
+            selected_pos = pos;
+        }
+    };
+
 
     private void createPlaylist(){
         final Dialog dialog = new Dialog(getActivity());

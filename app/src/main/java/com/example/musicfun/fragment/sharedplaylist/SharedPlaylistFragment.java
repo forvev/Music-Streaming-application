@@ -1,6 +1,7 @@
 package com.example.musicfun.fragment.sharedplaylist;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.SharedPlaylist.SharedPlaylistAdapter;
 import com.example.musicfun.databinding.FragmentMymusicBinding;
@@ -64,14 +66,13 @@ public class SharedPlaylistFragment extends Fragment {
 
         @Override
         public void setDefaultPlaylist(int position, boolean isDefault) {
-
+//          Do nothing for shared playlists
         }
 
         @Override
         public void deletePlaylist(int position) {
             // remove this playlist from server
             viewModel.deletePlaylist(position);
-            //Toast.makeText(getContext(), "remove playlist", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -79,8 +80,8 @@ public class SharedPlaylistFragment extends Fragment {
             //Using navigation approach move to another fragment
             NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment(my_playlists.get(position).getPlaylist_id());
             Navigation.findNavController(getView()).navigate(action);
-
         }
+
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override

@@ -32,7 +32,6 @@ public class CurrentPlaylistFragment extends Fragment {
     private FragmentCurrentPlaylistBinding binding;
     private ListView lv_current;
     private ListView lv_next;
-    private ImageView close;
     private List<Songs> songInfo = new ArrayList<>();
     private Toolbar toolbar;
 
@@ -50,8 +49,8 @@ public class CurrentPlaylistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         lv_current = binding.lvCurrentTitle;
         lv_next = binding.lvNextTitles;
-
-        toolbar = getActivity().findViewById(R.id.toolbar);
+//       Toolbar handeling:
+        toolbar = binding.toolbarLyrics;
         toolbar.setTitle("");
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_close_24));
         ((LyricsActivity)getActivity()).setSupportActionBar(toolbar);
@@ -80,7 +79,7 @@ public class CurrentPlaylistFragment extends Fragment {
             SongListAdapter second_adapter = new SongListAdapter(getActivity(), nextTitles);
             lv_next.setAdapter(second_adapter);
         }
-
+//      TODO: bind service here. If broadcast receive intent, update listview
 
     }
 
@@ -91,12 +90,5 @@ public class CurrentPlaylistFragment extends Fragment {
             navController.popBackStack();
         }
     };
-
-    @Override
-    public void onStop(){
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_downward_24));
-        toolbar.setNavigationOnClickListener(((LyricsActivity)getActivity()).getBackPress());
-        super.onStop();
-    }
 
 }
