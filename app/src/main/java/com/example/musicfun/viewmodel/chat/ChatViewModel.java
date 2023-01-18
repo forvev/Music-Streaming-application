@@ -26,6 +26,9 @@ public class ChatViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Message>> messagesList = new MutableLiveData<>();
     private ArrayList<Message> messageArrayList;
+
+    private MutableLiveData<ArrayList<String>> badWordsList = new MutableLiveData<>();
+    private ArrayList<String> badWords;
     Application application;
     Database db;
 
@@ -36,6 +39,11 @@ public class ChatViewModel extends AndroidViewModel {
         this.application = application;
         messageArrayList =  new ArrayList<>();
         messagesList.setValue(messageArrayList);
+
+        badWordsList = new MutableLiveData<>();
+        badWords = new ArrayList<>();
+        badWordsList.setValue(badWords);
+
         db = new Database(application.getApplicationContext());
     }
 
@@ -93,12 +101,39 @@ public class ChatViewModel extends AndroidViewModel {
         }, token, partner, message);
     }
 
+    public void getBadWords(String token){
+        badWords.clear();
+        db.getBadWords(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try{
+                    JSONArray words = (JSONArray) result.get("badwords");
+                    //Log.d("badWordsExtra", words.length() + "");
+                    for(int i=0; i<words.length(); i++){
+                       badWords.add(words.getString(i));
+                    }
+                    badWordsList.setValue(badWords);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token);
+    }
+
     public MutableLiveData<ArrayList<Message>> getMessages() {return messagesList;}
 
     public void activeAdd(Message msg){
         messageArrayList.add(msg);
         messagesList.postValue(messageArrayList);
-        //messagesList.setValue(messageArrayList); funktioniert nicht weil aufgerufen aus asynchrounus Thread
+    }
+
+    public MutableLiveData<ArrayList<String>> getBadWordsList(){
+        return badWordsList;
     }
 
 }
