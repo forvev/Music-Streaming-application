@@ -30,6 +30,7 @@ import com.example.musicfun.datatype.User;
 import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -87,9 +88,14 @@ public class List_of_friends_fragment extends Fragment {
         }
 
         @Override
-        public void deleteFirend(int position, String user_id, String playlist_id) {
+        public void deleteFriend(int position, String user_id, String playlist_id) {
 
         }
+
+        //@Override
+        //public void deleteFriend(int position, String user_id, String playlist_id) {
+
+        //}
 
         @Override
         public void addFriend(String name) {

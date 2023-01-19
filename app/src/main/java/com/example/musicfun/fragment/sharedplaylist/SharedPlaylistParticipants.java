@@ -81,7 +81,7 @@ public class SharedPlaylistParticipants extends Fragment {
         }
 
         @Override
-        public void deleteFirend(int position, String user_id, String playlist_id) {
+        public void deleteFriend(int position, String user_id, String playlist_id) {
             playlist_id = passed_playlist_id;
 
             //friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);

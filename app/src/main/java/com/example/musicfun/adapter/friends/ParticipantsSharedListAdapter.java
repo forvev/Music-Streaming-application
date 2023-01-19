@@ -75,7 +75,7 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
     //holder.listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
     holder.imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
 
-    holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
+    holder.imageView_delete.setOnClickListener(click ->fi.deleteFriend(position, userList.get(position).getUser_id(),""));
     view.setTag(holder);
 
     return view;
