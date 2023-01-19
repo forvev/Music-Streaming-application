@@ -80,10 +80,10 @@ public class List_of_friends_fragment extends Fragment {
 
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int i) {
+        public void deleteFriend(int i, String name) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
 
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
         }
 
         @Override
@@ -92,7 +92,7 @@ public class List_of_friends_fragment extends Fragment {
         }
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
 
         }
 
