@@ -72,13 +72,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
-    private static final String TAG = "MainActivity";
-
     private SharedPreferences sp;
 
     protected @Nullable ExoPlayer player;
     protected PlayerControlView control;
 
+//    service related attributes
     private List<MediaItem> mediaItems = new ArrayList<>();
     private List<Songs> songInfo = new ArrayList<>();
     private boolean startAutoPlay;
@@ -88,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private TextView tv_title;
     private TextView tv_artist;
     private boolean isBound;
+    private boolean initBound = true;
     private MusicbannerService service;
     private BroadcastReceiver broadcastReceiver;
     private Intent intent;
@@ -224,6 +224,10 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             else{
                 Intent gotoLogin = new Intent(MainActivity.this, RegisterActivity.class);
                 sp.edit().putInt("logged", -1).apply();
+                if(player.isPlaying()){
+                    player.stop();
+                }
+                service.notificationManager.setPlayer(null);
                 Toast.makeText(getApplicationContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
                 startActivity(gotoLogin);
             }
@@ -249,13 +253,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
-
     private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
         @Override
         public void addToDefault(String position) {
             discoveryViewModel.getDefaultPlaylist(position);
         }
-
         @Override
         public void removeFromDefault(String position) {
 
@@ -414,8 +416,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         });
     }
 
-
-
     public void closeSearchView(View view){
         closeKeyboard(view);
         searchView.setQuery("", false);
@@ -463,25 +463,28 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     private void createMediaItems(List<Songs> playlist) {
         songInfo = playlist;
         // if the app just started, the songs in the new releases are set as default playlist
-        if(playlist == null){
-            discoveryViewModel.getSongNames().observe(this, new Observer<ArrayList<Songs>>() {
+        if(playlist == null || playlist.isEmpty()){
+            discoveryViewModel.initInMain("get/recentlyUploadedSongs");
+            discoveryViewModel.getInitList().observe(this, new Observer<ArrayList<Songs>>() {
                 @Override
                 public void onChanged(@Nullable final ArrayList<Songs> newName) {
                     // binds the Adapter to the ListView
-                    songInfo = newName;
-                    for(int i = 0; i < newName.size(); i++){
-                        Songs s = newName.get(i);
-                        MediaMetadata m = new MediaMetadata.Builder()
-                                .setTitle((s.getSongName()))
-                                .setArtist(s.getArtist())
-                                .setDescription(s.getSongId())
-                                .build();
-                        MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
-                                .setMediaMetadata(m)
-                                .build();
-                        mediaItems.add(mediaItem);
+                    if(!newName.isEmpty()){
+                        songInfo = newName;
+                        for(int i = 0; i < newName.size(); i++){
+                            Songs s = newName.get(i);
+                            MediaMetadata m = new MediaMetadata.Builder()
+                                    .setTitle((s.getSongName()))
+                                    .setArtist(s.getArtist())
+                                    .setDescription(s.getSongId())
+                                    .build();
+                            MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+                                    .setMediaMetadata(m)
+                                    .build();
+                            mediaItems.add(mediaItem);
+                        }
+                        initializePlayer();
                     }
-                    initializePlayer();
                 }
             });
         }
@@ -508,8 +511,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     protected boolean initializePlayer() {
 
         if(!isBound){
-            startItemIndex = sp.getInt("startItemIndex", 0);
-            startPosition = sp.getLong("startPosition", 0);
+            if(initBound){
+                startItemIndex = sp.getInt("startItemIndex", 0);
+                startPosition = sp.getLong("startPosition", 0);
+                initBound = false;
+            }
             doBindService();
         }
         else{

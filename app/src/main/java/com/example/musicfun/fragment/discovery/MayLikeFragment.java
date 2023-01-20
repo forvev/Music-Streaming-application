@@ -70,11 +70,6 @@ public class MayLikeFragment extends Fragment {
             NavDirections action = MayLikeFragmentDirections.actionMayLikeFragmentToChoosePlaylistFragment();
             Navigation.findNavController(getView()).navigate(action);
         }
-
-        @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
-        }
     };
 
     // TODO: Rename parameter arguments, choose names that match

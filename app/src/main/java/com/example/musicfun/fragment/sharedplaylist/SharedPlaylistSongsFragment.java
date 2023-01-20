@@ -72,11 +72,6 @@ public class SharedPlaylistSongsFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
-
-        @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
-        }
     };
 
 
@@ -110,17 +105,12 @@ public class SharedPlaylistSongsFragment extends Fragment {
                     tv_listenTogether.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            TODO: get current position and current item index from server
                             passData.seek(songs, 0, 0);
-
                             Intent intent = new Intent(getActivity(), LyricsActivity.class);
-//                            Gson gson = new Gson();
-//                            String json = gson.toJson(songs);
                             intent.putExtra("title", songs.get(0).getSongName());
                             intent.putExtra("artist", songs.get(0).getArtist());
                             intent.putExtra("listenTogether", true);
                             intent.putExtra("playlistID", selected_playlist_id + "");
-//                            intent.putExtra("playlist", json);
                             startActivity(intent);
                         }
                     });

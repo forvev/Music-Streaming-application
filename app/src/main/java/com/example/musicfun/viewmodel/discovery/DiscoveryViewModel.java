@@ -24,7 +24,9 @@ import java.util.ArrayList;
 public class DiscoveryViewModel extends AndroidViewModel {
 
     MutableLiveData<ArrayList<Songs>> songNames;
+    MutableLiveData<ArrayList<Songs>> initList;
     private ArrayList<Songs> songsArrayList;
+    private ArrayList<Songs> initArrayList;
     Application application;
     Database db;
     PlaylistRepository playlistRepository;
@@ -32,18 +34,27 @@ public class DiscoveryViewModel extends AndroidViewModel {
 
     public DiscoveryViewModel(Application application){
         super(application);
-        songNames = new MutableLiveData<>();
         this.application = application;
         db = new Database(application.getApplicationContext());
         playlistRepository = new PlaylistRepository(application.getApplicationContext());
+
+        songNames = new MutableLiveData<>();
         songsArrayList = new ArrayList<>();
         songNames.setValue(songsArrayList);
+//        initArrayList is used for MainActivity, so that the mutablelivedata can response to MainActivity instead of DiscoveryFragments
+        initList = new MutableLiveData<>();
+        initArrayList = new ArrayList<>();
+        initList.setValue(initArrayList);
         SharedPreferences sp = application.getSharedPreferences("login",MODE_PRIVATE);
         token = sp.getString("token", "");
     }
 
     public MutableLiveData<ArrayList<Songs>> getSongNames(){
         return songNames;
+    }
+
+    public MutableLiveData<ArrayList<Songs>> getInitList(){
+        return initList;
     }
 
     public void init(String url) {
@@ -58,6 +69,29 @@ public class DiscoveryViewModel extends AndroidViewModel {
                         songsArrayList.add(s);
                     }
                     songNames.setValue(songsArrayList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, url);
+    }
+
+    public void initInMain (String url){
+        initArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray songTitles = (JSONArray) response.get("Songs");
+                    for (int i = 0; i < songTitles.length(); i++) {
+                        Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
+                        initArrayList.add(s);
+                    }
+                    initList.setValue(initArrayList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

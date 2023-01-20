@@ -66,11 +66,6 @@ public class MyPlaylistFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
-
-        @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
-        }
     };
 
     @Nullable

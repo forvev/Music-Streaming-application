@@ -1,6 +1,9 @@
 package com.example.musicfun.adapter.search;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ public class SearchResultAdapter extends BaseAdapter {
     public PassDataInterface mOnInputListner;
     private ArrayList<Songs> arraylist;
     private DiscoveryItemClick discoveryItemClick;
+    private SharedPreferences sp;
 
     public SearchResultAdapter(Context context, List<Songs> songsList, DiscoveryItemClick discoveryItemClick) {
         mContext = context;
@@ -35,6 +39,7 @@ public class SearchResultAdapter extends BaseAdapter {
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(songsList);
         this.discoveryItemClick = discoveryItemClick;
+        sp = context.getSharedPreferences("login",MODE_PRIVATE);
     }
 
     public class ViewHolder {
@@ -76,21 +81,29 @@ public class SearchResultAdapter extends BaseAdapter {
         else{
             holder = (ViewHolder) view.getTag();
         }
-        holder.setDefault.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!click){
-                    holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
-                    click = true;
-                    discoveryItemClick.addToDefault(songsList.get(position).getSongId());
+
+//      hide "add to default" icon if user did not log in
+        if(sp.getInt("logged", 999) != 1){
+            holder.setDefault.setVisibility(View.INVISIBLE);
+        }
+        else{
+            holder.setDefault.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!click){
+                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
+                        click = true;
+                        discoveryItemClick.addToDefault(songsList.get(position).getSongId());
+                    }
+                    else{
+                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
+                        click = false;
+                        discoveryItemClick.removeFromDefault(songsList.get(position).getSongId());
+                    }
                 }
-                else{
-                    holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
-                    click = false;
-                    discoveryItemClick.removeFromDefault(songsList.get(position).getSongId());
-                }
-            }
-        });
+            });
+        }
+
         holder.clickField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

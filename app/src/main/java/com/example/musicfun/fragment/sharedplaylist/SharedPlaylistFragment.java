@@ -1,7 +1,10 @@
 package com.example.musicfun.fragment.sharedplaylist;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -53,6 +56,7 @@ public class SharedPlaylistFragment extends Fragment {
     private ListView listView;
     private SharedPlaylistAdapter playlistAdapter;
     private ImageView add_playlist;
+    private String username;
 
 
     private PlaylistMenuClick playlistMenuClick = new PlaylistMenuClick(){
@@ -106,6 +110,8 @@ public class SharedPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences sp = getActivity().getSharedPreferences("login", MODE_PRIVATE);
+        username = sp.getString("name", "");
         add_playlist = binding.addPlaylist;
         add_playlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,12 +124,29 @@ public class SharedPlaylistFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {
                 if(!playlists.isEmpty()){
+                    playlists = sortPlaylist(playlists);
                     listView = binding.playlist;
                     playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
                     listView.setAdapter(playlistAdapter);
                 }
             }
         });
+    }
+
+//    Sort the playlists so that the ones this user owns are shown first.
+    private ArrayList<Playlist> sortPlaylist (ArrayList<Playlist> playlists){
+        ArrayList<Playlist> isOwner = new ArrayList<>();
+        ArrayList<Playlist> rest = new ArrayList<>();
+        for (Playlist p : playlists){
+            if (p.getOwner().equals(username)){
+                isOwner.add(p);
+            }
+            else{
+                rest.add(p);
+            }
+        }
+        isOwner.addAll(rest);
+        return isOwner;
     }
 
     private void createPlaylist(){

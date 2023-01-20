@@ -90,7 +90,7 @@ public class MusicbannerService extends Service {
         player.addAnalyticsListener(new PlaybackStatsListener(false, (eventTime, playbackStats) -> {
                     // Analytics data for the session started at `eventTime` is ready
                     // Songs which are played more than 10 seconds are considered as listen history and will be sent to database
-                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null){
+                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null && sp.getInt("logged", 999) == 1){
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
                     // TODO: add listen history UI to setting activity

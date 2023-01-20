@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -36,14 +38,13 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private MutableLiveData<String> artist = new MutableLiveData<>();
     private MutableLiveData<Boolean> session = new MutableLiveData<>();
     private MutableLiveData<String> playlistID = new MutableLiveData<>();
-    private MutableLiveData<List<Songs>> m_playlist = new MutableLiveData<>();
-    private List<Songs> playlist = new ArrayList<>();
 
     private ExoPlayer player;
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
     private List<MediaItem> mediaItems = new ArrayList<>();
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         //creates a full screen view and hides the default action bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        sp = getSharedPreferences("login",MODE_PRIVATE);
 
         binding = ActivityLyricsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -123,6 +125,9 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         if (isBound){
             unbindService(playerServiceConnection);
             isBound = false;
+//            After this activity finished, service will be rebound to other activities.
+//            Set startPosition to 0, so that the songs in other activities/fragments can be played from the start.
+//            sp.edit().putLong("startPosition", 0).apply();
         }
     }
 
@@ -165,7 +170,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
     @Override
     public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
-        this.startAutoPlay = true;
+        this.startAutoPlay = false;
         this.startPosition = startPosition;
         this.startItemIndex = 0;
         createMediaItems(playlist);
