@@ -212,9 +212,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                     Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
                     toolbar.setNavigationOnClickListener(closeFragment);
                 }
+//                in ChooseOnePlaylistFragment, the search function searches all songs in the databank
                 else if (navDestination.getId() == R.id.choose_one_playlist){
-                    searchView.setQueryHint(getString(R.string.search_hint_playlist));
+                    searchView.setQueryHint(getString(R.string.search_hint_songs));
                     toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+                    Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+                    toolbar.setNavigationOnClickListener(closeFragment);
                 }
             }
         });
@@ -267,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         });
     }
 
-//    pop back to the previous fragment. Only used in MyPlaylistFragment
+//    pop back to the previous fragment. Only used in MyPlaylistFragment & ChooseOnePlaylistFragment
     private View.OnClickListener closeFragment = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -308,7 +311,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         if(currentFragmentId == R.id.discovery){
             searchSongs();
         }
-        else if(currentFragmentId == R.id.my_music || currentFragmentId == R.id.choose_one_playlist){
+        else if (currentFragmentId == R.id.choose_one_playlist){
+            toolbar.setNavigationOnClickListener(cancelSearch);
+            searchSongs();
+        }
+        else if(currentFragmentId == R.id.my_music){
             searchPlaylist();
         }
         else if(currentFragmentId == R.id.myPlaylistFragment){
@@ -488,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     public void closeSearchView(View view){
         closeKeyboard(view);
-        if (navController.getCurrentDestination().getId() == R.id.myPlaylistFragment){
+        if (navController.getCurrentDestination().getId() == R.id.myPlaylistFragment || navController.getCurrentDestination().getId() == R.id.choose_one_playlist){
             toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             toolbar.setNavigationOnClickListener(closeFragment);
