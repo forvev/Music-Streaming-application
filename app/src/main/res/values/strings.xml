@@ -61,7 +61,7 @@
     <string name="setting">Setting</string>
 
     <string name="search_hint_songs">Find a song</string>
-    <string name="search_hint_playlist">Search in playlists</string>
+    <string name="search_hint_playlist">Search playlists</string>
     <string name="search_hint_song_in_playlist">Search in playlist</string>
     <string name="search_hint_friend">Find a friend</string>
     <string name="invite_friends">Invite friends</string>

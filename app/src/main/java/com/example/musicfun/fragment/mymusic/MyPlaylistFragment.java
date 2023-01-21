@@ -2,21 +2,29 @@ package com.example.musicfun.fragment.mymusic;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,12 +37,14 @@ import com.example.musicfun.R;
 import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.mymusic.SongListAdapter;
+import com.example.musicfun.adapter.search.SearchSonglistAdapter;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.fragment.banner.CurrentPlaylistFragment;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
+import com.google.android.exoplayer2.Player;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -52,7 +62,6 @@ public class MyPlaylistFragment extends Fragment {
     private ImageView shuffle;
     private boolean isShuffle;
     private PassDataInterface passData;
-
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
@@ -78,17 +87,11 @@ public class MyPlaylistFragment extends Fragment {
         return root;
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        Objects.requireNonNull(((MainActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(closeFragment);
         selected_playlist_id = MyPlaylistFragmentArgs.fromBundle(getArguments()).getSelectedPlaylistId();
-
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
@@ -134,7 +137,6 @@ public class MyPlaylistFragment extends Fragment {
             }
         });
 
-
 //         listen whether there is selected playlist id popped back from ChoosePlaylistFragment
         NavController navController = NavHostFragment.findNavController(MyPlaylistFragment.this);
         MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
@@ -147,14 +149,6 @@ public class MyPlaylistFragment extends Fragment {
             }
         });
     }
-
-    private View.OnClickListener closeFragment = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            NavController navController = NavHostFragment.findNavController(MyPlaylistFragment.this);
-            navController.popBackStack();
-        }
-    };
 
     @Override
     public void onAttach(Context context){

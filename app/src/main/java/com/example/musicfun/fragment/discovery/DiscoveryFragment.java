@@ -27,9 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -53,7 +55,6 @@ public class DiscoveryFragment extends Fragment {
     private static final String TAG = "DiscoveryFragment";
     DiscoveryViewModel discoveryViewModel;
     public PassDataInterface mOnInputListner;
-    private SharedPreferences sp;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,13 +108,12 @@ public class DiscoveryFragment extends Fragment {
         // check internet connection
         boolean temp = isNetworkAvailable(getActivity().getApplication());
         if (!temp){
-            System.out.println("network not connected!!");
+            Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
-        NavController navController = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
-        NavigationUI.setupWithNavController(binding.DiscoveryNav, navController);
+        NavController controller = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
+        NavigationUI.setupWithNavController(binding.DiscoveryNav, controller);
     }
 
     private Boolean isNetworkAvailable(Application application) {

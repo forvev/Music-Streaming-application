@@ -93,7 +93,6 @@ public class MusicbannerService extends Service {
                     if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null && sp.getInt("logged", 999) == 1){
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
-                    // TODO: add listen history UI to setting activity
                 }));
 
         sp = getSharedPreferences("login",MODE_PRIVATE);

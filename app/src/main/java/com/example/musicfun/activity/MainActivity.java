@@ -32,8 +32,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -46,7 +48,9 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.discovery.DiscoveryFragment;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
@@ -68,6 +72,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
 //    search relevant attributes
     private Toolbar toolbar;
+    private Toolbar temp;
     private SearchView searchView;
     private ListView searchResult;
     private ImageView setting;
@@ -140,13 +146,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             binding.navView.getMenu().removeItem(R.id.my_music);
         }
         NavigationUI.setupWithNavController(binding.navView, navController);
-        binding.navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                NavigationUI.onNavDestinationSelected(item, navController);
-                return true;
-            }
-        });
 
         // initialize the relative UI components
         tv_title = findViewById(R.id.banner_song_title);
@@ -179,21 +178,16 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
 //        handel toolbar functions
         searchView = binding.actionSearch;
+        initSearchHint(getString(R.string.search_hint_songs));
         searchResult = binding.searchList;
         setting = binding.setting;
         cancel = binding.cancel;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.purple_50));
-                setting.setVisibility(View.GONE);
-                cancel.setVisibility(View.VISIBLE);
-                cancel.setOnClickListener(cancelSearch);
-                binding.flSearchResult.setVisibility(View.VISIBLE);
-                locateFragment();
-            }
-        });
 
+        listenNavController();
+        menuSelectedCheck();
+        searchViewFocused(false);
+
+//       setting
         setting.setOnClickListener(goToSetting);
         binding.controls.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +200,80 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             }
         });
     }
+
+    public void listenNavController(){
+//        special care for the MyPlaylistFragment and ChooseOnePlaylistFragment
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                if (navDestination.getId() == R.id.myPlaylistFragment){
+                    searchView.setQueryHint(getString(R.string.search_hint_song_in_playlist));
+                    toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+                    Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+                    toolbar.setNavigationOnClickListener(closeFragment);
+                }
+                else if (navDestination.getId() == R.id.choose_one_playlist){
+                    searchView.setQueryHint(getString(R.string.search_hint_playlist));
+                    toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+                }
+            }
+        });
+    }
+
+    public void menuSelectedCheck(){
+//        ensure the bottom navView always shows the correct color
+        binding.navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.discovery) {
+                    searchView.setQueryHint(getString(R.string.search_hint_songs));
+                }
+                else if(item.getItemId() == R.id.my_music) {
+                    searchView.setQueryHint(getString(R.string.search_hint_playlist));
+                }
+                else if (item.getItemId() == R.id.friends) {
+                    searchView.setQueryHint(getString(R.string.search_hint_friend));
+                }
+                else{
+                    searchView.setQueryHint(getString(R.string.search_hint_songs));
+                }
+                NavigationUI.onNavDestinationSelected(item, navController);
+                return true;
+            }
+        });
+    }
+
+    public void initSearchHint(String text){
+        searchView.setQueryHint(text);
+    }
+
+//  newController = false indicates the controller is in MainActivity
+//  newController = true indicates the controller is from DiscoveryFragment
+    public void searchViewFocused(boolean newController){
+//        search function
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.purple_50));
+                    setting.setVisibility(View.GONE);
+                    cancel.setVisibility(View.VISIBLE);
+                    cancel.setOnClickListener(cancelSearch);
+                    binding.flSearchResult.setVisibility(View.VISIBLE);
+                    locateFragment();
+                }
+            }
+        });
+    }
+
+//    pop back to the previous fragment. Only used in MyPlaylistFragment
+    private View.OnClickListener closeFragment = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            navController.popBackStack();
+        }
+    };
 
     private View.OnClickListener cancelSearch = new View.OnClickListener() {
         @Override
@@ -234,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     };
 
+//    find the current visible fragment
     private void locateFragment(){
         int currentFragmentId = navController.getCurrentDestination().getId();
         if(currentFragmentId == R.id.discovery){
@@ -243,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             searchPlaylist();
         }
         else if(currentFragmentId == R.id.myPlaylistFragment){
+            toolbar.setNavigationOnClickListener(cancelSearch);
             searchSongsInPlaylist();
         }
         else if(currentFragmentId == R.id.friends){
@@ -418,6 +488,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     public void closeSearchView(View view){
         closeKeyboard(view);
+        if (navController.getCurrentDestination().getId() == R.id.myPlaylistFragment){
+            toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(closeFragment);
+        }
         searchView.setQuery("", false);
         searchView.clearFocus();
         toolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -433,6 +508,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         return false;
     };
 
+//    set up broadcast to get information from service
     @Override
     public void onStart() {
         super.onStart();
@@ -508,8 +584,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
+//    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
-
         if(!isBound){
             if(initBound){
                 startItemIndex = sp.getInt("startItemIndex", 0);
@@ -580,20 +656,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         createMediaItems(playlist);
     }
 
-    public boolean isConnectedToServer(String url, int timeout) {
-        try{
-            URL myUrl = new URL(url);
-            URLConnection connection = myUrl.openConnection();
-            connection.setConnectTimeout(timeout);
-            connection.connect();
-            return true;
-        } catch (Exception e) {
-            // Handle your exceptions
-            return false;
-        }
-    }
-
-    private void closeKeyboard(View view) {
+    public void closeKeyboard(View view) {
         if (view != null) {
             InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
