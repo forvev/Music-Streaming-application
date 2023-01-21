@@ -7,13 +7,16 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
+import com.example.musicfun.BasicEvent;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.Database;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +25,11 @@ import java.util.ArrayList;
 
 public class FriendsViewModel extends AndroidViewModel {
 
+    private final MutableLiveData _navigateToDetails = new MutableLiveData();
+
     private MutableLiveData<ArrayList<User>> m_userNames = new MutableLiveData<>();
     private MutableLiveData<ArrayList<User>> m_searchUserResult = new MutableLiveData<>();
+    private MutableLiveData<Integer> old_Size = new MutableLiveData<>();
     private ArrayList<User> userArrayList;
     private ArrayList<User> searchUserResult;
     Database db;
@@ -43,9 +49,19 @@ public class FriendsViewModel extends AndroidViewModel {
         token = sp.getString("token", "");
     }
 
+    public void doClear(){
+        userArrayList.clear();
+        m_userNames.setValue(userArrayList);
+    }
+
+    @NotNull
+    public final LiveData getNavigateToDetails() {
+        return this._navigateToDetails;
+    }
+
     public void init() {
         userArrayList.clear();
-        Log.d("token", token);
+        //Log.d("token", token);
         db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -57,7 +73,9 @@ public class FriendsViewModel extends AndroidViewModel {
                         User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
                         userArrayList.add(user);
                     }
+                    //Log.d("checkIdeaDiv", userArrayList.size()+"");
                     m_userNames.setValue(userArrayList);
+                    //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -142,8 +160,12 @@ public class FriendsViewModel extends AndroidViewModel {
                             db.addMsg(new ServerCallBack() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
-                                    userArrayList.remove(i);
+                                    //if needed, because when clicking to fast on same delete icon, IoB Exception would happen
+                                    if(userArrayList.size() != 0){
+                                        userArrayList.remove(i);
+                                    }
                                     m_userNames.setValue(userArrayList);
+                                    //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                                 }
 
                                 @Override
@@ -152,9 +174,11 @@ public class FriendsViewModel extends AndroidViewModel {
                             }, url, toDelete);
                         }else{
                             m_userNames.setValue(userArrayList);
+                            //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                         }
                     }else{
                         m_userNames.setValue(userArrayList);
+                        //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                     }
 
                 } catch (JSONException e) {
@@ -184,6 +208,7 @@ public class FriendsViewModel extends AndroidViewModel {
                         public void onSuccess(JSONObject result) {
                             userArrayList.add(new User(userToBeAdded, "", false, true));
                             m_userNames.setValue(userArrayList);
+                            //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                         }
 
                         @Override
@@ -221,7 +246,8 @@ public class FriendsViewModel extends AndroidViewModel {
                             userArrayList.add(i, new User(userToBeAdded, "", true, false));
                             userArrayList.remove(i+1);
                             //userArrayList.add(new User(userToBeAdded));
-                            m_userNames.setValue(userArrayList);
+                             m_userNames.setValue(userArrayList);
+                            //_navigateToDetails.setValue(new BasicEvent(userArrayList));
                         }
 
                         @Override

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.musicfun.BasicEvent;
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.activity.MessageListActivity;
@@ -44,6 +46,9 @@ public class Friends_friend_Fragment extends Fragment {
     FriendsViewModel friendsViewModel;
     SharedPreferences sp;
     FriendsListAdapter adapter;
+
+    boolean firstTime;
+    Observer<ArrayList<User>> activityObserver;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -123,6 +128,7 @@ public class Friends_friend_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        firstTime = false;
         View view = inflater.inflate(R.layout.fragment_friends_friend, container, false);
         return view;
     }
@@ -137,27 +143,59 @@ public class Friends_friend_Fragment extends Fragment {
             return;
         }
 
-        friendsViewModel.init();
         listView = (ListView) view.findViewById(R.id.lvfriends);
+        friendsViewModel.init();
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
-            @Override
-            public void onChanged(ArrayList<User> users) {
-                //TODO: User hinzufügen und direkt löschen, dann sieht man User immer noch kurz angezeigt
-                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
-                    listView.setAdapter(adapter);
-                    Log.d("LastCheck", users.size() + "");
-            }
-        });
-//        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
-//        Those changes should also be observed here.
-//        Otherwise the view will not be updated.
-        ((MainActivity)getActivity()).getReply().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                 listView.setAdapter(adapter);
+                Log.d("fixThis", "observerInFragment: "+ users.size());
             }
         });
+
+/*
+        friendsViewModel.getNavigateToDetails().observe(getViewLifecycleOwner(), new Observer() {
+            @Override
+            public void onChanged(Object o) {
+                BasicEvent event = (BasicEvent) o;
+                ArrayList<User>  list = (ArrayList<User>) event.getContentIfNotHandled();
+                boolean check = list == null;
+                Log.d("testThis", check + "");
+                if(list != null){
+                    Log.d("checkIdea", "observerInFragment: "+ list.size());
+                    Log.d("testThisVorkommen", "ausgeführt");
+                    adapter = new FriendsListAdapter(getActivity(), list , friendFragmentInterface);
+                    listView.setAdapter(adapter);
+                }
+            }
+        });
+*/
+
+        activityObserver = new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+
+                if(firstTime){
+                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                    listView.setAdapter(adapter);
+                }
+
+            }
+        };
+//        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
+//        Those changes should also be observed here.
+//        Otherwise the view will not be updated.
+        ((MainActivity)getActivity()).getReply().observe(getViewLifecycleOwner(), activityObserver);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                firstTime = true;
+                Log.d("fixThat", "firstTime after: "+ firstTime);
+            }
+        }, 100);//50 works but for safety we take 100
+
 
     }
 
@@ -167,5 +205,12 @@ public class Friends_friend_Fragment extends Fragment {
         if (nw == null) return false;
         NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
         return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //friendsViewModel.getUserNames().removeObserver(activityObserver);
+        friendsViewModel.getUserNames().removeObservers(getViewLifecycleOwner());
     }
 }
