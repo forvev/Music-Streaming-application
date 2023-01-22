@@ -29,6 +29,7 @@ public class Database {
     private String getChatUrl = "http://10.0.2.2:3000/get/chat?auth_token=";
     private String sendChatMsgUrl = "http://10.0.2.2:3000/get/storeMessage?auth_token=";
     private String addUsrToSharedPlaylist = "http://10.0.2.2:3000/get/storeMessage?auth_token=";
+    private String badWordsUrl = "http://10.0.2.2:3000/badwords?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
@@ -51,6 +52,23 @@ public class Database {
         });
         requestQueue.add(request);
     }
+
+    public void getBadWords(ServerCallBack callback, String token){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(badWordsUrl + token, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error Response 'Bad Words' " + error.getMessage() + " url = " + badWordsUrl + token);
+            }
+        });
+        requestQueue.add(request);
+    }
+
 //TODO: Do we need a response from the server and if so what shall we do with it?
     public void addMsg(ServerCallBack callBack, String url, String username){
         JSONObject user = new JSONObject();

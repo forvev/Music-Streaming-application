@@ -77,7 +77,7 @@ public class SharedPlaylistParticipants extends Fragment {
 
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int position) {
+        public void deleteFriend(int position, String name) {
         }
 
         @Override
@@ -91,7 +91,7 @@ public class SharedPlaylistParticipants extends Fragment {
         }
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
 
         }
 

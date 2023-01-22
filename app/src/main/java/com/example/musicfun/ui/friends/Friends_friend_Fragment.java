@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class Friends_friend_Fragment extends Fragment {
     SharedPreferences sp;
     FriendsListAdapter adapter;
 
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,9 +55,9 @@ public class Friends_friend_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int i) {
+        public void deleteFriend(int i, String name) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
         }
 
         @Override
@@ -64,7 +66,8 @@ public class Friends_friend_Fragment extends Fragment {
         }
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
+            friendsViewModel.sendMsgWithBodyAccept(name, i);
         }
 
         @Override
@@ -139,8 +142,10 @@ public class Friends_friend_Fragment extends Fragment {
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
-                listView.setAdapter(adapter);
+                //TODO: User hinzufügen und direkt löschen, dann sieht man User immer noch kurz angezeigt
+                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                    listView.setAdapter(adapter);
+                    Log.d("LastCheck", users.size() + "");
             }
         });
 //        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
