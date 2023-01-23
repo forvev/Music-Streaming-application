@@ -249,7 +249,6 @@ public class LyricsFragment extends Fragment {
 
             if(player != null){
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
-                Log.d("songcover", id + "");
                 String coverUrl = "http://100.110.104.112:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
                 if (title.equals("") && artist.equals("")){

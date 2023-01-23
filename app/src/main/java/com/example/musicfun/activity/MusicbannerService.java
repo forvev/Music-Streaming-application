@@ -210,7 +210,7 @@ public class MusicbannerService extends Service {
                 return;
             }
             String id = mediaItem.mediaMetadata.description.toString();
-            String coverUrl = "http://100.110.104.112/:3000/images/" + id + ".jpg";
+            String coverUrl = "http://100.110.104.112:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist, coverUrl);
