@@ -69,6 +69,11 @@ public class MostHeardFragment extends Fragment {
             NavDirections action = MostHeardFragmentDirections.actionMostHeardFragmentToChoosePlaylistFragment();
             Navigation.findNavController(getView()).navigate(action);
         }
+
+        @Override
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
     };
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

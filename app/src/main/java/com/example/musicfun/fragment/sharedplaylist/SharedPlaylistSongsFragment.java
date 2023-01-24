@@ -72,6 +72,11 @@ public class SharedPlaylistSongsFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
+
+        @Override
+        public void addToDefault(String position) {
+//            discoveryViewModel.getDefaultPlaylist(position);
+        }
     };
 
 

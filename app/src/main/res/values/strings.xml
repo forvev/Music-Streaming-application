@@ -69,6 +69,7 @@
     <string name="participants">Participants</string>
     <string name="current_title">Current title</string>
     <string name="coming_next">Coming next</string>
+    <string name="add_to_default">Add to default playlist</string>
 
 
 </resources>

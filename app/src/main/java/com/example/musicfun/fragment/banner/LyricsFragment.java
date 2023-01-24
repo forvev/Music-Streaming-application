@@ -51,7 +51,10 @@ import com.example.musicfun.databinding.FragmentLyricsBinding;
 import com.example.musicfun.datatype.Lyrics;
 import com.example.musicfun.datatype.RelativeSizeColorSpan;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
@@ -76,6 +79,8 @@ public class LyricsFragment extends Fragment {
     protected @Nullable ExoPlayer player;
     private BroadcastReceiver broadcastReceiver;
     private MainActivityViewModel viewModel;
+    private SonglistViewModel songlistViewModel;
+    private DiscoveryViewModel discoveryViewModel;
 
     private StyledPlayerControlView controlView;
     private TextView tv_title;
@@ -83,8 +88,10 @@ public class LyricsFragment extends Fragment {
     private TextView tv_artist;
     private String artist = "";
     private ImageView coverView;
-    private ImageView btn_currentPlaylist;
     private ImageView btn_active_guests;
+    private ImageView btn_add_to_default;
+    private Boolean isClicked;
+    private String current_song_id = "";
 
     //Socket IO
     SocketIOClient socketIOClient = new SocketIOClient();
@@ -128,6 +135,8 @@ public class LyricsFragment extends Fragment {
         binding = FragmentLyricsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        songlistViewModel = new ViewModelProvider(this).get(SonglistViewModel.class);
+        discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
         return root;
     }
@@ -155,12 +164,38 @@ public class LyricsFragment extends Fragment {
             tv_title.setText(title);
             tv_artist.setText(artist);
         }
+        ImageView btn_add_to_playlist = binding.lyricsAddToPlaylist;
+        btn_add_to_playlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToChoosePlaylistFragment2();
+                Navigation.findNavController(getView()).navigate(action);
+            }
+        });
+
+//         listen whether there is selected playlist id popped back from ChoosePlaylistFragment
+        NavController navController = NavHostFragment.findNavController(LyricsFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && !current_song_id.isEmpty()){
+                    songlistViewModel.addSongToPlaylist(playlist_position, current_song_id);
+                }
+            }
+        });
+
+//        add the current song to default playlist
+        btn_add_to_default = getView().findViewById(R.id.add_to_default);
+//        if this song is in default, change image resource
+        initDefaultButton();
+        btn_add_to_default.setOnClickListener(setAsDefault);
 
 //        lyrics relevant
         tv_lyrics = binding.lyrics;
         tv_lyrics.setMovementMethod(scrolltext);
 
-        btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
+        ImageView btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
         btn_currentPlaylist.setOnClickListener(showCurrentPlaylist);
         btn_active_guests = binding.activeListeners;
         if (isSession) {
@@ -173,6 +208,7 @@ public class LyricsFragment extends Fragment {
             controlView.setShowShuffleButton(true);
         }
 
+//        Service informs the media transfers
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -180,13 +216,51 @@ public class LyricsFragment extends Fragment {
                 artist = intent.getStringExtra("artist");
                 tv_title.setText(title);
                 tv_artist.setText(artist);
+                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+                initDefaultButton();
                 String coverUrl = intent.getStringExtra("coverUrl");
                 changeCover(coverUrl);
                 updateLyricsFile();
             }
         };
-
     }
+
+    private void initDefaultButton (){
+        if(!current_song_id.isEmpty()){
+            discoveryViewModel.checkSongInDefault(current_song_id);
+            discoveryViewModel.getIsInDefault().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if(aBoolean){
+                        isClicked = true;
+                        btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_24);
+                    }
+                    else{
+                        isClicked = false;
+                        btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_border_24);
+                    }
+                }
+            });
+        }
+    }
+
+    private View.OnClickListener setAsDefault = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(isClicked && !current_song_id.isEmpty()){
+//                remove from default playlist
+                isClicked = false;
+                btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_border_24);
+                discoveryViewModel.removeSongFromDefault(current_song_id);
+            }
+            else if (!current_song_id.isEmpty()){
+//                add to default playlist
+                isClicked = true;
+                btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_24);
+                discoveryViewModel.getDefaultPlaylist(current_song_id);
+            }
+        }
+    };
 
 //    Bind service from fragment to make sure the service is bound on time
     private ServiceConnection playerServiceConnection = new ServiceConnection() {
@@ -248,6 +322,8 @@ public class LyricsFragment extends Fragment {
             controlView.setPlayer(player);
 
             if(player != null){
+                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+                initDefaultButton();
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
                 String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
@@ -358,7 +434,6 @@ public class LyricsFragment extends Fragment {
     private View.OnClickListener showActiveGuests = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Toast.makeText(getContext(), "active listeners clicked!", Toast.LENGTH_SHORT).show();
             Gson gson = new Gson();
             String json = gson.toJson(usernames);
             NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToActiveListenerFragment(json);

@@ -25,6 +25,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
 
     MutableLiveData<ArrayList<Songs>> songNames;
     MutableLiveData<ArrayList<Songs>> initList;
+    MutableLiveData<Boolean> isInDefault;
     private ArrayList<Songs> songsArrayList;
     private ArrayList<Songs> initArrayList;
     Application application;
@@ -45,6 +46,9 @@ public class DiscoveryViewModel extends AndroidViewModel {
         initList = new MutableLiveData<>();
         initArrayList = new ArrayList<>();
         initList.setValue(initArrayList);
+
+        isInDefault = new MutableLiveData<>();
+        isInDefault.setValue(false);
         SharedPreferences sp = application.getSharedPreferences("login",MODE_PRIVATE);
         token = sp.getString("token", "");
     }
@@ -56,6 +60,8 @@ public class DiscoveryViewModel extends AndroidViewModel {
     public MutableLiveData<ArrayList<Songs>> getInitList(){
         return initList;
     }
+
+    public MutableLiveData<Boolean> getIsInDefault() {return isInDefault;}
 
     public void init(String url) {
         songsArrayList.clear();
@@ -126,13 +132,13 @@ public class DiscoveryViewModel extends AndroidViewModel {
         }, name);
     }
 
-    public void getDefaultPlaylist(String position){
+    public void getDefaultPlaylist(String song_id){
         playlistRepository.getDefaultPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
                     String defaultPlaylist = result.getString("defaultPlaylist");
-                    addSongToPlaylist(defaultPlaylist, position);
+                    addSongToPlaylist(defaultPlaylist, song_id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -145,12 +151,72 @@ public class DiscoveryViewModel extends AndroidViewModel {
         }, token);
     }
 
-    public void addSongToPlaylist(String playlist_position, String songlist_position){
+    public void checkSongInDefault(String song_id){
+        isInDefault.setValue(false);
+        playlistRepository.getDefaultPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    String defaultPlaylist = result.getString("defaultPlaylist");
+                    checkSongInPlaylist(defaultPlaylist, song_id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token);
+    }
+
+    public void removeSongFromDefault(String song_id){
+        playlistRepository.getDefaultPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    String defaultPlaylist = result.getString("defaultPlaylist");
+                    removeSongFromPlaylist(defaultPlaylist, song_id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, token);
+    }
+
+    private void checkSongInPlaylist(String selected_playlist_id, String song_id) {
+        playlistRepository.getSongsFromPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray songlistArray = (JSONArray) response.get("songs");
+                    for (int j = 0; j < songlistArray.length(); j++){
+                        if(song_id.equals(songlistArray.getJSONObject(j).getString("_id"))){
+                            isInDefault.setValue(true);
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        }, selected_playlist_id, token);
+    }
+
+    public void addSongToPlaylist(String playlist_id, String song_id){
         playlistRepository.addSongToPlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
-
-
             }
             @Override
             public void onError(VolleyError error) {
@@ -158,8 +224,18 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     Toast.makeText(application.getApplicationContext(), "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, playlist_position, songlist_position, token);
+        }, playlist_id, song_id, token);
     }
 
+    public void removeSongFromPlaylist (String selected_playlist_id, String song_id) {
+        playlistRepository.deleteSongsFromPlaylist(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject response) {
+            }
+            @Override
+            public void onError(VolleyError error) {
+            }
+        }, selected_playlist_id, song_id, token);
+    }
 
 }

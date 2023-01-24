@@ -43,8 +43,6 @@ public class SonglistViewModel extends AndroidViewModel {
         m_searchResult.setValue(searchResult);
         sp = getApplication().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
         token = sp.getString("token", "");
-        //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYzOTc5NGY1ZGQ2OTAyMGIwMTVlNDBhNSJ9LCJpYXQiOjE2NzA4Nzk4NDh9.0jHIAosQ7HrSA9LZmv1VfD3OWR5gfUfc4Fsa3QzVv3A";
-
     }
 
     public MutableLiveData<ArrayList<Songs>> getM_songlist(){

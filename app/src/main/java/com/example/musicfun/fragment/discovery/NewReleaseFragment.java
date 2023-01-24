@@ -69,6 +69,11 @@ public class NewReleaseFragment extends Fragment {
             NavDirections action = NewReleaseFragmentDirections.actionNewReleaseFragmentToChoosePlaylistFragment();
             Navigation.findNavController(getView()).navigate(action);
         }
+
+        @Override
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
     };
 
     // TODO: Rename parameter arguments, choose names that match

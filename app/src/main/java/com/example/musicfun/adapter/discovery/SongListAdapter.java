@@ -35,6 +35,7 @@ public class SongListAdapter extends BaseAdapter {
     public PassDataInterface mOnInputListner;
     private SonglistMenuClick songlistMenuClick;
     private SharedPreferences sp;
+    private PopupMenu popup;
 
 
     public SongListAdapter(Context context, List<Songs> songsList, SonglistMenuClick songlistMenuClick){
@@ -91,7 +92,29 @@ public class SongListAdapter extends BaseAdapter {
             holder.imageView.setVisibility(View.INVISIBLE);
         }
         else{
-            holder.imageView.setOnClickListener(view1 -> songlistMenuClick.addToPlaylist(songsList.get(i).getSongId()));
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.discovery_menu, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.add_to_default:
+                                    songlistMenuClick.addToDefault(songsList.get(i).getSongId());
+                                    break;
+                                case R.id.add_to_playlist:
+                                    songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                }
+            });
         }
         holder.clickField.setOnClickListener(click -> {
             playSong(i);

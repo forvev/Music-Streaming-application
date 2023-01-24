@@ -70,6 +70,11 @@ public class ChartsFragment extends Fragment {
             NavDirections action = ChartsFragmentDirections.actionChartsFragment2ToChoosePlaylistFragment();
             Navigation.findNavController(getView()).navigate(action);
         }
+
+        @Override
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
+        }
     };
 
 

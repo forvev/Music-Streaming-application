@@ -75,6 +75,11 @@ public class MyPlaylistFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
+
+        @Override
+        public void addToDefault(String position) {
+
+        }
     };
 
     @Nullable
