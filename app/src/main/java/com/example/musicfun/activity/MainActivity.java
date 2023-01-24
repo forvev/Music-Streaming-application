@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -40,6 +41,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
+import com.example.musicfun.adapter.discovery.SongListAdapter;
 import com.example.musicfun.adapter.search.SearchPlaylistAdapter;
 import com.example.musicfun.adapter.search.SearchResultAdapter;
 import com.example.musicfun.adapter.search.SearchSonglistAdapter;
@@ -49,11 +51,13 @@ import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.fragment.discovery.DiscoveryFragment;
+import com.example.musicfun.fragment.discovery.NewReleaseFragmentDirections;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
 import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
+import com.example.musicfun.interfaces.SonglistMenuClick;
 import com.example.musicfun.ui.friends.FriendsViewModel;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
@@ -330,17 +334,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         }
     }
 
-    private DiscoveryItemClick discoveryItemClick = new DiscoveryItemClick() {
-        @Override
-        public void addToDefault(String position) {
-            discoveryViewModel.getDefaultPlaylist(position);
-        }
-        @Override
-        public void removeFromDefault(String position) {
-
-        }
-    };
-
     /*
     Search a song from all songs in database.
     Possible extension: Instead of fetch all songs from db, fetch the 10 songs
@@ -351,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         discoveryViewModel.getSongNames().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName, discoveryItemClick);
+                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName);
                 searchResult.setAdapter(adapter);
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override

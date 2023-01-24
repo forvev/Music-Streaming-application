@@ -26,27 +26,24 @@ public class SearchResultAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Songs> songsList = null;
-    private boolean click = false;
     public PassDataInterface mOnInputListner;
     private ArrayList<Songs> arraylist;
-    private DiscoveryItemClick discoveryItemClick;
     private SharedPreferences sp;
 
-    public SearchResultAdapter(Context context, List<Songs> songsList, DiscoveryItemClick discoveryItemClick) {
+    public SearchResultAdapter(Context context, List<Songs> songsList) {
         mContext = context;
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(songsList);
-        this.discoveryItemClick = discoveryItemClick;
         sp = context.getSharedPreferences("login",MODE_PRIVATE);
     }
 
     public class ViewHolder {
         TextView name;
         TextView artist;
-        ImageView setDefault;
         RelativeLayout clickField;
+        ImageView songlist_menu;
     }
 
     @Override
@@ -69,41 +66,17 @@ public class SearchResultAdapter extends BaseAdapter {
         if (view == null) {
             holder = new ViewHolder();
             // Locate the TextViews in song_search_result_lv.xml
-            view = inflater.inflate(R.layout.row_song_search, null);
+            view = inflater.inflate(R.layout.row_songlist, null);
             holder.name = (TextView) view.findViewById(R.id.song_name);
-            holder.artist = (TextView) view.findViewById(R.id.artist);
+            holder.artist = (TextView) view.findViewById(R.id.artist_name);
             holder.clickField = view.findViewById(R.id.rl_clickable_song);
-
-            holder.setDefault = (ImageView) view.findViewById(R.id.add_to_default);
-
+            holder.songlist_menu = (ImageView) view.findViewById(R.id.add_to_default);
+            holder.songlist_menu.setVisibility(View.INVISIBLE);
             view.setTag(holder);
         }
         else{
             holder = (ViewHolder) view.getTag();
         }
-
-//      hide "add to default" icon if user did not log in
-        if(sp.getInt("logged", 999) != 1){
-            holder.setDefault.setVisibility(View.INVISIBLE);
-        }
-        else{
-            holder.setDefault.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!click){
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_24);
-                        click = true;
-                        discoveryItemClick.addToDefault(songsList.get(position).getSongId());
-                    }
-                    else{
-                        holder.setDefault.setImageResource(R.drawable.ic_baseline_star_border_24);
-                        click = false;
-                        discoveryItemClick.removeFromDefault(songsList.get(position).getSongId());
-                    }
-                }
-            });
-        }
-
         holder.clickField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
