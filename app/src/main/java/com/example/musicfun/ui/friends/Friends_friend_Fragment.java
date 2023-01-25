@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,8 @@ public class Friends_friend_Fragment extends Fragment {
     FriendsViewModel friendsViewModel;
     SharedPreferences sp;
     FriendsListAdapter adapter;
+
+    boolean firstTime;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -123,6 +126,7 @@ public class Friends_friend_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        firstTime = false;
         View view = inflater.inflate(R.layout.fragment_friends_friend, container, false);
         return view;
     }
@@ -145,7 +149,7 @@ public class Friends_friend_Fragment extends Fragment {
                 //TODO: User hinzufügen und direkt löschen, dann sieht man User immer noch kurz angezeigt
                     adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                     listView.setAdapter(adapter);
-                    Log.d("LastCheck", users.size() + "");
+                    //Log.d("LastCheck", users.size() + "");
             }
         });
 //        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
@@ -154,10 +158,21 @@ public class Friends_friend_Fragment extends Fragment {
         ((MainActivity)getActivity()).getReply().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
-                listView.setAdapter(adapter);
+                if(firstTime){
+                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                    listView.setAdapter(adapter);
+                    Log.d("fixThis", "observerInActivity: "+ users.size());
+                }
             }
         });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                firstTime = true;
+                Log.d("fixThat", "firstTime after: "+ firstTime);
+            }
+        }, 100);//50 works but for safety we take 100
 
     }
 
