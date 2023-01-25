@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL);
                 closeSearchView(view);
             }
         });
@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL, false);
+                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL);
                 closeSearchView(view);
             }
         });
@@ -633,13 +633,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     }
 
     @Override
-    public void playSong(List<Songs> playlist, int repeatMode, boolean shuffle) {
+    public void playSong(List<Songs> playlist, int repeatMode) {
         startAutoPlay = true;
         startPosition = 0;
         startItemIndex = 0;
         createMediaItems(playlist);
         player.setRepeatMode(repeatMode);
-        player.setShuffleModeEnabled(shuffle);
     }
 
     @Override

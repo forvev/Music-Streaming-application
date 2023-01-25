@@ -126,8 +126,7 @@ public class SongListAdapter extends BaseAdapter {
     }
 
     private void playSong(int i) {
-        Songs s = songsList.get(i);
-        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
+        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL);
     }
 
 }

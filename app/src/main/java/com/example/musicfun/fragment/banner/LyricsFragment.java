@@ -57,6 +57,7 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.source.ShuffleOrder;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -67,9 +68,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 public class LyricsFragment extends Fragment {
@@ -283,8 +286,6 @@ public class LyricsFragment extends Fragment {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
-//                                    Log.d("test", !isPlaying + "");
-//                                    Log.d("test", playerpause + "");
                                     if (!player.isPlaying() && playerpause) {
                                         sendPlayerstate("pause", "");
                                     }
@@ -308,7 +309,6 @@ public class LyricsFragment extends Fragment {
                             playerseek = false;
                         }
                         else {
-//                            Log.d("test", "onPositionDiscontinuity");
                             if (oldPosition.mediaItemIndex == newPosition.mediaItemIndex) {
                                 sendPlayerstate("syncTime", Long.toString(newPosition.positionMs));
                             }
@@ -415,15 +415,40 @@ public class LyricsFragment extends Fragment {
         }
     };
 
+//    if shuffle mode is enabled, fetch the "random order" of the playlist, and reorder the playlist,
+//        so that the playlist shown in CurrentPlaylistFragment is the shuffled version
     private View.OnClickListener showCurrentPlaylist = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int startItemIndex = player.getCurrentMediaItemIndex();
+            int subListStart = 0;
+            List<Songs> restOfPlaylist = new ArrayList<>();
             List<Songs> songInfo = service.getSongInfo();
-            List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+            List<Songs> temp = new ArrayList<>();
+            if(player.getShuffleModeEnabled() && service != null){
+                List<Integer> preOrder = service.getList_order();
+                if (preOrder.size() == songInfo.size()) {
+                    for (int i = 0; i < player.getMediaItemCount(); i++) {
+                        temp.add(songInfo.get(preOrder.get(i)));
+                        if (preOrder.get(i) == startItemIndex) {
+                            subListStart = i;
+                        }
+                    }
+                    restOfPlaylist = temp.subList(subListStart, temp.size());
+                    if(player.getRepeatMode() != Player.REPEAT_MODE_OFF){
+                        restOfPlaylist.addAll(temp.subList(0, subListStart));
+                    }
+                }
+                else{
+                    restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+                }
+            }
+            else{
+                restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+            }
+
             Gson gson = new Gson();
             String json = gson.toJson(restOfPlaylist);
-
             NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToCurrentPlaylistFragment(json);
             Navigation.findNavController(getView()).navigate(action);
             isVisible = false;
@@ -541,19 +566,6 @@ public class LyricsFragment extends Fragment {
     // find the start and end point of the current line. This helps to highlight the lyrics.
     private int[] currentStartPoint(int line){
         int[] result = new int[2];
-//        if(lyricsExist){
-//            int start = 0;
-//            if (line == 0){
-//                result[0] = 0;
-//                result[1] = lyricsList.get(0).getLength() + 1;
-//                return result;
-//            }
-//            for (int i = 0; i < line; i++){
-//                start = start + lyricsList.get(i).getLength() + 1;
-//            }
-//            result[0] = start;
-//            result[1] = start + lyricsList.get(line).getLength();
-//        }
         int start = 0;
         if (line == 0){
             result[0] = 0;
@@ -737,7 +749,6 @@ public class LyricsFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         songID = Integer.toString(player.getCurrentMediaItemIndex());
-//                        Log.d("test", "songID " + songID);
                         timestamp = Long.toString(player.getCurrentPosition());
                         JSONObject mess = new JSONObject();
                         try{
@@ -761,7 +772,6 @@ public class LyricsFragment extends Fragment {
                 Boolean finalPlayerPlaying = playerPlaying;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-//                        Log.d("test", "syncJoinBack");
                         playerseek = true;
                         player.seekTo(finalSong, finalTime);
                         if (finalPlayerPlaying) {

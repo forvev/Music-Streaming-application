@@ -2,6 +2,8 @@ package com.example.musicfun.activity;
 
 import static android.app.NotificationManager.IMPORTANCE_HIGH;
 
+import static com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -23,15 +25,18 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.PlaybackStatsListener;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.source.ShuffleOrder;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class MusicbannerService extends Service {
 
@@ -44,6 +49,7 @@ public class MusicbannerService extends Service {
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
+    private ArrayList<Integer> preOrder = new ArrayList<>();
 
     private SharedPreferences sp;
 
@@ -187,17 +193,10 @@ public class MusicbannerService extends Service {
     private class PlayerEventListener implements Player.Listener {
 
         @Override
-        public void onPlaybackStateChanged(@Player.State int playbackState) {
-            if (playbackState == Player.STATE_ENDED) {
-            }
-        }
-
-        @Override
         public void onPlayerError(PlaybackException error) {
             if (error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
                 player.seekToDefaultPosition();
                 player.prepare();
-            } else {
             }
         }
 
@@ -213,12 +212,29 @@ public class MusicbannerService extends Service {
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist, coverUrl);
-
-            // TODO: update lyrics file
         }
 
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled){
+            if(shuffleModeEnabled){
+                preOrder.clear();
+                for (int i = 0; i < player.getMediaItemCount(); i++){
+                    preOrder.add(i);
+                }
+                Collections.shuffle(preOrder, new Random(player.getMediaItemCount()));
+                int [] array_order = new int[player.getMediaItemCount()];
+                for (int i = 0; i < preOrder.size(); i++){
+                    array_order[i] = preOrder.get(i);
+                }
+                ShuffleOrder.DefaultShuffleOrder order = new ShuffleOrder.DefaultShuffleOrder(array_order, 1);
+                player.setShuffleOrder(order);
+            }
+        }
     }
 
+    public ArrayList<Integer> getList_order (){
+        return preOrder;
+    }
 
     public void setPlaylist(List<MediaItem> mediaItems, int startItemIndex, long startPosition, boolean startAutoPlay){
         boolean haveStartPosition = startItemIndex != C.INDEX_UNSET;
@@ -238,6 +254,8 @@ public class MusicbannerService extends Service {
         intent1.putExtra("coverUrl", coverUrl);
         broadcaster.sendBroadcast(intent1);
     }
+
+
 
     public void releasePlayer() {
         if (player != null) {

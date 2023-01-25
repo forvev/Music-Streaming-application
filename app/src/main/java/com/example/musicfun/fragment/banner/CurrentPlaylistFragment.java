@@ -81,6 +81,7 @@ public class CurrentPlaylistFragment extends Fragment {
         }
 //      TODO: bind service here. If broadcast receive intent, update listview
 
+
     }
 
     private View.OnClickListener closeFragment = new View.OnClickListener() {

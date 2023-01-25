@@ -127,9 +127,6 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         if (isBound){
             unbindService(playerServiceConnection);
             isBound = false;
-//            After this activity finished, service will be rebound to other activities.
-//            Set startPosition to 0, so that the songs in other activities/fragments can be played from the start.
-//            sp.edit().putLong("startPosition", 0).apply();
         }
     }
 
@@ -155,13 +152,12 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     }
 
     @Override
-    public void playSong(List<Songs> playlist, int repeatMode, boolean shuffle) {
+    public void playSong(List<Songs> playlist, int repeatMode) {
         startAutoPlay = true;
         startPosition = 0;
         startItemIndex = 0;
         createMediaItems(playlist);
         player.setRepeatMode(repeatMode);
-        player.setShuffleModeEnabled(shuffle);
     }
 
     @Override

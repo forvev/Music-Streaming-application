@@ -30,12 +30,14 @@ public class SongListAdapter extends BaseAdapter {
     private PopupMenu popup;
     SonglistMenuClick songlistMenuClick;
     public PassDataInterface mOnInputListner;
+    private Boolean isShuffle;
 
-    public SongListAdapter(Context context, List<Songs> songList, SonglistMenuClick songlistMenuClick) {
+    public SongListAdapter(Context context, List<Songs> songList, SonglistMenuClick songlistMenuClick, boolean isShuffle) {
         mContext = context;
         this.songList = songList;
         inflater = LayoutInflater.from(mContext);
         this.songlistMenuClick = songlistMenuClick;
+        this.isShuffle = isShuffle;
     }
 
     public SongListAdapter(Context context, List<Songs> songList){
@@ -120,7 +122,7 @@ public class SongListAdapter extends BaseAdapter {
             holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL, false);
+                    mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL);
                 }
             });
         }
