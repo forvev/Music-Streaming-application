@@ -36,12 +36,18 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/merriweather"
                     android:textColor="@color/purple_900"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     tools:text="Username" />
 
             </LinearLayout>
-        </RelativeLayout>
 
+
+        </RelativeLayout>
+    <RadioButton
+        android:id="@+id/btn_select_shared_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 <!--    </LinearLayout>-->
 

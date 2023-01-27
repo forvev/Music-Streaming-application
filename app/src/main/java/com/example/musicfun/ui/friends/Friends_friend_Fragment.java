@@ -86,6 +86,11 @@ public class Friends_friend_Fragment extends Fragment {
             getActivity().startActivity(goChat);
 
         }
+
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
+
+        }
     };
     private String mParam1;
     private String mParam2;

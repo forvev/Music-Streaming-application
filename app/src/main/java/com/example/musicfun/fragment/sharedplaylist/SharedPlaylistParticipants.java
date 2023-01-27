@@ -105,6 +105,11 @@ public class SharedPlaylistParticipants extends Fragment {
 
         }
 
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
+
+        }
+
     };
 
     @Override
