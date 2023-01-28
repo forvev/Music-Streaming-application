@@ -107,9 +107,8 @@ public class SettingFragment extends Fragment {
         int startItemIndex = player.getCurrentMediaItemIndex();
         long startPosition = Math.max(0, player.getContentPosition());
         songInfo = service.getSongInfo();
-        List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
         Gson gson = new Gson();
-        String json = gson.toJson(restOfPlaylist);
+        String json = gson.toJson(songInfo);
         viewModel.saveDataWhenLogout(startItemIndex, startPosition, json);
         sp.edit().putInt("startItemIndex", 0).apply();
         sp.edit().putLong("startPosition", 0).apply();

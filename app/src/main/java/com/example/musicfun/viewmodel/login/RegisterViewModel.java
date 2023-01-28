@@ -27,6 +27,7 @@ public class RegisterViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> loginResult = new MutableLiveData<>();
     private MutableLiveData<Boolean> registerResult = new MutableLiveData<>();
     private MutableLiveData<Boolean> resetResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> fetchData = new MutableLiveData<>();
     private LoginRepository loginRepository;
     SharedPreferences sp;
 
@@ -45,6 +46,9 @@ public class RegisterViewModel extends AndroidViewModel {
     }
     public LiveData<Boolean> getRegisterResult() {
         return registerResult;
+    }
+    public LiveData<Boolean> getFetchData() {
+        return fetchData;
     }
 
     public LiveData<Boolean> getResetResult() {
@@ -103,7 +107,6 @@ public class RegisterViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject result) {
                 try {
                     JSONObject objectUser = (JSONObject) result.get("user");
-                    System.out.println(result.getString("message"));
                     resetResult.setValue(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -159,7 +162,8 @@ public class RegisterViewModel extends AndroidViewModel {
                 try {
                     sp.edit().putInt("startItemIndex", result.getInt("startItemIndex")).apply();
                     sp.edit().putLong("startPosition", Long.parseLong(result.getString("startPosition"))).apply();
-                    sp.edit().putString("saved_playlist", result.getString("saved_playlist")).apply();
+                    sp.edit().putString("saved_playlist", result.getString("savedPlaylist")).apply();
+                    fetchData.setValue(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

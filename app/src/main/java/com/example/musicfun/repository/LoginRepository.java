@@ -1,6 +1,9 @@
 package com.example.musicfun.repository;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,11 +27,13 @@ public class LoginRepository {
     private final String url_reset = "http://10.0.2.2:3000/account/change-password?auth_token=";
     private final String url_saveListenStatus = "http://10.0.2.2:3000/user/saveData?auth_token=";
     private final String url_getListenStatus = "http://10.0.2.2:3000/user/getData?auth_token=";
+    SharedPreferences sp;
 
     private Context context;
 
     public LoginRepository (Context context) {
         this.context = context;
+        sp = context.getSharedPreferences("login", MODE_PRIVATE);
     }
 
     public void login(String username, String password, ServerCallBack callBack){

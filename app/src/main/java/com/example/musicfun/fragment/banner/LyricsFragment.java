@@ -204,11 +204,11 @@ public class LyricsFragment extends Fragment {
         if (isSession) {
             btn_active_guests.setVisibility(View.VISIBLE);
             btn_active_guests.setOnClickListener(showActiveGuests);
-            controlView.setShowShuffleButton(false);
+//            controlView.setShowShuffleButton(true);
         }
         else {
             btn_active_guests.setVisibility(View.GONE);
-            controlView.setShowShuffleButton(true);
+//            controlView.setShowShuffleButton(true);
         }
 
 //        Service informs the media transfers
@@ -303,6 +303,11 @@ public class LyricsFragment extends Fragment {
                 }
 
                 @Override
+                public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled){
+                    sendPlayerstate("shuffle", Boolean.toString(shuffleModeEnabled));
+                }
+
+                @Override
                 public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, int reason) {
                     if (reason == Player.DISCONTINUITY_REASON_SEEK) {
                         if (playerseek == true) {
@@ -354,7 +359,7 @@ public class LyricsFragment extends Fragment {
                                     public void onChanged(String s) {
                                         if (!s.isEmpty()){
                                             room = s;
-                                            controlView.setShowShuffleButton(false);
+//                                            controlView.setShowShuffleButton(true);
                                             connectToSocketIO();
                                             JSONObject mess = new JSONObject();
                                             try{
@@ -686,6 +691,14 @@ public class LyricsFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.setRepeatMode(finalInfo);
+                    }
+                });
+            }
+            if (message.equals("shuffle")){
+                Boolean finalInfo = Boolean.parseBoolean(info);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.setShuffleModeEnabled(finalInfo);
                     }
                 });
             }

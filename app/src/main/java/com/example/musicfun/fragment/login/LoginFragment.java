@@ -78,10 +78,19 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getContext(), "Wrong password or username", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    sp.edit().putInt("logged",1).apply();
-                    sp.edit().putString("name",usernameEditText.getText().toString()).apply();
-                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(myIntent);
+//                    if login successful, fetch saved data from database
+                    registerViewModel.getDataWhenLogin();
+                    registerViewModel.getFetchData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            if(aBoolean){
+                                sp.edit().putInt("logged",1).apply();
+                                sp.edit().putString("name",usernameEditText.getText().toString()).apply();
+                                Intent myIntent = new Intent(getActivity(), MainActivity.class);
+                                getActivity().startActivity(myIntent);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -124,7 +133,6 @@ public class LoginFragment extends Fragment {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 try {
                     registerViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                    registerViewModel.getDataWhenLogin();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

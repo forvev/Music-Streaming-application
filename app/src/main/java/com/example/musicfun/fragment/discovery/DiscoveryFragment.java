@@ -48,6 +48,7 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DiscoveryFragment extends Fragment {
 
@@ -111,9 +112,14 @@ public class DiscoveryFragment extends Fragment {
             Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        SharedPreferences sp = getActivity().getSharedPreferences("login",MODE_PRIVATE);
         NavController controller = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
+        if(sp.getInt("logged",0) == 0){
+            binding.DiscoveryNav.getMenu().removeItem(R.id.most_heard);
+            binding.DiscoveryNav.getMenu().removeItem(R.id.may_like);
+        }
         NavigationUI.setupWithNavController(binding.DiscoveryNav, controller);
+
     }
 
     private Boolean isNetworkAvailable(Application application) {

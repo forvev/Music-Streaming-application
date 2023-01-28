@@ -37,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void goToMainActivity(){
+//        This indicates the user was already logged in, continue the playing from last time left.
         Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);
         RegisterActivity.this.startActivity(myIntent);
         finish();
@@ -45,6 +46,9 @@ public class RegisterActivity extends AppCompatActivity {
     public void skipLogin(View view){
         Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);
         sp.edit().putInt("logged",0).apply();
+        sp.edit().putInt("startItemIndex", 0).apply();
+        sp.edit().putLong("startPosition", 0).apply();
+        sp.edit().putString("saved_playlist", "").apply();
         RegisterActivity.this.startActivity(myIntent);
         finish();
     }

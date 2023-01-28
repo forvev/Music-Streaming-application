@@ -2,6 +2,7 @@ package com.example.musicfun.ui.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -120,23 +122,16 @@ public class FriendsFragment extends Fragment {
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
         NavController navController = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_friends));
         NavigationUI.setupWithNavController(binding.FriendsNav, navController);
-    }
 
-    private void insertNestedFragment(Fragment childFragment) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_friends, childFragment).commit();
+        binding.FriendsNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                NavigationUI.onNavDestinationSelected(item, navController);
+                return true;
+            }
+        });
     }
-
-    private void closeKeyboard(View view) {
-        // this will give us the view which is currently focus in this layout
-        // if nothing is currently focus then this will protect the app from crash
-        if (view != null) {
-            // assign the system service to InputMethodManager
-            InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
 
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);

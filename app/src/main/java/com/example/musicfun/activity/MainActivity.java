@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
     private ActivityMainBinding binding;
     private SharedPreferences sp;
+    private Intent registerIntent;
 
     protected @Nullable ExoPlayer player;
     protected PlayerControlView control;

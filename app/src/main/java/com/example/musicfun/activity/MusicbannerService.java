@@ -21,6 +21,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
@@ -58,6 +59,9 @@ public class MusicbannerService extends Service {
     private List<Songs> songInfo = new ArrayList<>();
     LocalBroadcastManager broadcaster;
     MainActivityViewModel viewModel;
+    SonglistViewModel songlistViewModel;
+    private boolean isSession;
+    private String selected_playlist_id;
 
     public void setSongInfo (List<Songs> songInfo){
         this.songInfo = songInfo;
@@ -65,6 +69,15 @@ public class MusicbannerService extends Service {
 
     public List<Songs> getSongInfo(){
         return songInfo;
+    }
+
+    public void setIsSession(boolean isSession, String selected_playlist_id){
+        this.isSession = isSession;
+        this.selected_playlist_id = selected_playlist_id;
+    }
+
+    public boolean getIsSession(){
+        return isSession;
     }
 
     //class binder for clients
@@ -86,6 +99,7 @@ public class MusicbannerService extends Service {
         //assign variables
         player = new ExoPlayer.Builder(getApplicationContext()).build();
         viewModel = new MainActivityViewModel(getApplication());
+        songlistViewModel = new SonglistViewModel(getApplication());
         //audio focus attributes
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -212,6 +226,11 @@ public class MusicbannerService extends Service {
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist, coverUrl);
+
+            if(isSession){
+                songlistViewModel.getSongsFromPlaylist(selected_playlist_id);
+//                TODO: observe does not exist
+            }
         }
 
         @Override
@@ -255,8 +274,6 @@ public class MusicbannerService extends Service {
         broadcaster.sendBroadcast(intent1);
     }
 
-
-
     public void releasePlayer() {
         if (player != null) {
             updateStartPosition();
@@ -273,11 +290,12 @@ public class MusicbannerService extends Service {
             startPosition = Math.max(0, player.getContentPosition());
             sp.edit().putInt("startItemIndex", startItemIndex).apply();
             sp.edit().putLong("startPosition", startPosition).apply();
-            List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
             Gson gson = new Gson();
-            String json = gson.toJson(restOfPlaylist);
+            String json = gson.toJson(songInfo);
+            System.out.println("saved_playlist in service = " + json);
             sp.edit().putString("saved_playlist", json).apply();
         }
     }
+
 
 }
