@@ -37,28 +37,21 @@
         <RelativeLayout
             android:id="@+id/friend_request_received_user_and_id"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/friend_request_received_friends_custom_view_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:layout_marginTop="12dip"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/merriweather"
+                android:textColor="@color/purple_900"
+                android:textSize="15sp"
+                tools:text="Username" />
 
-                <TextView
-                    android:id="@+id/friend_request_received_friends_custom_view_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/merriweather"
-                    android:textColor="@color/purple_900"
-                    android:textSize="15sp"
-                    tools:text="Username" />
 
-            </LinearLayout>
         </RelativeLayout>
 
         <ImageView

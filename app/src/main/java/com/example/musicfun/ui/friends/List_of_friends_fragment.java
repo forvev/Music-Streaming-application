@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,14 +25,11 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.datatype.User;
-import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class List_of_friends_fragment extends Fragment {
 
@@ -42,6 +40,8 @@ public class List_of_friends_fragment extends Fragment {
     //to check if the item in the listView was selected
     ArrayList<User> users_list;//, selected_users_list;
     String selected_shared_id_2;
+    private RadioButton btn_selected;
+    private Button my_button;
 
     //private HashSet<String> selectedItems = new HashSet<>();
     private ArrayList<String> selected_users_list;
@@ -106,6 +106,15 @@ public class List_of_friends_fragment extends Fragment {
 
         }
 
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
+            selected_users_list = new ArrayList<>();
+            selected_users_list = arrayList;
+            if(selected_users_list.size()==0) my_button.setVisibility(4);
+            else my_button.setVisibility(0);
+        }
+
+
     };
 
     @Override
@@ -150,58 +159,57 @@ public class List_of_friends_fragment extends Fragment {
             }
         });
 
-        Button my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
+        my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
         my_button.setVisibility(View.INVISIBLE);
-        selected_users_list = new ArrayList<>();
-
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
-
-                // mis-clicking prevention, using threshold of 500 ms
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 100){
-                    return false;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                int position = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
-                if (position == -1){
-                    return false;
-                }else{
-                    Log.i("info of users",String.valueOf(position));
-                    View item = listView.getChildAt(position);
-
-                    String user_id = users_list.get(position).getUser_id();
-
-
-                    if (selected_users_list.contains(user_id)){
-                        item.setBackgroundColor(Color.WHITE);
-                        selected_users_list.remove(user_id);
-                        //remove selected user to the list
-                        //selected_users_list.remove(users_list.get(position));
-                        //if there are no selected items we can hide the button
-                        if (selected_users_list.isEmpty())  my_button.setVisibility(View.INVISIBLE);
-                    }
-                    else{
-                        item.setBackgroundColor(Color.rgb(177, 151, 229));
-                        //add selected user to the list
-                        selected_users_list.add(user_id);
-                        //Log.i("User_name",String.valueOf(users_list.get(position).getUser_id()));
-                        //selectedItems.add(position);
-                        my_button.setVisibility(View.VISIBLE);
-                    }
-                    Log.i("actual users",String.valueOf(selected_users_list));
-                    return false;
-                }
-            }
-        });
+//        selected_users_list = new ArrayList<>();
+//
+//
+//        listView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
+//
+//                // mis-clicking prevention, using threshold of 500 ms
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 100){
+//                    return false;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                int position = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
+//                if (position == -1){
+//                    return false;
+//                }else{
+//                    Log.i("info of users",String.valueOf(position));
+//                    View item = listView.getChildAt(position);
+//
+//                    String user_id = users_list.get(position).getUser_id();
+//
+//
+//                    if (selected_users_list.contains(user_id)){
+//                        item.setBackgroundColor(Color.WHITE);
+//                        selected_users_list.remove(user_id);
+//                        //remove selected user to the list
+//                        //selected_users_list.remove(users_list.get(position));
+//                        //if there are no selected items we can hide the button
+//                        if (selected_users_list.isEmpty())  my_button.setVisibility(View.INVISIBLE);
+//                    }
+//                    else{
+//                        item.setBackgroundColor(Color.rgb(177, 151, 229));
+//                        //add selected user to the list
+//                        selected_users_list.add(user_id);
+//                        //Log.i("User_name",String.valueOf(users_list.get(position).getUser_id()));
+//                        //selectedItems.add(position);
+//                        my_button.setVisibility(View.VISIBLE);
+//                    }
+//                    Log.i("actual users",String.valueOf(selected_users_list));
+//                    return false;
+//                }
+//            }
+//        });
 
 
         my_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("selected_users",String.valueOf(selected_users_list));
-
                 for(int i=0; i<selected_users_list.size(); i++){
                     Log.i("user:",selected_users_list.get(i));
                     friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_users_list.get(i), selected_shared_id_2);

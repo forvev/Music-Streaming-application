@@ -44,18 +44,22 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
     public void init() {
+        Log.d("LastCheck", "init is called");
         userArrayList.clear();
         Log.d("token", token);
         db.sendMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
+                Log.d("LastCheck", "init success");
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for (int i = 0; i < userNames1.length(); i++) {
                         //TODO: ask server side about the names
                         JSONObject userObject = userNames1.getJSONObject(i);
+                        Log.d("LastCheck",userObject.getString("username") );
                         User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
                         userArrayList.add(user);
+                        Log.d("LastCheck", userArrayList.size()+"");
                     }
                     m_userNames.setValue(userArrayList);
                 } catch (JSONException e) {
@@ -65,6 +69,7 @@ public class FriendsViewModel extends AndroidViewModel {
 
             @Override
             public void onError(VolleyError error) {
+                Log.d("LastCheck", "init failed");
             }
         }, "user/allFriends?auth_token=" + token);
     }
@@ -142,7 +147,10 @@ public class FriendsViewModel extends AndroidViewModel {
                             db.addMsg(new ServerCallBack() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
-                                    userArrayList.remove(i);
+                                    //if needed, because when clicking to fast on same delete icon, IoB Exception would happen
+                                    if(userArrayList.size() != 0){
+                                        userArrayList.remove(i);
+                                    }
                                     m_userNames.setValue(userArrayList);
                                 }
 
