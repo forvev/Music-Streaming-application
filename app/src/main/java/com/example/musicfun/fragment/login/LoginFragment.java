@@ -26,10 +26,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentLoginBinding;
 import com.example.musicfun.R;
+import com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment;
 import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -42,6 +45,7 @@ public class LoginFragment extends Fragment {
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginBtn;
+    private TextView noAccount;
     private TextInputLayout reset_current;
     private TextInputLayout reset_new;
     private ProgressBar loadingProgressBar;
@@ -70,6 +74,13 @@ public class LoginFragment extends Fragment {
         passwordEditText = binding.loginPassword;
         loginBtn = binding.login;
         loadingProgressBar = binding.loading;
+        noAccount = binding.noAccount;
+        noAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backToRegister();
+            }
+        });
         registerViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean loginResult) {
@@ -146,5 +157,10 @@ public class LoginFragment extends Fragment {
             InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void backToRegister(){
+        NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+        navController.popBackStack();
     }
 }

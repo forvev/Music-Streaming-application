@@ -97,6 +97,7 @@
     <string name="request_pending">Request pending...</string>
     <string name="shared_playlists">Shared Playlists</string>
     <string name="friends">Friends</string>
+    <string name="no_account"><u>No account?</u></string>
 
 
 </resources>

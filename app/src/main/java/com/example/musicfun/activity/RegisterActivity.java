@@ -9,11 +9,16 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityRegisterBinding;
 import com.example.musicfun.fragment.login.LoginFragment;
 import com.example.musicfun.fragment.login.RegisterFragment;
+import com.example.musicfun.fragment.login.RegisterFragmentDirections;
+import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -39,7 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
             goToMainActivity();
             return;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.register_container, new RegisterFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.register_container, new RegisterFragment()).commit();
+        NavController navController = Navigation.findNavController(this, R.id.register_container);
+        navController.navigate(R.id.registerFragment);
     }
 
     public void goToMainActivity(){
@@ -60,6 +67,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void directLogin(View view){
-        getSupportFragmentManager().beginTransaction().replace(R.id.register_container, new LoginFragment()).commit();
+        NavDirections action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment();
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
     }
 }

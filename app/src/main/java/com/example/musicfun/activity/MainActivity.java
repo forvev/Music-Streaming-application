@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                     player.stop();
                 }
                 service.notificationManager.setPlayer(null);
-                Toast.makeText(getApplicationContext(), R.string.login_required, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.login_required), Toast.LENGTH_SHORT).show();
                 startActivity(gotoLogin);
             }
         }

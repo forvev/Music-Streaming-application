@@ -54,6 +54,7 @@ public class RegisterFragment extends Fragment {
         usernameEditText = binding.registerUsername;
         passwordEditText = binding.registerPassword;
         registerBtn = binding.register;
+        registerBtn.setEnabled(false);
         loadingProgressBar = binding.loading;
 
         registerViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
