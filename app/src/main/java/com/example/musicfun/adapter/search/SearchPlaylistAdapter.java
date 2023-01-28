@@ -13,6 +13,9 @@ import com.example.musicfun.R;
 
 import java.util.List;
 
+/**
+ * Adapter for searching playlists
+ */
 public class SearchPlaylistAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -23,7 +26,9 @@ public class SearchPlaylistAdapter extends BaseAdapter {
         this.playlist = playlist;
         inflater = LayoutInflater.from(mContext);
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SearchPlaylistViewHolder {
         TextView name;
         ImageView playlist_menu;

@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -537,7 +541,7 @@ public class LyricsFragment extends Fragment {
                     tv_lyrics.scrollTo(0, 0);
                     lyricsExist = false;
                     tv_lyrics.setGravity(Gravity.CENTER);
-                    tv_lyrics.setText("No Lyrics");
+                    tv_lyrics.setText(getString(R.string.no_lyrics));
                 }
             }
         });
@@ -619,15 +623,28 @@ public class LyricsFragment extends Fragment {
         @Override
         public void onClick(View view) {
             if(isSession){
-                AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
-                adb.setMessage("Are you sure to leave the room?");
-                adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                final Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.dialog_leave_room);
+                dialog.show();
+
+                Button ok = dialog.findViewById(R.id.confirm);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         getActivity().finish();
                     }
                 });
-                adb.show();
+
+                Button cancel = dialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
             else{
                 getActivity().finish();

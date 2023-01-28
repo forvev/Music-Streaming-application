@@ -27,6 +27,13 @@ import com.example.musicfun.R;
 
 import java.util.List;
 
+/**
+ * Adapter for showing all personal playlists. It provides 4 functions:
+ *      1. rename this playlist
+ *      2. set this playlist as default
+ *      3. delete this playlist
+ *      4. create a copy of this playlist and add it to shared playlist
+ */
 public class PlaylistAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -42,7 +49,9 @@ public class PlaylistAdapter extends BaseAdapter {
         this.playlistMenuClick = playlistMenuClick;
         this.fragmentTransfer = fragmentTransfer;
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class PlaylistViewHolder {
         TextView name;
         ImageView imageView;

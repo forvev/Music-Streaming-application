@@ -20,7 +20,9 @@ import com.example.musicfun.fragment.login.SettingFragment;
 
 import java.util.Objects;
 
-
+/**
+ * SettingActivity directly starts SettingFragment and provides onBackPressed function.
+ */
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private Toolbar toolbar;

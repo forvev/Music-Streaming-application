@@ -97,5 +97,7 @@
     <string name="request_pending">请求已发送</string>
     <string name="shared_playlists">共享歌单</string>
     <string name="friends">好友</string>
+    <string name="no_lyrics">亲，暂时没有歌词哦~</string>
+    <string name="sure_leave_room">确定要离开吗？</string>
     <string name="no_account"><u>没有账户？</u></string>
 </resources>

@@ -17,6 +17,9 @@ import com.example.musicfun.databinding.ActivityChatBinding;
 import com.example.musicfun.fragment.chat.ChatFragment;
 import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 
+/**
+ * MessageListActivity starts chatting function directly and provides onBackPressed function.
+ */
 public class MessageListActivity extends AppCompatActivity {
     private ActivityChatBinding binding;
 

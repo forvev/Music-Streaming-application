@@ -39,6 +39,12 @@ import com.example.musicfun.ui.friends.List_of_friends_fragment;
 
 import java.util.List;
 
+/**
+ * Adapter for shared playlists. It provides three functions:
+ *      1. User can rename a playlist, if he owns this playlist
+ *      2. User can remove a playlist, if he owns this playlist
+ *      3. User can invite friend to this playlist, if he owns this playlist
+ */
 public class SharedPlaylistAdapter  extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -59,7 +65,9 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         sp = context.getSharedPreferences("login", MODE_PRIVATE);
         username = sp.getString("name", "");
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     private class SharedPlaylistViewHolder {
         private TextView playlist_name;
         private TextView owner_name;
@@ -111,18 +119,6 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
                                     case R.id.rename_playlist:
-//                                        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-//                                        final EditText edittext = new EditText(mContext);
-//                                        alert.setTitle(R.string.give_new_name);
-//                                        alert.setView(edittext);
-//                                        alert.setNegativeButton(mContext.getString(R.string.cancel), null);
-//                                        alert.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                                playlistMenuClick.renamePlaylist(edittext.getText().toString(), position);
-//                                                playlist.get(position).setPlaylist_name(edittext.getText().toString());
-//                                            }
-//                                        });
-//                                        alert.show();
                                         final Dialog dialog = new Dialog(mContext);
                                         //We have added a title in the custom layout. So let's disable the default title.
                                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

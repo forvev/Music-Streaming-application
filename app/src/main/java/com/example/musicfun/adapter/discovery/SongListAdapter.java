@@ -28,6 +28,11 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 
+/**
+ * Adapter for showing songs in discovery view. It provides two functions:
+ *      add this song to default playlist,
+ *      and add this song to one of the playlist which this user owns.
+ */
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -46,6 +51,9 @@ public class SongListAdapter extends BaseAdapter {
         sp = context.getSharedPreferences("login",MODE_PRIVATE);
     }
 
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     private class SongListViewHolder {
         TextView name;
         TextView artist;

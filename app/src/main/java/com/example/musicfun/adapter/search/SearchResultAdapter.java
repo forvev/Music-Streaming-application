@@ -22,6 +22,9 @@ import com.google.android.exoplayer2.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for searching songs in Discovery
+ */
 public class SearchResultAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -38,8 +41,10 @@ public class SearchResultAdapter extends BaseAdapter {
         this.arraylist.addAll(songsList);
         sp = context.getSharedPreferences("login",MODE_PRIVATE);
     }
-
-    public class ViewHolder {
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
+    private class ViewHolder {
         TextView name;
         TextView artist;
         RelativeLayout clickField;

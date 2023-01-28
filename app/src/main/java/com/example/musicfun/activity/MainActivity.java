@@ -78,11 +78,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * MainActivity is responsible for all search functions in different fragments (search songs, playlists, songs in a playlist and friends),
+ *      and does preparation for playlist contents,
+ *      and update music banner UI components, when service sends out a broadcast.
+ */
 public class MainActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private SharedPreferences sp;
-    private Intent registerIntent;
 
     protected @Nullable ExoPlayer player;
     protected PlayerControlView control;

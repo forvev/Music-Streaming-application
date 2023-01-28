@@ -16,6 +16,9 @@ import com.example.musicfun.ui.friends.FriendsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for searching users in Friends
+ */
 public class SearchUserResultAdapter extends BaseAdapter {
     Context mContext;
     private List<User> userList = null;
@@ -33,8 +36,10 @@ public class SearchUserResultAdapter extends BaseAdapter {
         this.friendsViewModel = friendsViewModel;
         this.closeSearchViewInterface = closeSearchViewInterface;
     }
-
-    public class ViewHolder {
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
+    private class ViewHolder {
         TextView name;
         LinearLayout linearLayout;
     }

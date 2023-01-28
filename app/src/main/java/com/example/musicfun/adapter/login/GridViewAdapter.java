@@ -13,6 +13,9 @@ import com.example.musicfun.R;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for genres in form of GridView
+ */
 public class GridViewAdapter extends BaseAdapter {
 
     private Context context;

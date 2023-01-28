@@ -42,6 +42,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * MusicbannerService is the only place to create new Exoplayer. Basic player listeners are implemented,
+*          including send out broadcasts when player starts the next song,
+*         and determine the seed of shuffle order, if shuffle is enabled.
+*  MusicbannerService runs above all activities. If a java class wants to have control to the player, it has to be bound to this service first.
+ */
 public class MusicbannerService extends LifecycleService {
 
     //member

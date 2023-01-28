@@ -62,6 +62,9 @@ public class FriendsSharedListAdapter extends BaseAdapter {
         return i;
     }
 
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SharedPlaylistParticipantsHolder {
         private TextView user_name;
         private RadioButton btn_selected;

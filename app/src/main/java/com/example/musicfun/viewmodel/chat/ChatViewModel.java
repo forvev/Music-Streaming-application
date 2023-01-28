@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * ChatViewModel process the results sent back from server which are all relevant to chat functions.
+ */
 public class ChatViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Message>> messagesList = new MutableLiveData<>();

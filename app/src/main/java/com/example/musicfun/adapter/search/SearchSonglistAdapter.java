@@ -13,6 +13,9 @@ import com.example.musicfun.datatype.Songs;
 
 import java.util.List;
 
+/**
+ * Adapter for searching songs in a playlist
+ */
 public class SearchSonglistAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -23,7 +26,9 @@ public class SearchSonglistAdapter extends BaseAdapter {
         this.songs = songs;
         inflater = LayoutInflater.from(mContext);
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SearchSonglistViewHolder {
         TextView name;
         TextView artist;

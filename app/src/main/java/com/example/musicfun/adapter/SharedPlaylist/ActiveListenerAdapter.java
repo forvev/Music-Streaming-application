@@ -11,6 +11,9 @@ import com.example.musicfun.R;
 
 import java.util.List;
 
+/**
+ * Adapter for listing users who are now active in a room
+ */
 public class ActiveListenerAdapter extends BaseAdapter {
 
     Context mContext;

@@ -30,6 +30,9 @@ import com.google.android.exoplayer2.MediaMetadata;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * LyricsActivity does preparation for playlist items and provides onBackPressed feature
+ */
 public class LyricsActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityLyricsBinding binding;
@@ -79,6 +82,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
     }
 
+//    bind service to the activity
     ServiceConnection playerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {

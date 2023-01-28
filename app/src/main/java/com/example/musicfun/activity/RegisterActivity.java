@@ -20,6 +20,9 @@ import com.example.musicfun.fragment.login.RegisterFragment;
 import com.example.musicfun.fragment.login.RegisterFragmentDirections;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 
+/**
+ * RegisterActivity handles register and login processes. Users can register, login, or start app without an account.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;

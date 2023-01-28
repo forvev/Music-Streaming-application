@@ -22,6 +22,11 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 
+/**
+ * Adapter for showing all songs in a personal or shared playlist.
+ *      If it is a personal playlist or a shared playlist but user is the owner, he can remove this song from this playlist or add it to another playlist which he owns.
+ *      If it is a shared playlist but from a friend of user, he can only add this song to another playlist which he owns.
+ */
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -45,7 +50,9 @@ public class SongListAdapter extends BaseAdapter {
         this.songList = songList;
         inflater = LayoutInflater.from(mContext);
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SonglistViewHolder {
         TextView name;
         TextView artist;
