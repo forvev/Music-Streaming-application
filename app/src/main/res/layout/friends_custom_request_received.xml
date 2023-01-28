@@ -3,80 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="4dip"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
+    <TextView
+        android:id="@+id/friend_request_received_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/merriweather"
+        android:textColor="@color/purple_900"
+        android:textSize="16sp"
+        android:text="@string/request_from" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/friend_request_received_friends_custom_view_username"
+        android:layout_width="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
-        <!-- TODO: insert profile picture-->
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/friends_custom_view_profile"-->
-        <!--            android:layout_width="40dip"-->
-        <!--            android:layout_height="40dip"-->
-        <!--            android:layout_gravity="center_vertical"-->
-        <!--            android:layout_marginRight="20dip"-->
-        <!--            android:src="@drawable/ic_baseline_perm_identity_24" />-->
-
-        <TextView
-            android:id="@+id/friend_request_received_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/merriweather"
-            android:textColor="@color/purple_900"
-            android:textSize="15sp"
-            android:text="Request from:" />
-
-        <RelativeLayout
-            android:id="@+id/friend_request_received_user_and_id"
-            android:layout_width="0dp"
-            android:gravity="center_vertical"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/friend_request_received_friends_custom_view_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/merriweather"
-                android:textColor="@color/purple_900"
-                android:textSize="15sp"
-                tools:text="Username" />
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/merriweather"
+        android:textColor="@color/purple_900"
+        android:textSize="16sp"
+        tools:text="Username"
+        android:layout_marginEnd="4dp"
+        />
 
 
-        </RelativeLayout>
+    <ImageView
+        android:id="@+id/friend_request_received_accept"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_gravity="center_vertical"
+        android:padding="4dp"
+        android:src="@drawable/ic_baseline_check_24" />
 
-        <ImageView
-            android:id="@+id/friend_request_received_accept"
-            android:layout_width="33dip"
-            android:layout_height="33dip"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_thumb_up_24" />
-
-        <ImageView
-            android:layout_marginLeft="10dp"
-            android:id="@+id/friend_request_received_decline"
-            android:layout_width="33dip"
-            android:layout_height="33dip"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_thumb_down_24" />
-
-
-
-    </LinearLayout>
-
-
-
-
-
+    <ImageView
+        android:layout_marginLeft="10dp"
+        android:id="@+id/friend_request_received_decline"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_clear_24"
+        android:layout_weight="0"
+        />
 
 
 

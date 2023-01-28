@@ -1,5 +1,6 @@
 package com.example.musicfun.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +19,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     SharedPreferences sp;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

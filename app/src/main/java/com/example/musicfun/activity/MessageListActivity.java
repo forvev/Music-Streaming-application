@@ -2,6 +2,7 @@ package com.example.musicfun.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,11 @@ import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 
 public class MessageListActivity extends AppCompatActivity {
     private ActivityChatBinding binding;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

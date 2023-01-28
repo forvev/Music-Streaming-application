@@ -62,7 +62,7 @@ public class CurrentPlaylistFragment extends Fragment {
         Type type = new TypeToken<List<Songs>>(){}.getType();
         songInfo = gson.fromJson(json, type);
         if (songInfo.size() < 1){
-            binding.tvNextTitles.setText("There are currently no songs in this playlist!");
+            binding.tvNextTitles.setText(getString(R.string.no_songs));
             binding.tvCurrentTitle.setVisibility(View.INVISIBLE);
         }
         else if (songInfo.size() == 1){

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import com.example.musicfun.R;
-import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 import com.example.musicfun.repository.Database;
@@ -134,11 +134,10 @@ public class FriendsListAdapter extends BaseAdapter {
                 //v = inflater.inflate(R.layout.friends_custom_view, null);
                 TextView username = (TextView) v.findViewById(R.id.friends_custom_view_username);
                 ImageView delete = (ImageView) v.findViewById(R.id.friends_custom_view_delete);
-                RelativeLayout clickArea = (RelativeLayout) v.findViewById(R.id.user_and_id);
 
                 username.setText(user.getUserName());
                 delete.setOnClickListener(click -> fi.deleteFriend(i,retrieveUserName(i)));
-                clickArea.setOnClickListener(click -> fi.startChat(retrieveUserName(i)));
+                username.setOnClickListener(click -> fi.startChat(retrieveUserName(i)));
             }
         }
 

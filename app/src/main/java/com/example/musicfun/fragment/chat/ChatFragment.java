@@ -2,10 +2,8 @@ package com.example.musicfun.fragment.chat;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MessageListActivity;
-import com.example.musicfun.adapter.MessageListAdapter;
+import com.example.musicfun.adapter.SharedPlaylist.MessageListAdapter;
 import com.example.musicfun.databinding.FragmentChatBinding;
 import com.example.musicfun.datatype.Message;
 import com.example.musicfun.datatype.SocketIOClient;
@@ -35,11 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
-import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class ChatFragment extends Fragment {
@@ -203,7 +198,7 @@ public class ChatFragment extends Fragment {
         String[] parts = toTestMsg.split(" ");
         for(int i = 0; i < parts.length; i++){
             if(BadWordsList.contains(parts[i])){
-                return  "Message censored - Bad word used";
+                return  getString(R.string.bad_words);
             }
         }
         return toTest;

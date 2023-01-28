@@ -1,29 +1,24 @@
 package com.example.musicfun.fragment.banner;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.LyricsActivity;
-import com.example.musicfun.adapter.ActiveListenerAdapter;
+import com.example.musicfun.adapter.SharedPlaylist.ActiveListenerAdapter;
 import com.example.musicfun.databinding.FragmentActiveListenersBinding;
-import com.example.musicfun.datatype.Songs;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -74,7 +69,6 @@ public class ActiveListenerFragment extends Fragment {
         Gson gson = new Gson();
         Type type = new TypeToken<List<String>>(){}.getType();
         List<String> usernames = gson.fromJson(json, type);
-        Log.d("test", usernames.size() + "");
         if(!usernames.isEmpty()) {
             adapter = new ActiveListenerAdapter(getContext(),usernames);
             lv_acitveListeners.setAdapter(adapter);

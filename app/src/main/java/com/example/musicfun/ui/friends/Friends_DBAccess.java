@@ -29,7 +29,6 @@ public class Friends_DBAccess {
 
                 try{
                     String answer = result.getString("message");
-                    Log.d("onSuccess", answer);
                 }catch (JSONException e){
                     e.printStackTrace();
                 }

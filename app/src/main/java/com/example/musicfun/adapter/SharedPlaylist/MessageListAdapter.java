@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.SharedPlaylist;
 
 import android.content.Context;
 import android.util.Log;

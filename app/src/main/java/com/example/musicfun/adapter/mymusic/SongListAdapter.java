@@ -94,8 +94,8 @@ public class SongListAdapter extends BaseAdapter {
                                             AlertDialog.Builder adb=new AlertDialog.Builder(mContext);
                                             adb.setTitle(R.string.delete_playlist);
                                             adb.setMessage(mContext.getString(R.string.sure_delete_song));
-                                            adb.setNegativeButton("Cancel", null);
-                                            adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                                            adb.setNegativeButton(mContext.getString(R.string.cancel), null);
+                                            adb.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     songlistMenuClick.removeFromPlaylist(position);
                                                 }});

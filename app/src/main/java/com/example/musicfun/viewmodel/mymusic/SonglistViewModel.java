@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.R;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.PlaylistRepository;
 
@@ -100,7 +101,7 @@ public class SonglistViewModel extends AndroidViewModel {
             @Override
             public void onError(VolleyError error) {
                 if (error.networkResponse.statusCode == 422){
-                    Toast.makeText(application, "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application, application.getApplicationContext().getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         }, playlist_position, song_id, token);

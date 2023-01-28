@@ -97,8 +97,8 @@ public class PlaylistAdapter extends BaseAdapter {
                                 final EditText edittext = new EditText(mContext);
                                 alert.setTitle(R.string.give_new_name);
                                 alert.setView(edittext);
-                                alert.setNegativeButton("Cancel", null);
-                                alert.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                                alert.setNegativeButton(mContext.getString(R.string.cancel), null);
+                                alert.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         playlistMenuClick.renamePlaylist(edittext.getText().toString(), position);
                                         playlist.get(position).setPlaylist_name(edittext.getText().toString());
@@ -133,7 +133,7 @@ public class PlaylistAdapter extends BaseAdapter {
                                 break;
                             case R.id.remove_playlist:
                                 if(playlist.size() == 1){
-                                    Toast.makeText(mContext, "You need to have at least on playlist!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, mContext.getString(R.string.at_least_one_playlist), Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     // remove this list item
@@ -141,8 +141,8 @@ public class PlaylistAdapter extends BaseAdapter {
                                     adb.setTitle(R.string.delete_playlist);
                                     adb.setMessage(mContext.getString(R.string.sure_delete_playlist));
                                     final int positionToRemove = position;
-                                    adb.setNegativeButton("Cancel", null);
-                                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                                    adb.setNegativeButton(mContext.getString(R.string.cancel), null);
+                                    adb.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (playlist.get(position).isDefault()) {
                                                 playlist.get(position).setDefault(false);

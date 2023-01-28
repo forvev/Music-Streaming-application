@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
 //    search relevant attributes
     private Toolbar toolbar;
-    private Toolbar temp;
     private SearchView searchView;
     private ListView searchResult;
     private ImageView setting;
@@ -117,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 //    Otherwise the view will not be updated
     public MutableLiveData<ArrayList<User>> reply = new MutableLiveData<>();
     public MutableLiveData<ArrayList<User>> getReply() {return reply;}
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

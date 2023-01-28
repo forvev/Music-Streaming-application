@@ -28,6 +28,11 @@ public class SettingActivity extends AppCompatActivity {
     private MutableLiveData<MusicbannerService> service;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

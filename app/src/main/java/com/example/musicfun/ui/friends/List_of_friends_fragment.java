@@ -2,6 +2,8 @@ package com.example.musicfun.ui.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -81,9 +83,17 @@ public class List_of_friends_fragment extends Fragment {
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
         public void deleteFriend(int i, String name) {
-            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
+            adb.setTitle(R.string.delete_friend);
+            adb.setMessage(getString(R.string.sure_delete_friend));
+            adb.setNegativeButton(getString(R.string.cancel), null);
+            adb.setPositiveButton(getString(R.string.confirm), new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
+                }
+            });
+            adb.show();
 
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
         }
 
         @Override

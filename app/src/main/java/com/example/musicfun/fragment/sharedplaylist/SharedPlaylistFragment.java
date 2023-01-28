@@ -169,10 +169,9 @@ public class SharedPlaylistFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
                     viewModel.createSharedPlaylist(playlistName);
                     dialog.dismiss();
 

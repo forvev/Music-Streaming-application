@@ -95,6 +95,7 @@ public class ChoosePlaylistFragment extends Fragment {
                         public void onClick(View view) {
 //                            Limitation: Only one item can be transfered back to the previous fragment
                             if(hasChosen){
+                                Toast.makeText(getContext(), getString(R.string.added_to) + " " + finalPlaylists.get(selected_pos).getPlaylist_name(), Toast.LENGTH_SHORT).show();
                                 NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
                                 navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", finalPlaylists.get(selected_pos).getPlaylist_id());
                                 navController.popBackStack();
@@ -170,10 +171,9 @@ public class ChoosePlaylistFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.playlist_need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "New playlist created", Toast.LENGTH_SHORT).show();
                     viewModel.createPlaylists(playlistName);
                     dialog.dismiss();
 

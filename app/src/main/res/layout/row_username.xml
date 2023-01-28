@@ -17,6 +17,10 @@
         android:textColor="@color/purple_900"
         tools:text="Username" />
 
-
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_baseline_clear_24"
+        android:visibility="invisible"/>
 
 </LinearLayout>

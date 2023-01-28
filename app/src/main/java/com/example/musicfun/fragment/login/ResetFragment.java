@@ -78,7 +78,7 @@ public class ResetFragment extends Fragment {
                     registerViewModel.getResetResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                         @Override
                         public void onChanged(Boolean aBoolean) {
-                            Toast.makeText(getContext(), "New password saved!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.pw_saved), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
                         }
                     });

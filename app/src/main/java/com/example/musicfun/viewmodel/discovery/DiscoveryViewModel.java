@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.example.musicfun.repository.Database;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.R;
 import com.example.musicfun.repository.PlaylistRepository;
 
 import org.json.JSONArray;
@@ -221,7 +222,7 @@ public class DiscoveryViewModel extends AndroidViewModel {
             @Override
             public void onError(VolleyError error) {
                 if (error.networkResponse.statusCode == 422){
-                    Toast.makeText(application.getApplicationContext(), "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application.getApplicationContext(), application.getApplicationContext().getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         }, playlist_id, song_id, token);

@@ -166,7 +166,7 @@ public class NewReleaseFragment extends Fragment {
                     discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
                 }
                 else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
-                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         });

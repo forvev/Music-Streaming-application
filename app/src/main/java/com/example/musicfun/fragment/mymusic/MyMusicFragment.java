@@ -54,7 +54,6 @@ public class MyMusicFragment extends Fragment {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
             viewModel.renamePlaylist(playlistName, position);
-            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -62,7 +61,7 @@ public class MyMusicFragment extends Fragment {
             // send playlist_id to server as default playlist
             if(!isDefault){
                 if(position == 0){
-                    Toast.makeText(getContext(), "You need to have a default playlist!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.at_least_one_default), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     viewModel.setAsDefault(0);
@@ -82,7 +81,7 @@ public class MyMusicFragment extends Fragment {
         @Override
         public void share(List<Playlist> my_playlists, int position) {
             // send this playlist to friends
-            Toast.makeText(getContext(), "This playlist is now shared!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), my_playlists.get(position).getPlaylist_name() + " " + getString(R.string.X_is_shared), Toast.LENGTH_SHORT).show();
             viewModel.setAsShare(position);
         }
     };
@@ -147,10 +146,9 @@ public class MyMusicFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
                     viewModel.createPlaylists(playlistName);
                     dialog.dismiss();
 

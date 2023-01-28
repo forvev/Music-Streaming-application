@@ -50,6 +50,11 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private SharedPreferences sp;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);

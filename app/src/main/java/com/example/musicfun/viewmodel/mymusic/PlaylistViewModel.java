@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.Playlist;
+import com.example.musicfun.R;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.PlaylistRepository;
 
@@ -20,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class PlaylistViewModel extends AndroidViewModel {
 
@@ -223,7 +223,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-                Toast.makeText(application, "Sorry, only the playlist owner can rename it", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_rename), Toast.LENGTH_SHORT).show();
             }
         }, playlist.get(position).getPlaylist_id(), name, token);
     }
@@ -263,7 +263,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-                Toast.makeText(application, "Sorry, only the playlist owner can delete it", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_delete), Toast.LENGTH_SHORT).show();
             }
         }, id, token);
     }

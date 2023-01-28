@@ -75,7 +75,7 @@ public class LoginFragment extends Fragment {
             public void onChanged(@Nullable Boolean loginResult) {
                 loadingProgressBar.setVisibility(View.GONE);
                 if (!loginResult) {
-                    Toast.makeText(getContext(), "Wrong password or username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.invalid_login), Toast.LENGTH_SHORT).show();
                 }
                 else{
 //                    if login successful, fetch saved data from database
