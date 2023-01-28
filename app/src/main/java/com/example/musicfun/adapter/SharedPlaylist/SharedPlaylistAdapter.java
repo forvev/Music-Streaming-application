@@ -3,16 +3,20 @@ package com.example.musicfun.adapter.SharedPlaylist;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -107,18 +111,46 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
                                     case R.id.rename_playlist:
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                                        final EditText edittext = new EditText(mContext);
-                                        alert.setTitle(R.string.give_new_name);
-                                        alert.setView(edittext);
-                                        alert.setNegativeButton(mContext.getString(R.string.cancel), null);
-                                        alert.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                playlistMenuClick.renamePlaylist(edittext.getText().toString(), position);
-                                                playlist.get(position).setPlaylist_name(edittext.getText().toString());
+//                                        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+//                                        final EditText edittext = new EditText(mContext);
+//                                        alert.setTitle(R.string.give_new_name);
+//                                        alert.setView(edittext);
+//                                        alert.setNegativeButton(mContext.getString(R.string.cancel), null);
+//                                        alert.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                playlistMenuClick.renamePlaylist(edittext.getText().toString(), position);
+//                                                playlist.get(position).setPlaylist_name(edittext.getText().toString());
+//                                            }
+//                                        });
+//                                        alert.show();
+                                        final Dialog dialog = new Dialog(mContext);
+                                        //We have added a title in the custom layout. So let's disable the default title.
+                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+                                        dialog.setCancelable(true);
+                                        //Mention the name of the layout of your custom dialog.
+                                        dialog.setContentView(R.layout.dialog_rename_playlist);
+                                        dialog.show();
+
+                                        //Initializing the views of the dialog.
+                                        Button submitButton = dialog.findViewById(R.id.submit_button);
+                                        submitButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                final EditText nameEt = dialog.findViewById(R.id.name_et);
+                                                String playlistName = nameEt.getText().toString();
+                                                // send the input playlist name to the server
+                                                if(TextUtils.isEmpty(playlistName)) {
+                                                    nameEt.setError(mContext.getString(R.string.playlist_need_name));
+                                                }
+                                                else{
+                                                    playlistMenuClick.renamePlaylist(playlistName, position);
+                                                    playlist.get(position).setPlaylist_name(playlistName);
+                                                    dialog.dismiss();
+
+                                                }
                                             }
                                         });
-                                        alert.show();
                                         break;
                                     case R.id.remove_playlist:
                                         // remove this list item

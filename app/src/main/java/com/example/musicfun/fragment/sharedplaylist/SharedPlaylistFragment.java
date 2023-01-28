@@ -65,7 +65,6 @@ public class SharedPlaylistFragment extends Fragment {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
             viewModel.renamePlaylist(playlistName, position);
-            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
         }
 
         @Override
