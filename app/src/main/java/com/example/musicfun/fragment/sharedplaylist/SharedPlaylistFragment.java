@@ -89,10 +89,10 @@ public class SharedPlaylistFragment extends Fragment {
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
-        public void transferFragment(String selected_shared_id) {
+        public void transferFragment(String selected_shared_id, boolean isOwner) {
             //selected_shared_id -> we pass by the id selected playlist to another fragment
             ((MainActivity)getActivity()).setPlaylistId(selected_shared_id);
-            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id);
+            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id, isOwner);
             Navigation.findNavController(getView()).navigate(action);
         }
     };

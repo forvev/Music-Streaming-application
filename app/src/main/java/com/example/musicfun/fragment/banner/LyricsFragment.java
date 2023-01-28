@@ -425,7 +425,7 @@ public class LyricsFragment extends Fragment {
             List<Songs> restOfPlaylist = new ArrayList<>();
             List<Songs> songInfo = service.getSongInfo();
             List<Songs> temp = new ArrayList<>();
-            if(player.getShuffleModeEnabled() && service != null){
+            if(player.getShuffleModeEnabled()){
                 List<Integer> preOrder = service.getList_order();
                 if (preOrder.size() == songInfo.size()) {
                     for (int i = 0; i < player.getMediaItemCount(); i++) {

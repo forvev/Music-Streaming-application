@@ -35,6 +35,12 @@
         <action
             android:id="@+id/action_sharedPlaylistSongsFragment_to_sharedPlaylistParticipants3"
             app:destination="@id/sharedPlaylistParticipants3" />
+        <action
+            android:id="@+id/action_sharedPlaylistSongsFragment_to_choosePlaylistFragment3"
+            app:destination="@id/choosePlaylistFragment3" />
+        <argument
+            android:name="isOwner"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/list_of_friends_fragment"
@@ -56,6 +62,10 @@
             android:name="selected_shared_id_3"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/choosePlaylistFragment3"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="ChoosePlaylistFragment" />
 
 
 </navigation>

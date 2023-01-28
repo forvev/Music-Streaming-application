@@ -167,7 +167,7 @@ public class PlaylistAdapter extends BaseAdapter {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransfer.transferFragment(playlist.get(position).getPlaylist_id());
+                fragmentTransfer.transferFragment(playlist.get(position).getPlaylist_id(), true);
             }
         });
         // set list view content

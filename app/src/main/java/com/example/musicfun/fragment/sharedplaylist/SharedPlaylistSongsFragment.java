@@ -56,6 +56,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
     private ListView listView;
     private SongListAdapter adapter;
     private String selected_playlist_id;
+    private Boolean isOwner;
     private String song_id;
     private PassDataInterface passData;
     private TextView tv_listenTogether;
@@ -68,14 +69,13 @@ public class SharedPlaylistSongsFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
+            NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToChoosePlaylistFragment3();
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
 
         @Override
         public void addToDefault(String position) {
-//            discoveryViewModel.getDefaultPlaylist(position);
         }
     };
 
@@ -96,13 +96,14 @@ public class SharedPlaylistSongsFragment extends Fragment {
 
         tv_listenTogether = binding.listenTogether;
         selected_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
+        isOwner = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getIsOwner();
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
             @Override
             public void onChanged(ArrayList<Songs> songs) {
                 listView = binding.songlist;
-                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick, false);
+                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick, isOwner);
                 listView.setAdapter(adapter);
                 if (songs.size() != 0){
                     binding.empty.setVisibility(View.GONE);

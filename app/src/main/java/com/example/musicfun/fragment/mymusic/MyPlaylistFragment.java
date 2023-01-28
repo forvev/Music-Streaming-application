@@ -153,7 +153,7 @@ public class MyPlaylistFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Songs> songs) {
                 listView = binding.songlist;
-                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick, isShuffle);
+                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick, true);
                 listView.setAdapter(adapter);
                 if (songs.size() != 0){
                     binding.empty.setVisibility(View.GONE);

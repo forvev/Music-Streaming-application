@@ -51,6 +51,7 @@ public class ChoosePlaylistFragment extends Fragment {
     private Button save;
     private Button cancel;
     private int selected_pos;
+    private boolean hasChosen;
     private String username;
 
     @Nullable
@@ -93,9 +94,14 @@ public class ChoosePlaylistFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
 //                            Limitation: Only one item can be transfered back to the previous fragment
-                            NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
-                            navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", finalPlaylists.get(selected_pos).getPlaylist_id());
-                            navController.popBackStack();
+                            if(hasChosen){
+                                NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
+                                navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", finalPlaylists.get(selected_pos).getPlaylist_id());
+                                navController.popBackStack();
+                            }
+                            else{
+                                Toast.makeText(getContext(), "Please choose a playlist!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +145,7 @@ public class ChoosePlaylistFragment extends Fragment {
 
     SelectPlaylistInterface selectPlaylistInterface = new SelectPlaylistInterface() {
         public void setSelectedPlaylistIndex(int pos){
+            hasChosen = true;
             selected_pos = pos;
         }
     };
@@ -166,7 +173,7 @@ public class ChoosePlaylistFragment extends Fragment {
                     nameEt.setError("Please give your playlist a name!");
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "New playlist created", Toast.LENGTH_SHORT).show();
                     viewModel.createPlaylists(playlistName);
                     dialog.dismiss();
 

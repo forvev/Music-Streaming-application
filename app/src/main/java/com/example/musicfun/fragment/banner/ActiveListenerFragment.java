@@ -36,7 +36,6 @@ public class ActiveListenerFragment extends Fragment {
 
     private FragmentActiveListenersBinding binding;
     private ListView lv_acitveListeners;
-    private TextView noActive;
     private Toolbar toolbar;
     private ImageView iv_activeListeners;
 //    private MainActivityViewModel viewModel;
@@ -62,7 +61,7 @@ public class ActiveListenerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //       Toolbar handeling:
         toolbar = binding.toolbarLyrics;
-        toolbar.setTitle("Active users");
+        toolbar.setTitle("");
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_close_24));
         ((LyricsActivity)getActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((LyricsActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -70,7 +69,6 @@ public class ActiveListenerFragment extends Fragment {
 
         lv_acitveListeners =  binding.lvActiveListeners;
         //lv_listeners = (ListView) view.findViewById(R.id.lv_active_listeners);
-        noActive = binding.noActiveListeners;
 //        TODO: set list adapter and fetch active users
         String json = ActiveListenerFragmentArgs.fromBundle(getArguments()).getUsernames();
         Gson gson = new Gson();
@@ -78,7 +76,6 @@ public class ActiveListenerFragment extends Fragment {
         List<String> usernames = gson.fromJson(json, type);
         Log.d("test", usernames.size() + "");
         if(!usernames.isEmpty()) {
-            noActive.setVisibility(View.GONE);
             adapter = new ActiveListenerAdapter(getContext(),usernames);
             lv_acitveListeners.setAdapter(adapter);
         }

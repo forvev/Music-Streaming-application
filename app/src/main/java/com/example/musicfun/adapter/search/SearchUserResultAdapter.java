@@ -53,7 +53,7 @@ public class SearchUserResultAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.user_search_result_lv, null);
+            view = inflater.inflate(R.layout.row_username, null);
             holder.name = (TextView) view.findViewById(R.id.user_name);
             holder.linearLayout = (LinearLayout) view.findViewById(R.id.ll_search_user);
             view.setTag(holder);
