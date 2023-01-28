@@ -95,6 +95,8 @@ public class LyricsFragment extends Fragment {
     private ImageView btn_add_to_default;
     private Boolean isClicked;
     private String current_song_id = "";
+    private String current_playlist_id = "";
+    private int numberOfSongs;
 
     //Socket IO
     SocketIOClient socketIOClient = new SocketIOClient();
@@ -274,6 +276,7 @@ public class LyricsFragment extends Fragment {
             service = binder.getMusicbannerService();
 
             player = service.player;
+            numberOfSongs = player.getMediaItemCount();
             player.addListener(new Player.Listener() {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
@@ -310,7 +313,7 @@ public class LyricsFragment extends Fragment {
                 @Override
                 public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, int reason) {
                     if (reason == Player.DISCONTINUITY_REASON_SEEK) {
-                        if (playerseek == true) {
+                        if (playerseek) {
                             playerseek = false;
                         }
                         else {
@@ -358,6 +361,7 @@ public class LyricsFragment extends Fragment {
                                     @Override
                                     public void onChanged(String s) {
                                         if (!s.isEmpty()){
+                                            service.setSession(true, s);
                                             room = s;
 //                                            controlView.setShowShuffleButton(true);
                                             connectToSocketIO();
@@ -389,6 +393,8 @@ public class LyricsFragment extends Fragment {
                                                             mess2.put("person2", sp.getString("name", ""));
                                                             mess2.put("username", room);
                                                             mess2.put("playPlaying", false);
+                                                            mess2.put("repeat", "");
+                                                            mess2.put("shuffle", false);
                                                         }catch(JSONException e){
                                                             e.printStackTrace();
                                                         }
@@ -747,6 +753,8 @@ public class LyricsFragment extends Fragment {
             String person = "";
             String person2 = "";
             Boolean playerPlaying  = false;
+            String isRepeat = "";
+            Boolean shuffle = false;
             try {
                 message = jsonmessage.getString("message");
                 song = jsonmessage.getString("song");
@@ -754,6 +762,8 @@ public class LyricsFragment extends Fragment {
                 person = jsonmessage.getString("person");
                 person2 = jsonmessage.getString("person2");
                 playerPlaying = jsonmessage.getBoolean("player");
+                isRepeat = jsonmessage.getString("repeat");
+                shuffle = jsonmessage.getBoolean("shuffle");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -772,6 +782,8 @@ public class LyricsFragment extends Fragment {
                             mess.put("player", player.isPlaying());
                             mess.put("person2", finalPerson);
                             mess.put("username", room);
+                            mess.put("repeat", player.getRepeatMode());
+                            mess.put("shuffle", player.getShuffleModeEnabled());
                         }catch(JSONException e){
                             e.printStackTrace();
                         }
@@ -783,10 +795,14 @@ public class LyricsFragment extends Fragment {
                 Integer finalSong = Integer.parseInt(song);
                 Long finalTime = Long.parseLong(time);
                 Boolean finalPlayerPlaying = playerPlaying;
+                Integer finalIsRepeat = Integer.parseInt(isRepeat);
+                Boolean finalShuffle = shuffle;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         playerseek = true;
                         player.seekTo(finalSong, finalTime);
+                        player.setRepeatMode(finalIsRepeat);
+                        player.setShuffleModeEnabled(finalShuffle);
                         if (finalPlayerPlaying) {
                             player.setPlayWhenReady(true);
                         }

@@ -22,6 +22,7 @@ import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityLyricsBinding;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
@@ -34,6 +35,8 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private ActivityLyricsBinding binding;
     private MusicbannerService service;
     private boolean isBound;
+    private SonglistViewModel songlistViewModel;
+    private int numberOfSongs;
     private MutableLiveData<String> title = new MutableLiveData<>();
     private MutableLiveData<String> artist = new MutableLiveData<>();
     private MutableLiveData<Boolean> session = new MutableLiveData<>();
@@ -57,6 +60,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
         binding = ActivityLyricsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        songlistViewModel = new SonglistViewModel(getApplication());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -65,7 +69,6 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
             session.setValue(extras.getBoolean("listenTogether"));
             playlistID.setValue(extras.getString("playlistID"));
         }
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_lyrics);
         navController.navigate(R.id.lyricsFragment);
 
@@ -133,6 +136,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private void createMediaItems(List<Songs> playlist) {
         // if the app just started, the songs in the new releases are set as default playlist
         mediaItems.clear();
+        numberOfSongs = playlist.size();
         for(int i = 0; i < playlist.size(); i++){
             Songs s = playlist.get(i);
             MediaMetadata m = new MediaMetadata.Builder()
@@ -147,6 +151,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
             mediaItems.add(mediaItem);
         }
         if(isBound){
+            service.setSongInfo(playlist);
             service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
         }
     }
