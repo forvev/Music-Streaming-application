@@ -30,21 +30,6 @@ public class GenreRepository {
         this.context = context;
     }
 
-//    public void getAllGenres(ServerCallBack callBack) throws JSONException {
-//        RequestQueue requestQueue = Volley.newRequestQueue(context);
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url_receive_genre, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                callBack.onSuccess(response);
-//            }
-//        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                System.out.println("Error Response from receive_genre" + error.getMessage());
-//            }
-//        });
-//        requestQueue.add(request);
-//    }
 
     public void sendGenres(String token, ArrayList<String> selectedGenres, ServerCallBack callBack) throws JSONException {
         JSONArray arr = new JSONArray();

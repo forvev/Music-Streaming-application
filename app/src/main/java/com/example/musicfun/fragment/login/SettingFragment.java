@@ -92,28 +92,6 @@ public class SettingFragment extends Fragment {
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new GenreFragment().newInstance(true)).commit();
                         break;
                     case 2:
-//                        final int[] checkedItem = {-1};
-//                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-//                        alertDialog.setTitle(getString(R.string.select_language));
-//                        alertDialog.setSingleChoiceItems(listItems, checkedItem[0], (dialog, which) -> {
-//                            checkedItem[0] = which;
-//                            if(listItems[which].equals("English")){
-//                                LocaleHelper.setLocale(getContext(), "en");
-//                                startActivity(new Intent(getContext(), SettingActivity.class));
-//                                getActivity().finish();
-//                            }
-//                            else if (listItems[which].equals("中文")){
-//                                LocaleHelper.setLocale(getContext(), "zh");
-//                                startActivity(new Intent(getContext(), SettingActivity.class));
-//                                getActivity().finish();
-//                            }
-//                            dialog.dismiss();
-//                        });
-//                        alertDialog.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
-//
-//                        });
-//                        alertDialog.show();
-
                         final String[] listItems = new String[]{getString(R.string.english), getString(R.string.chinese)};
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         final int[] checkedItem = {-1};

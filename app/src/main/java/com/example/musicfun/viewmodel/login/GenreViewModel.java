@@ -56,23 +56,6 @@ public class GenreViewModel extends AndroidViewModel {
             genreLiveList.setValue(genreArrayList);
         }
 
-//        genreArrayList.clear();
-//        genreRepository.getAllGenres(new ServerCallBack() {
-//            @Override
-//            public void onSuccess(JSONObject result) {
-//                try {
-//                    JSONArray genres = (JSONArray) result.get("All genres");
-//                    for (int i = 0; i < genres.length(); i++) {
-//                        Genre s = new Genre(genres.getJSONObject(i).getString("genre_name"), genres.getJSONObject(i).getInt("genre_id"), genres.getJSONObject(i).getInt("image_id"), false);
-//                        genreArrayList.add(s);
-//                    }
-//                    genreLiveList.setValue(genreArrayList);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
     }
 
     public void submit() throws JSONException {

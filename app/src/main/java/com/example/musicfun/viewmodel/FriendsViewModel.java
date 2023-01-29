@@ -222,7 +222,6 @@ public class FriendsViewModel extends AndroidViewModel {
                         public void onSuccess(JSONObject result) {
                             userArrayList.add(i, new User(userToBeAdded, "", true, false));
                             userArrayList.remove(i+1);
-                            //userArrayList.add(new User(userToBeAdded));
                             m_userNames.setValue(userArrayList);
                         }
 

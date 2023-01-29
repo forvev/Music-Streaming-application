@@ -45,7 +45,6 @@ public class ChatFragment extends Fragment {
 
     ArrayList<String> BadWordsList = new ArrayList<>();
 
-    //private ChatViewBinding binding;
     private FragmentChatBinding binding;
     private SharedPreferences sp;
     private String chatPartnerName;

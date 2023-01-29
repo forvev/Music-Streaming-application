@@ -42,12 +42,11 @@ public class List_of_friends_fragment extends Fragment {
     SharedPreferences sp;
     FriendsSharedListAdapter adapter;
     //to check if the item in the listView was selected
-    ArrayList<User> users_list;//, selected_users_list;
+    ArrayList<User> users_list;
     String selected_shared_id_2;
     private RadioButton btn_selected;
     private Button my_button;
 
-    //private HashSet<String> selectedItems = new HashSet<>();
     private ArrayList<String> selected_users_list;
     private long mLastClickTime = 0;
 
@@ -155,8 +154,6 @@ public class List_of_friends_fragment extends Fragment {
 
         //Find selected playlist id for the request to db
         selected_shared_id_2 = List_of_friends_fragmentArgs.fromBundle(getArguments()).getSelectedSharedId2();
-        Log.i("play_id", selected_shared_id_2);
-        //friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
         friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_shared_id_2);
         listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
@@ -166,7 +163,6 @@ public class List_of_friends_fragment extends Fragment {
                 users_list = new ArrayList<>();
                 users_list = users;
                 listView.setAdapter(adapter);
-                //adapter.notifyDataSetChanged(); Not working like that!
 
             }
         });
@@ -178,12 +174,10 @@ public class List_of_friends_fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 for(int i=0; i<selected_users_list.size(); i++){
-                    Log.i("user:",selected_users_list.get(i));
                     friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_users_list.get(i), selected_shared_id_2);
                 }
 
                 NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToFriendsSharedPlaylist4();
-                //NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToSharedPlaylistParticipants2();
                 Navigation.findNavController(getView()).navigate(action);
             }
         });

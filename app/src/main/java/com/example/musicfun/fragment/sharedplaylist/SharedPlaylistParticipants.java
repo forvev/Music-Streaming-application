@@ -76,9 +76,6 @@ public class SharedPlaylistParticipants extends Fragment {
         @Override
         public void deleteFirend(int position, String user_id, String playlist_id) {
             playlist_id = passed_playlist_id;
-
-            //friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
-            //friendsViewModel.add_user_to_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
             friendsViewModel.delete_user_from_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id, position);
             Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();
         }
@@ -132,7 +129,6 @@ public class SharedPlaylistParticipants extends Fragment {
         passed_playlist_id = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getSelectedSharedId3();
         Log.i("passed",passed_playlist_id);
         friendsViewModel.fetch_shared_friends("playlist/getUsersFromSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
-        //friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
 
         //user/allFriendsForSharedPlaylist
         //playlist/getUsersFromSharedPlaylist
@@ -146,11 +142,6 @@ public class SharedPlaylistParticipants extends Fragment {
             }
         });
 
-//        ImageView imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
-//
-//        imageView_delete.setOnClickListener(click ->{
-//            Log.i("hello","hehe");
-//        });
     }
 
 }
