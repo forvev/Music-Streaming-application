@@ -23,12 +23,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 
 import java.util.ArrayList;
@@ -228,6 +231,16 @@ public class List_of_friends_fragment extends Fragment {
                 NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToFriendsSharedPlaylist4();
                 //NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToSharedPlaylistParticipants2();
                 Navigation.findNavController(getView()).navigate(action);
+            }
+        });
+
+        Button button_cancel = (Button) view.findViewById(R.id.cancel_selection_friends);
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = NavHostFragment.findNavController(List_of_friends_fragment.this);
+                navController.popBackStack();
             }
         });
 

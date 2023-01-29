@@ -88,6 +88,7 @@ public class ChoosePlaylistAdapter extends BaseAdapter {
         }
 
 
+
         holder.btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
