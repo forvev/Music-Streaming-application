@@ -19,6 +19,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * All sorts of different database accesses are performed in this class.
+ * Examples of this are the chat, the lyrics, but also the search queries.
+ */
 public class Database {
 
     private String baseUrl = "http://10.0.2.2:3000/";
@@ -77,12 +81,10 @@ public class Database {
         }catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("onSuccess", username);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, baseUrl + url, user, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("disTest", "Hello");
                 callBack.onSuccess(response);
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
@@ -104,18 +106,14 @@ public class Database {
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        //Log.d("disTest", "is ok");
-        //TODO: Warten das Dominik aus der Antwort ein JSONObject macht und dann weiter behandeln
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, getChatUrl + token, user, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //Log.d("disTest", "now its ok");
                 callBack.onSuccess(response);
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("disTest", "Fehlgeschlagen" + error.getMessage());
                 callBack.onError(error);
             }
         });
@@ -135,13 +133,11 @@ public class Database {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, sendChatMsgUrl + token, msg, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //Log.d("disTest", "Hello");
                 callBack.onSuccess(response);
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.d("disTest", "Fehlgeschlagen" + error.getMessage());
                 callBack.onError(error);
             }
         });

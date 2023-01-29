@@ -10,6 +10,10 @@ import com.example.musicfun.repository.Database;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This class was intended for all extra database accesses, as have to do with the friend system.
+ * However, these accesses were then implemented in the database class, so that this has no more use.
+ */
 public class Friends_DBAccess {
 
     Context context;

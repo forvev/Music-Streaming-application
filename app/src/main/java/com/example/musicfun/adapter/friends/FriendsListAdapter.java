@@ -93,19 +93,6 @@ public class FriendsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        /*
-        view = inflater.inflate(R.layout.friends_custom_view, null);
-        TextView username = (TextView) view.findViewById(R.id.friends_custom_view_username);
-        ImageView delete = (ImageView) view.findViewById(R.id.friends_custom_view_delete);
-
-        RelativeLayout clickArea = (RelativeLayout) view.findViewById(R.id.user_and_id);
-
-        clickArea.setOnClickListener(click -> fi.startChat(retrieveUserName(i)));
-             profile.setOnClickListener(click -> getProfile(i));
-        delete.setOnClickListener(click -> fi.deleteFriend(i));
-
-        username.setText(userList.get(i).getUserName());
-        */
         View v = view;
         int type = getItemViewType(i);
         if(v == null){
@@ -113,7 +100,7 @@ public class FriendsListAdapter extends BaseAdapter {
             User user = userList.get(i);
             if (type == 0){
                 v = inflater.inflate(R.layout.friends_custom_request_sent, viewGroup, false);
-                //v = inflater.inflate(R.layout.friends_custom_request_sent, null);
+
                 TextView username = (TextView) v.findViewById(R.id.friend_request_sent_friends_custom_view_username);
                 ImageView delete = (ImageView) v.findViewById(R.id.friend_request_sent_friends_custom_view_delete);
 
@@ -121,7 +108,7 @@ public class FriendsListAdapter extends BaseAdapter {
                 delete.setOnClickListener(click -> fi.deleteFriend(i,retrieveUserName(i)));
             }else if(type == 1){
                 v = inflater.inflate(R.layout.friends_custom_request_received, viewGroup, false);
-                //v = inflater.inflate(R.layout.friends_custom_request_received, null);
+
                 TextView username = (TextView) v.findViewById(R.id.friend_request_received_friends_custom_view_username);
                 ImageView accept = (ImageView) v.findViewById(R.id.friend_request_received_accept);
                 ImageView decline = (ImageView) v.findViewById(R.id.friend_request_received_decline);
@@ -131,7 +118,7 @@ public class FriendsListAdapter extends BaseAdapter {
                 accept.setOnClickListener(click -> fi.addFriend(user.getUserName(), i));
             }else{
                 v = inflater.inflate(R.layout.friends_custom_view, viewGroup, false);
-                //v = inflater.inflate(R.layout.friends_custom_view, null);
+
                 TextView username = (TextView) v.findViewById(R.id.friends_custom_view_username);
                 ImageView delete = (ImageView) v.findViewById(R.id.friends_custom_view_delete);
 

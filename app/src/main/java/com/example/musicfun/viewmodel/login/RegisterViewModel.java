@@ -21,6 +21,10 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/**
+ * This class serves as an intermediate station for registry related database accesses.
+ * It is used in the LoginFragment, RegisterFragment and ResetFragment.
+ */
 public class RegisterViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();

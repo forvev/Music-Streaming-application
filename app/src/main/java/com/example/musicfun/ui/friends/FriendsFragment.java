@@ -53,6 +53,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Objects;
 
+/**
+ * This class hosts the Friends_friend_fragment view and SharedPlaylistFragment view,
+ * depending on what is selected.
+ */
 public class FriendsFragment extends Fragment {
 
     private SharedPreferences sp;
