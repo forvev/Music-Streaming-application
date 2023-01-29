@@ -81,7 +81,6 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void startChat(String name) {
-            //Log.d("disTest", name);
             Intent goChat = new Intent(getActivity(), MessageListActivity.class);
             goChat.putExtra(ARG_PARAM_NAME, name);
             getActivity().startActivity(goChat);
@@ -152,10 +151,8 @@ public class Friends_friend_Fragment extends Fragment {
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                //TODO: User hinzufügen und direkt löschen, dann sieht man User immer noch kurz angezeigt
                     adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                     listView.setAdapter(adapter);
-                    //Log.d("LastCheck", users.size() + "");
             }
         });
 //        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
@@ -167,7 +164,6 @@ public class Friends_friend_Fragment extends Fragment {
                 if(firstTime){
                     adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
                     listView.setAdapter(adapter);
-                    Log.d("fixThis", "observerInActivity: "+ users.size());
                 }
             }
         });
@@ -176,7 +172,6 @@ public class Friends_friend_Fragment extends Fragment {
         handler.postDelayed(new Runnable() {
             public void run() {
                 firstTime = true;
-                Log.d("fixThat", "firstTime after: "+ firstTime);
             }
         }, 100);//50 works but for safety we take 100
 

@@ -25,8 +25,6 @@ public class Friends_DBAccess {
     }
 
     public void sendMsgWithBody(String url, String user){
-        //db.test();
-        //Log.d("onSuccess", url + " " + user);
         db.addMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {

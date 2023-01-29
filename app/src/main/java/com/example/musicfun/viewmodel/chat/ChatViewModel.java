@@ -53,16 +53,12 @@ public class ChatViewModel extends AndroidViewModel {
     //display the initial list of messages
     public void init(String token, String chatpartner){
         messageArrayList.clear();
-        //Log.d("disTest", "good so far");
         db.getChat(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
-                //Log.d("disTest", "good so far");
                 try{
                 //TODO: Wenn request funktioniert hier das Array bearbeiten
                     JSONArray messages = (JSONArray) result.get("messages");
-                    //Log.d("disTest", messages.get(0).toString());
-                    //Log.d("disTest", messages.getJSONObject(0).getString("sender"));
                     for(int i=0; i<messages.length(); i++){
                         JSONObject mess = messages.getJSONObject(i);
                         Message message = new Message(mess.getString("message"),mess.getString("date"), mess.getString("time"), mess.getString("sender"));
@@ -111,7 +107,6 @@ public class ChatViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject result) {
                 try{
                     JSONArray words = (JSONArray) result.get("badwords");
-                    //Log.d("badWordsExtra", words.length() + "");
                     for(int i=0; i<words.length(); i++){
                        badWords.add(words.getString(i));
                     }

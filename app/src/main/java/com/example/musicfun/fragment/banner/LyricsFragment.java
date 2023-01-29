@@ -288,7 +288,6 @@ public class LyricsFragment extends Fragment {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (!playerseek) {
-//                        Log.d("test", "onIsPlayingChanged");
                         if (isPlaying) {
                             sendPlayerstate("play", "");
                         } else {

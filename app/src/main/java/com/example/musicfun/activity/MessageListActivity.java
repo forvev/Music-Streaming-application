@@ -39,7 +39,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(Friends_friend_Fragment.ARG_PARAM_NAME);
-        //Log.d("disTest", name);
+
         Bundle data = new Bundle();
         data.putString("Username", name);
 
