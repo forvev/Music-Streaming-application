@@ -122,7 +122,6 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Log.d("myTest", "closeEdittext");
                 closeKeyboard(chatView);
                 return false;
             }
@@ -148,7 +147,7 @@ public class ChatFragment extends Fragment {
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
-                //Log.d("SocketStuff", String.valueOf(mess));
+
                 socketIOClient.mSocket.emit("sendMsg",  mess);
                 editText.setText("");
             }
