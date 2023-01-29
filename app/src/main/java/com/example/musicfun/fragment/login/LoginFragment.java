@@ -38,6 +38,9 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 
+/**
+ * Displays a fragment where you can log into your already existed account
+ */
 public class LoginFragment extends Fragment {
 
     private RegisterViewModel registerViewModel;

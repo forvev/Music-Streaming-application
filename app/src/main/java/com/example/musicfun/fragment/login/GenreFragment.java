@@ -27,6 +27,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment allows you to choose the genres from the provided list
+ */
 public class GenreFragment extends Fragment {
 
     private GridView gridView;

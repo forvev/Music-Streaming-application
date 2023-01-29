@@ -31,6 +31,7 @@ import com.example.musicfun.activity.MessageListActivity;
 import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 

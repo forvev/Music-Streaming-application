@@ -21,6 +21,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Set of request to:
+ * 1. Get songs from the specific playlist,
+ * 2. Delete/add songs from the playlist,
+ * 3. Search songs
+ *
+ */
 public class SonglistViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Songs>> m_songlist;

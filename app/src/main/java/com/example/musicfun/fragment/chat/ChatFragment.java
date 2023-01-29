@@ -37,6 +37,9 @@ import java.util.Objects;
 
 import io.socket.emitter.Emitter;
 
+/**
+ * Displays a chat view where you can communicate with the chosen friend
+ */
 public class ChatFragment extends Fragment {
 
 

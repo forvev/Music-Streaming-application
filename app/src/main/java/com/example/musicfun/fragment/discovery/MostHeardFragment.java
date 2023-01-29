@@ -36,9 +36,7 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MostHeardFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays a list of songs that will be based on friends' history
  */
 public class MostHeardFragment extends Fragment {
     SharedPreferences sp;

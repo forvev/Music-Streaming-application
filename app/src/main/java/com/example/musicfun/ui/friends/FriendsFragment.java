@@ -5,53 +5,28 @@ import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.RegisterActivity;
-import com.example.musicfun.activity.SettingActivity;
-import com.example.musicfun.adapter.search.SearchUserResultAdapter;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
-import com.example.musicfun.datatype.User;
-import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
-import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirections;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Objects;
 
 public class FriendsFragment extends Fragment {
 

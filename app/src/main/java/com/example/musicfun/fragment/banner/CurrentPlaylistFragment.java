@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Displays a list of songs that are coming next (after the song that is playing right now)
+ */
 public class CurrentPlaylistFragment extends Fragment {
 
     private FragmentCurrentPlaylistBinding binding;

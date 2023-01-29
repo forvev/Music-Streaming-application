@@ -41,6 +41,9 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a list of your playlists. Features like rename, set as default playlist, remove, share are included here.
+ */
 public class MyMusicFragment extends Fragment {
     private FragmentMymusicBinding binding;
     private PlaylistViewModel viewModel;

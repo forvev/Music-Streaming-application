@@ -5,18 +5,14 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +27,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.musicfun.R;
 import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.datatype.User;
-import com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 
@@ -174,51 +170,6 @@ public class List_of_friends_fragment extends Fragment {
 
         my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
         my_button.setVisibility(View.INVISIBLE);
-//        selected_users_list = new ArrayList<>();
-//
-//
-//        listView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
-//
-//                // mis-clicking prevention, using threshold of 500 ms
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 100){
-//                    return false;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
-//
-//                int position = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
-//                if (position == -1){
-//                    return false;
-//                }else{
-//                    Log.i("info of users",String.valueOf(position));
-//                    View item = listView.getChildAt(position);
-//
-//                    String user_id = users_list.get(position).getUser_id();
-//
-//
-//                    if (selected_users_list.contains(user_id)){
-//                        item.setBackgroundColor(Color.WHITE);
-//                        selected_users_list.remove(user_id);
-//                        //remove selected user to the list
-//                        //selected_users_list.remove(users_list.get(position));
-//                        //if there are no selected items we can hide the button
-//                        if (selected_users_list.isEmpty())  my_button.setVisibility(View.INVISIBLE);
-//                    }
-//                    else{
-//                        item.setBackgroundColor(Color.rgb(177, 151, 229));
-//                        //add selected user to the list
-//                        selected_users_list.add(user_id);
-//                        //Log.i("User_name",String.valueOf(users_list.get(position).getUser_id()));
-//                        //selectedItems.add(position);
-//                        my_button.setVisibility(View.VISIBLE);
-//                    }
-//                    Log.i("actual users",String.valueOf(selected_users_list));
-//                    return false;
-//                }
-//            }
-//        });
-
 
         my_button.setOnClickListener(new View.OnClickListener() {
             @Override

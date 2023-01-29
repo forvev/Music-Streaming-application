@@ -22,6 +22,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Connection to the server to get:
+ * 1. All of the playlists,
+ * 2. All of the owned playlists,
+ * 3. All of the shared playlists,
+ * 4. the default playlist,
+ *
+ * Requests to create normal and shared playlist
+ * Requests to delete, rename, set as default, search by name and to share playlist
+ */
 public class PlaylistViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Playlist>> m_playlist;

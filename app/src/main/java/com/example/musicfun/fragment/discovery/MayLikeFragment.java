@@ -37,9 +37,8 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MayLikeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays list of songs that you may like. The list is based on your listening history and will
+ * be updated all the time
  */
 public class MayLikeFragment extends Fragment {
     SharedPreferences sp;

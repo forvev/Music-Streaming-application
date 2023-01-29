@@ -36,6 +36,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Once we click on the face icon in the right top corner the fragment of settings will be displayed
+ *
+ */
 public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;

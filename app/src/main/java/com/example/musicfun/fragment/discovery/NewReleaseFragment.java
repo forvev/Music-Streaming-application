@@ -34,11 +34,8 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link NewReleaseFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays the latest songs releases
  */
-
 //this is Releases class
 public class NewReleaseFragment extends Fragment {
 

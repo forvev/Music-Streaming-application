@@ -41,6 +41,10 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * Once we click on the specific song that we want to add a song to the playlist this fragment will be displayed.
+ * We can use already created playlist or create a new one
+ */
 public class ChoosePlaylistFragment extends Fragment {
 
     private FragmentChoosePlaylistBinding binding;

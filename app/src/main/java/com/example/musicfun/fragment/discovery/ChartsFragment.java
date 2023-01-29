@@ -37,9 +37,7 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChartsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays a chart based on the listening history of every user
  */
 public class ChartsFragment extends Fragment {
 

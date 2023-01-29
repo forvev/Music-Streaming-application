@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.R;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
-import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

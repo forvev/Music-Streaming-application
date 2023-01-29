@@ -49,6 +49,10 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+The implementation of shared playlist is included here. Once the fragment is opened the list of shared playlist will be displayed.
+
+ **/
 public class SharedPlaylistFragment extends Fragment {
 
     private FragmentMymusicBinding binding;

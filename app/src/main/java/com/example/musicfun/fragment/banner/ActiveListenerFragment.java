@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Displays a list of active users with which we listen to a song using synchronous playback
+ */
 public class ActiveListenerFragment extends Fragment {
 
     private FragmentActiveListenersBinding binding;

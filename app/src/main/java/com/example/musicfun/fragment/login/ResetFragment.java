@@ -32,6 +32,9 @@ import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * Displays the fragment where you can reset your password (view based on fragment login)
+ */
 public class ResetFragment extends Fragment {
     private RegisterViewModel registerViewModel;
     private FragmentLoginBinding binding;

@@ -50,6 +50,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This fragment shows us sections to choose like new releases or friends' taste
+ * Moreover the navigation graph is implemented here
+ */
 public class DiscoveryFragment extends Fragment {
 
     private FragmentDiscoveryBinding binding;

@@ -49,6 +49,9 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * implementation of the fragment where the list of songs in the certain shared playlist will be diplayed
+ */
 public class SharedPlaylistSongsFragment extends Fragment {
 
     private FragmentSharedPlaylistSongsBinding binding;

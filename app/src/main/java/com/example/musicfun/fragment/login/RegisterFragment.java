@@ -29,6 +29,9 @@ import com.example.musicfun.viewmodel.login.RegisterViewModel;
 
 import org.json.JSONException;
 
+/**
+ * Displays a fragment where you can register your account
+ */
 public class RegisterFragment extends Fragment {
 
     private RegisterViewModel registerViewModel;

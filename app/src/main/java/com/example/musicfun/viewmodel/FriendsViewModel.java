@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.friends;
+package com.example.musicfun.viewmodel;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -20,6 +20,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Friends view model for:
+ * 1. Fetching the list of users from the server
+ * 2. Several requests to the server connected with message feature
+ * 3. Adding/deleting users from playlists
+ * 4. Fetching shared friends
+ */
 public class FriendsViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<User>> m_userNames = new MutableLiveData<>();

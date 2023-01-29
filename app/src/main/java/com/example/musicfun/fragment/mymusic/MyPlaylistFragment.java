@@ -39,6 +39,9 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import java.util.ArrayList;
 
+/**
+ * Displays the list of the songs inside the chosen playlist.
+ */
 public class MyPlaylistFragment extends Fragment {
 
     private FragmentSongsBinding binding;

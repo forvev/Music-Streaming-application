@@ -79,6 +79,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Displays the lyrics of a specific song
+ */
 public class LyricsFragment extends Fragment {
 
     private FragmentLyricsBinding binding;

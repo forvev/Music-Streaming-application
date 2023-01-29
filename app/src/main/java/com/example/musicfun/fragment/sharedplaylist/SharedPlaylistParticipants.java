@@ -3,16 +3,11 @@ package com.example.musicfun.fragment.sharedplaylist;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,21 +16,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.adapter.friends.ParticipantsSharedListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
-import com.example.musicfun.ui.friends.FriendsViewModel;
-import com.example.musicfun.ui.friends.List_of_friends_fragment;
-import com.example.musicfun.ui.friends.List_of_friends_fragmentArgs;
-import com.example.musicfun.ui.friends.List_of_friends_fragmentDirections;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 
+/**implementation of the list of participants
+ * In other words this fragment will display a list of friends with which we share our playlist
+ *
+ */
 public class SharedPlaylistParticipants extends Fragment {
 
     FriendsViewModel friendsViewModel;
