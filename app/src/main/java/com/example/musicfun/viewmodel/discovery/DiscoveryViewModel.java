@@ -22,6 +22,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * This class serves as an intermediate station for discovery related database accesses.
+ * It is used in MainActivity, LyricsFragment and in every class in fragment -> discovery folder.
+ */
 public class DiscoveryViewModel extends AndroidViewModel {
 
     MutableLiveData<ArrayList<Songs>> songNames;

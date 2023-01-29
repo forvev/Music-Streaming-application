@@ -32,6 +32,9 @@ import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * This class is there for representing the friends and their selection option (add) for a particular shared playlist.
+ */
 public class List_of_friends_fragment extends Fragment {
 
     FriendsViewModel friendsViewModel;
@@ -119,8 +122,8 @@ public class List_of_friends_fragment extends Fragment {
         public void add_friends(ArrayList<String> arrayList) {
             selected_users_list = new ArrayList<>();
             selected_users_list = arrayList;
-            if(selected_users_list.size()==0) my_button.setVisibility(4);
-            else my_button.setVisibility(0);
+            if(selected_users_list.size()==0) my_button.setVisibility(View.INVISIBLE);
+            else my_button.setVisibility(View.VISIBLE);
         }
 
 

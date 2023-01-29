@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * ChatViewModel process the results sent back from server which are all relevant to chat functions.
+ * ChatViewModel process the results sent back from/to server which are all relevant to chat functions.
  */
 public class ChatViewModel extends AndroidViewModel {
 

@@ -17,6 +17,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * This class is used to send changes to the user's genres to the database.
+ */
 public class GenreRepository {
     private String url_receive_genre = "";
     private String url_post_genre = "http://10.0.2.2:3000/account/sendgenres?auth_token=";

@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * This class serves as an intermediate station for genre related database accesses. It is used in the GenreFragment.
+ */
 public class GenreViewModel extends AndroidViewModel {
     private MutableLiveData<ArrayList<Genre>> genreLiveList;
     private ArrayList<Genre> genreArrayList;
