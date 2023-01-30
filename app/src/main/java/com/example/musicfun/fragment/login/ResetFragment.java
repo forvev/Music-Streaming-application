@@ -25,6 +25,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.FragmentLoginBinding;
@@ -68,6 +70,7 @@ public class ResetFragment extends Fragment {
         saveBtn = binding.login;
         saveBtn.setText(R.string.save);
         loadingProgressBar = binding.loading;
+        binding.noAccount.setVisibility(View.GONE);
 
         registerViewModel.getResetResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
@@ -82,7 +85,8 @@ public class ResetFragment extends Fragment {
                         @Override
                         public void onChanged(Boolean aBoolean) {
                             Toast.makeText(getContext(), getString(R.string.pw_saved), Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
+                            NavController navController = NavHostFragment.findNavController(ResetFragment.this);
+                            navController.popBackStack();
                         }
                     });
                 }

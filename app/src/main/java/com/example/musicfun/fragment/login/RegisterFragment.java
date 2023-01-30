@@ -21,6 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.constant.LoginFormState;
 import com.example.musicfun.R;
@@ -85,10 +88,11 @@ public class RegisterFragment extends Fragment {
                 }
                 else{
 
-                    Bundle result = new Bundle();
-                    result.putBoolean("bundleKey", false);
-                    getParentFragmentManager().setFragmentResult("requestKey", result);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.register_container, new GenreFragment().newInstance(false)).commit();
+//                    Bundle result = new Bundle();
+//                    result.putBoolean("bundleKey", false);
+//                    getParentFragmentManager().setFragmentResult("requestKey", result);
+                    NavDirections action = RegisterFragmentDirections.actionRegisterFragmentToGenreFragment(false);
+                    Navigation.findNavController(view).navigate(action);
                 }
             }
         });

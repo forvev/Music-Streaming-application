@@ -15,12 +15,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.login.GridViewAdapter;
 import com.example.musicfun.databinding.FragmentGenreBinding;
 import com.example.musicfun.datatype.Genre;
+import com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment;
 import com.example.musicfun.viewmodel.login.GenreViewModel;
 
 import org.json.JSONException;
@@ -40,17 +43,6 @@ public class GenreFragment extends Fragment {
     Boolean fromSetting = false;
     // https://icons8.com/icons/set/music-genre
 
-    ArrayList<Integer> selected = new ArrayList<>();
-
-    public GenreFragment newInstance(Boolean b) {
-        GenreFragment genreFragment = new GenreFragment ();
-        Bundle args = new Bundle();
-        args.putBoolean("fromSetting", b);
-        genreFragment.setArguments(args);
-        return genreFragment ;
-    }
-
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         genreViewModel = new ViewModelProvider(this).get(GenreViewModel.class);
         binding = FragmentGenreBinding.inflate(inflater, container, false);
@@ -63,7 +55,7 @@ public class GenreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         gridView = binding.genre;
         button = binding.submitGenre;
-        fromSetting = getArguments().getBoolean("fromSetting");
+        fromSetting = GenreFragmentArgs.fromBundle(getArguments()).getFromSetting();
         if(fromSetting){
             button.setText(R.string.save);
             button.setTextSize(24);
@@ -105,7 +97,8 @@ public class GenreFragment extends Fragment {
                     e.printStackTrace();
                 }
                 if(fromSetting){
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
+                    NavController navController = NavHostFragment.findNavController(GenreFragment.this);
+                    navController.popBackStack();
                 }
                 else{
                     Intent myIntent = new Intent(getActivity(), MainActivity.class);

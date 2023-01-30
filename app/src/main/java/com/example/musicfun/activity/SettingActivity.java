@@ -14,6 +14,8 @@ import com.example.musicfun.R;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.databinding.ActivitySettingBinding;
 import com.example.musicfun.fragment.login.SettingFragment;
@@ -55,7 +57,8 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         service = new MutableLiveData<>();
-        getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
+        NavController navController = Navigation.findNavController(this, R.id.setting_container);
+        navController.navigate(R.id.settingFragment);
     }
 
     ServiceConnection playerServiceConnection = new ServiceConnection() {
