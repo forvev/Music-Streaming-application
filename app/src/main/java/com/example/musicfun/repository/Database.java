@@ -33,7 +33,7 @@ public class Database {
     private String getChatUrl = "https://100.110.104.112:3000/get/chat?auth_token=";
     private String sendChatMsgUrl = "https://100.110.104.112:3000/get/storeMessage?auth_token=";
     private String addUsrToSharedPlaylist = "https://100.110.104.112:3000/get/storeMessage?auth_token=";
-    private String badWordsUrl = "https://10.0.2.2:3000/badwords?auth_token=";
+    private String badWordsUrl = "https://100.110.104.112:3000/badwords?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 
