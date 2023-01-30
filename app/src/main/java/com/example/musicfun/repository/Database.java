@@ -21,14 +21,14 @@ import java.util.ArrayList;
 
 public class Database {
 
-    private String baseUrl = "http://100.110.104.112:3000/";
-    private String searchUrl = "http://100.110.104.112:3000/get/titleStartsWith?string=";
-    private String searchUserUrl = "http://100.110.104.112:3000/get/userStartsWith?auth_token=";
-    private String urlListenHistory = "http://100.110.104.112:3000/account/addListenHistory?auth_token=";
-    private String fetchlyrics = "http://100.110.104.112:3000/get/lyrics";
-    private String getChatUrl = "http://100.110.104.112:3000/get/chat?auth_token=";
-    private String sendChatMsgUrl = "http://100.110.104.112:3000/get/storeMessage?auth_token=";
-    private String addUsrToSharedPlaylist = "http://100.110.104.112:3000/get/storeMessage?auth_token=";
+    private String baseUrl = "https://100.110.104.112:3000/";
+    private String searchUrl = "https://100.110.104.112:3000/get/titleStartsWith?string=";
+    private String searchUserUrl = "https://100.110.104.112:3000/get/userStartsWith?auth_token=";
+    private String urlListenHistory = "https://100.110.104.112:3000/account/addListenHistory?auth_token=";
+    private String fetchlyrics = "https://100.110.104.112:3000/get/lyrics";
+    private String getChatUrl = "https://100.110.104.112:3000/get/chat?auth_token=";
+    private String sendChatMsgUrl = "https://100.110.104.112:3000/get/storeMessage?auth_token=";
+    private String addUsrToSharedPlaylist = "https://100.110.104.112:3000/get/storeMessage?auth_token=";
     private ArrayList<Songs> songsArrayList = new ArrayList<>();
     Context context;
 

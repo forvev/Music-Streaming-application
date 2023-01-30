@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 public class GenreRepository {
     private String url_receive_genre = "";
-    private String url_post_genre = "http://100.110.104.112:3000/account/sendgenres?auth_token=";
+    private String url_post_genre = "https://100.110.104.112:3000/account/sendgenres?auth_token=";
 
     private Context context;
 
