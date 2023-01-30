@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,9 +55,13 @@ import com.example.musicfun.databinding.FragmentLyricsBinding;
 import com.example.musicfun.datatype.Lyrics;
 import com.example.musicfun.datatype.RelativeSizeColorSpan;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.source.ShuffleOrder;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -64,11 +72,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
+/**
+ * Displays the lyrics of a specific song
+ */
 public class LyricsFragment extends Fragment {
 
     private FragmentLyricsBinding binding;
@@ -76,6 +89,8 @@ public class LyricsFragment extends Fragment {
     protected @Nullable ExoPlayer player;
     private BroadcastReceiver broadcastReceiver;
     private MainActivityViewModel viewModel;
+    private SonglistViewModel songlistViewModel;
+    private DiscoveryViewModel discoveryViewModel;
 
     private StyledPlayerControlView controlView;
     private TextView tv_title;
@@ -83,8 +98,12 @@ public class LyricsFragment extends Fragment {
     private TextView tv_artist;
     private String artist = "";
     private ImageView coverView;
-    private ImageView btn_currentPlaylist;
     private ImageView btn_active_guests;
+    private ImageView btn_add_to_default;
+    private Boolean isClicked;
+    private String current_song_id = "";
+    private String current_playlist_id = "";
+    private int numberOfSongs;
 
     //Socket IO
     SocketIOClient socketIOClient = new SocketIOClient();
@@ -128,6 +147,8 @@ public class LyricsFragment extends Fragment {
         binding = FragmentLyricsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        songlistViewModel = new ViewModelProvider(this).get(SonglistViewModel.class);
+        discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
         sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
         return root;
     }
@@ -155,24 +176,51 @@ public class LyricsFragment extends Fragment {
             tv_title.setText(title);
             tv_artist.setText(artist);
         }
+        ImageView btn_add_to_playlist = binding.lyricsAddToPlaylist;
+        btn_add_to_playlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToChoosePlaylistFragment2();
+                Navigation.findNavController(getView()).navigate(action);
+            }
+        });
+
+//         listen whether there is selected playlist id popped back from ChoosePlaylistFragment
+        NavController navController = NavHostFragment.findNavController(LyricsFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && !current_song_id.isEmpty()){
+                    songlistViewModel.addSongToPlaylist(playlist_position, current_song_id);
+                }
+            }
+        });
+
+//        add the current song to default playlist
+        btn_add_to_default = getView().findViewById(R.id.add_to_default);
+//        if this song is in default, change image resource
+        initDefaultButton();
+        btn_add_to_default.setOnClickListener(setAsDefault);
 
 //        lyrics relevant
         tv_lyrics = binding.lyrics;
         tv_lyrics.setMovementMethod(scrolltext);
 
-        btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
+        ImageView btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
         btn_currentPlaylist.setOnClickListener(showCurrentPlaylist);
         btn_active_guests = binding.activeListeners;
         if (isSession) {
             btn_active_guests.setVisibility(View.VISIBLE);
             btn_active_guests.setOnClickListener(showActiveGuests);
-            controlView.setShowShuffleButton(false);
+//            controlView.setShowShuffleButton(true);
         }
         else {
             btn_active_guests.setVisibility(View.GONE);
-            controlView.setShowShuffleButton(true);
+//            controlView.setShowShuffleButton(true);
         }
 
+//        Service informs the media transfers
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -180,13 +228,51 @@ public class LyricsFragment extends Fragment {
                 artist = intent.getStringExtra("artist");
                 tv_title.setText(title);
                 tv_artist.setText(artist);
+                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+                initDefaultButton();
                 String coverUrl = intent.getStringExtra("coverUrl");
                 changeCover(coverUrl);
                 updateLyricsFile();
             }
         };
-
     }
+
+    private void initDefaultButton (){
+        if(!current_song_id.isEmpty()){
+            discoveryViewModel.checkSongInDefault(current_song_id);
+            discoveryViewModel.getIsInDefault().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if(aBoolean){
+                        isClicked = true;
+                        btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_24);
+                    }
+                    else{
+                        isClicked = false;
+                        btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_border_24);
+                    }
+                }
+            });
+        }
+    }
+
+    private View.OnClickListener setAsDefault = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(isClicked && !current_song_id.isEmpty()){
+//                remove from default playlist
+                isClicked = false;
+                btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_border_24);
+                discoveryViewModel.removeSongFromDefault(current_song_id);
+            }
+            else if (!current_song_id.isEmpty()){
+//                add to default playlist
+                isClicked = true;
+                btn_add_to_default.setImageResource(R.drawable.ic_baseline_star_24);
+                discoveryViewModel.getDefaultPlaylist(current_song_id);
+            }
+        }
+    };
 
 //    Bind service from fragment to make sure the service is bound on time
     private ServiceConnection playerServiceConnection = new ServiceConnection() {
@@ -197,11 +283,11 @@ public class LyricsFragment extends Fragment {
             service = binder.getMusicbannerService();
 
             player = service.player;
+            numberOfSongs = player.getMediaItemCount();
             player.addListener(new Player.Listener() {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (!playerseek) {
-//                        Log.d("test", "onIsPlayingChanged");
                         if (isPlaying) {
                             sendPlayerstate("play", "");
                         } else {
@@ -209,8 +295,6 @@ public class LyricsFragment extends Fragment {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
-//                                    Log.d("test", !isPlaying + "");
-//                                    Log.d("test", playerpause + "");
                                     if (!player.isPlaying() && playerpause) {
                                         sendPlayerstate("pause", "");
                                     }
@@ -228,13 +312,17 @@ public class LyricsFragment extends Fragment {
                 }
 
                 @Override
+                public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled){
+                    sendPlayerstate("shuffle", Boolean.toString(shuffleModeEnabled));
+                }
+
+                @Override
                 public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, int reason) {
                     if (reason == Player.DISCONTINUITY_REASON_SEEK) {
-                        if (playerseek == true) {
+                        if (playerseek) {
                             playerseek = false;
                         }
                         else {
-//                            Log.d("test", "onPositionDiscontinuity");
                             if (oldPosition.mediaItemIndex == newPosition.mediaItemIndex) {
                                 sendPlayerstate("syncTime", Long.toString(newPosition.positionMs));
                             }
@@ -248,6 +336,8 @@ public class LyricsFragment extends Fragment {
             controlView.setPlayer(player);
 
             if(player != null){
+                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+                initDefaultButton();
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
                 String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
@@ -277,8 +367,9 @@ public class LyricsFragment extends Fragment {
                                     @Override
                                     public void onChanged(String s) {
                                         if (!s.isEmpty()){
+                                            service.setSession(true, s);
                                             room = s;
-                                            controlView.setShowShuffleButton(false);
+//                                            controlView.setShowShuffleButton(true);
                                             connectToSocketIO();
                                             JSONObject mess = new JSONObject();
                                             try{
@@ -308,6 +399,8 @@ public class LyricsFragment extends Fragment {
                                                             mess2.put("person2", sp.getString("name", ""));
                                                             mess2.put("username", room);
                                                             mess2.put("playPlaying", false);
+                                                            mess2.put("repeat", "");
+                                                            mess2.put("shuffle", false);
                                                         }catch(JSONException e){
                                                             e.printStackTrace();
                                                         }
@@ -339,15 +432,40 @@ public class LyricsFragment extends Fragment {
         }
     };
 
+//    if shuffle mode is enabled, fetch the "random order" of the playlist, and reorder the playlist,
+//        so that the playlist shown in CurrentPlaylistFragment is the shuffled version
     private View.OnClickListener showCurrentPlaylist = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int startItemIndex = player.getCurrentMediaItemIndex();
+            int subListStart = 0;
+            List<Songs> restOfPlaylist = new ArrayList<>();
             List<Songs> songInfo = service.getSongInfo();
-            List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+            List<Songs> temp = new ArrayList<>();
+            if(player.getShuffleModeEnabled()){
+                List<Integer> preOrder = service.getList_order();
+                if (preOrder.size() == songInfo.size()) {
+                    for (int i = 0; i < player.getMediaItemCount(); i++) {
+                        temp.add(songInfo.get(preOrder.get(i)));
+                        if (preOrder.get(i) == startItemIndex) {
+                            subListStart = i;
+                        }
+                    }
+                    restOfPlaylist = temp.subList(subListStart, temp.size());
+                    if(player.getRepeatMode() != Player.REPEAT_MODE_OFF){
+                        restOfPlaylist.addAll(temp.subList(0, subListStart));
+                    }
+                }
+                else{
+                    restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+                }
+            }
+            else{
+                restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
+            }
+
             Gson gson = new Gson();
             String json = gson.toJson(restOfPlaylist);
-
             NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToCurrentPlaylistFragment(json);
             Navigation.findNavController(getView()).navigate(action);
             isVisible = false;
@@ -358,7 +476,6 @@ public class LyricsFragment extends Fragment {
     private View.OnClickListener showActiveGuests = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Toast.makeText(getContext(), "active listeners clicked!", Toast.LENGTH_SHORT).show();
             Gson gson = new Gson();
             String json = gson.toJson(usernames);
             NavDirections action = LyricsFragmentDirections.actionLyricsFragmentToActiveListenerFragment(json);
@@ -426,7 +543,7 @@ public class LyricsFragment extends Fragment {
                     tv_lyrics.scrollTo(0, 0);
                     lyricsExist = false;
                     tv_lyrics.setGravity(Gravity.CENTER);
-                    tv_lyrics.setText("No Lyrics");
+                    tv_lyrics.setText(getString(R.string.no_lyrics));
                 }
             }
         });
@@ -466,19 +583,6 @@ public class LyricsFragment extends Fragment {
     // find the start and end point of the current line. This helps to highlight the lyrics.
     private int[] currentStartPoint(int line){
         int[] result = new int[2];
-//        if(lyricsExist){
-//            int start = 0;
-//            if (line == 0){
-//                result[0] = 0;
-//                result[1] = lyricsList.get(0).getLength() + 1;
-//                return result;
-//            }
-//            for (int i = 0; i < line; i++){
-//                start = start + lyricsList.get(i).getLength() + 1;
-//            }
-//            result[0] = start;
-//            result[1] = start + lyricsList.get(line).getLength();
-//        }
         int start = 0;
         if (line == 0){
             result[0] = 0;
@@ -521,15 +625,28 @@ public class LyricsFragment extends Fragment {
         @Override
         public void onClick(View view) {
             if(isSession){
-                AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
-                adb.setMessage("Are you sure to leave the room?");
-                adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                final Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.dialog_leave_room);
+                dialog.show();
+
+                Button ok = dialog.findViewById(R.id.confirm);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         getActivity().finish();
                     }
                 });
-                adb.show();
+
+                Button cancel = dialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
             else{
                 getActivity().finish();
@@ -602,6 +719,14 @@ public class LyricsFragment extends Fragment {
                     }
                 });
             }
+            if (message.equals("shuffle")){
+                Boolean finalInfo = Boolean.parseBoolean(info);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.setShuffleModeEnabled(finalInfo);
+                    }
+                });
+            }
         }
     };
 
@@ -647,6 +772,8 @@ public class LyricsFragment extends Fragment {
             String person = "";
             String person2 = "";
             Boolean playerPlaying  = false;
+            String isRepeat = "";
+            Boolean shuffle = false;
             try {
                 message = jsonmessage.getString("message");
                 song = jsonmessage.getString("song");
@@ -654,6 +781,8 @@ public class LyricsFragment extends Fragment {
                 person = jsonmessage.getString("person");
                 person2 = jsonmessage.getString("person2");
                 playerPlaying = jsonmessage.getBoolean("player");
+                isRepeat = jsonmessage.getString("repeat");
+                shuffle = jsonmessage.getBoolean("shuffle");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -662,7 +791,6 @@ public class LyricsFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         songID = Integer.toString(player.getCurrentMediaItemIndex());
-//                        Log.d("test", "songID " + songID);
                         timestamp = Long.toString(player.getCurrentPosition());
                         JSONObject mess = new JSONObject();
                         try{
@@ -673,6 +801,8 @@ public class LyricsFragment extends Fragment {
                             mess.put("player", player.isPlaying());
                             mess.put("person2", finalPerson);
                             mess.put("username", room);
+                            mess.put("repeat", player.getRepeatMode());
+                            mess.put("shuffle", player.getShuffleModeEnabled());
                         }catch(JSONException e){
                             e.printStackTrace();
                         }
@@ -684,11 +814,14 @@ public class LyricsFragment extends Fragment {
                 Integer finalSong = Integer.parseInt(song);
                 Long finalTime = Long.parseLong(time);
                 Boolean finalPlayerPlaying = playerPlaying;
+                Integer finalIsRepeat = Integer.parseInt(isRepeat);
+                Boolean finalShuffle = shuffle;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-//                        Log.d("test", "syncJoinBack");
                         playerseek = true;
                         player.seekTo(finalSong, finalTime);
+                        player.setRepeatMode(finalIsRepeat);
+                        player.setShuffleModeEnabled(finalShuffle);
                         if (finalPlayerPlaying) {
                             player.setPlayWhenReady(true);
                         }

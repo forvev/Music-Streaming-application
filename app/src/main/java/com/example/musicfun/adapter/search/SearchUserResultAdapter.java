@@ -11,11 +11,14 @@ import android.widget.TextView;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.R;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
-import com.example.musicfun.ui.friends.FriendsViewModel;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for searching users in Friends
+ */
 public class SearchUserResultAdapter extends BaseAdapter {
     Context mContext;
     private List<User> userList = null;
@@ -33,8 +36,10 @@ public class SearchUserResultAdapter extends BaseAdapter {
         this.friendsViewModel = friendsViewModel;
         this.closeSearchViewInterface = closeSearchViewInterface;
     }
-
-    public class ViewHolder {
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
+    private class ViewHolder {
         TextView name;
         LinearLayout linearLayout;
     }
@@ -53,7 +58,7 @@ public class SearchUserResultAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.user_search_result_lv, null);
+            view = inflater.inflate(R.layout.row_username, null);
             holder.name = (TextView) view.findViewById(R.id.user_name);
             holder.linearLayout = (LinearLayout) view.findViewById(R.id.ll_search_user);
             view.setTag(holder);

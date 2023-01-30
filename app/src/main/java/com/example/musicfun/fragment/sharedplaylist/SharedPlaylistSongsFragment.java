@@ -49,6 +49,9 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * implementation of the fragment where the list of songs in the certain shared playlist will be diplayed
+ */
 public class SharedPlaylistSongsFragment extends Fragment {
 
     private FragmentSharedPlaylistSongsBinding binding;
@@ -56,6 +59,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
     private ListView listView;
     private SongListAdapter adapter;
     private String selected_playlist_id;
+    private Boolean isOwner;
     private String song_id;
     private PassDataInterface passData;
     private TextView tv_listenTogether;
@@ -68,14 +72,13 @@ public class SharedPlaylistSongsFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-            NavDirections action = MyPlaylistFragmentDirections.actionMyPlaylistFragmentToChooseOnePlaylist();
+            NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToChoosePlaylistFragment3();
             Navigation.findNavController(getView()).navigate(action);
             song_id = songId;
         }
 
         @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
+        public void addToDefault(String position) {
         }
     };
 
@@ -96,13 +99,14 @@ public class SharedPlaylistSongsFragment extends Fragment {
 
         tv_listenTogether = binding.listenTogether;
         selected_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
+        isOwner = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getIsOwner();
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
             @Override
             public void onChanged(ArrayList<Songs> songs) {
                 listView = binding.songlist;
-                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick);
+                adapter = new SongListAdapter(getActivity(), songs, songlistMenuClick, isOwner);
                 listView.setAdapter(adapter);
                 if (songs.size() != 0){
                     binding.empty.setVisibility(View.GONE);
@@ -110,17 +114,12 @@ public class SharedPlaylistSongsFragment extends Fragment {
                     tv_listenTogether.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            TODO: get current position and current item index from server
                             passData.seek(songs, 0, 0);
-
                             Intent intent = new Intent(getActivity(), LyricsActivity.class);
-//                            Gson gson = new Gson();
-//                            String json = gson.toJson(songs);
                             intent.putExtra("title", songs.get(0).getSongName());
                             intent.putExtra("artist", songs.get(0).getArtist());
                             intent.putExtra("listenTogether", true);
                             intent.putExtra("playlistID", selected_playlist_id + "");
-//                            intent.putExtra("playlist", json);
                             startActivity(intent);
                         }
                     });
@@ -149,9 +148,6 @@ public class SharedPlaylistSongsFragment extends Fragment {
         my_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants();
-                Log.i("view", String.valueOf(view));
-
                 String passed_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
                 NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id);
 

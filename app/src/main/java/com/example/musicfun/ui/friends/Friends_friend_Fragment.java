@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import com.example.musicfun.activity.MessageListActivity;
 import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 
@@ -44,6 +47,9 @@ public class Friends_friend_Fragment extends Fragment {
     SharedPreferences sp;
     FriendsListAdapter adapter;
 
+    boolean firstTime;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,9 +59,9 @@ public class Friends_friend_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int i) {
+        public void deleteFriend(int i, String name) {
             Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
+            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
         }
 
         @Override
@@ -64,7 +70,8 @@ public class Friends_friend_Fragment extends Fragment {
         }
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
+            friendsViewModel.sendMsgWithBodyAccept(name, i);
         }
 
         @Override
@@ -74,10 +81,14 @@ public class Friends_friend_Fragment extends Fragment {
 
         @Override
         public void startChat(String name) {
-            //Log.d("disTest", name);
             Intent goChat = new Intent(getActivity(), MessageListActivity.class);
             goChat.putExtra(ARG_PARAM_NAME, name);
             getActivity().startActivity(goChat);
+
+        }
+
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
 
         }
     };
@@ -120,6 +131,7 @@ public class Friends_friend_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         friendsViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        firstTime = false;
         View view = inflater.inflate(R.layout.fragment_friends_friend, container, false);
         return view;
     }
@@ -139,8 +151,8 @@ public class Friends_friend_Fragment extends Fragment {
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
-                listView.setAdapter(adapter);
+                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                    listView.setAdapter(adapter);
             }
         });
 //        After search friends, the changes of MutableLiveData will be sent back to MainActivity.
@@ -149,10 +161,19 @@ public class Friends_friend_Fragment extends Fragment {
         ((MainActivity)getActivity()).getReply().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
-                listView.setAdapter(adapter);
+                if(firstTime){
+                    adapter = new FriendsListAdapter(getActivity(), users, friendFragmentInterface);
+                    listView.setAdapter(adapter);
+                }
             }
         });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                firstTime = true;
+            }
+        }, 100);//50 works but for safety we take 100
 
     }
 

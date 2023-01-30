@@ -1,4 +1,4 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.SharedPlaylist;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,6 +17,9 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+/**
+ * Adapter for chat messages.
+ */
 public class MessageListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -52,6 +55,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     }
 
     // Inflates the appropriate layout according to the ViewType.
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;

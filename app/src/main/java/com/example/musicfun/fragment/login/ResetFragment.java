@@ -32,6 +32,9 @@ import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * Displays the fragment where you can reset your password (view based on fragment login)
+ */
 public class ResetFragment extends Fragment {
     private RegisterViewModel registerViewModel;
     private FragmentLoginBinding binding;
@@ -78,7 +81,7 @@ public class ResetFragment extends Fragment {
                     registerViewModel.getResetResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                         @Override
                         public void onChanged(Boolean aBoolean) {
-                            Toast.makeText(getContext(), "New password saved!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.pw_saved), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
                         }
                     });

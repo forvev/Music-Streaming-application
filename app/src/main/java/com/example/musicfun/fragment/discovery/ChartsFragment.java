@@ -37,9 +37,7 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChartsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays a chart based on the listening history of every user
  */
 public class ChartsFragment extends Fragment {
 
@@ -72,8 +70,8 @@ public class ChartsFragment extends Fragment {
         }
 
         @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
         }
     };
 
@@ -167,7 +165,7 @@ public class ChartsFragment extends Fragment {
                     discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
                 }
                 else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
-                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         });

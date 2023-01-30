@@ -20,12 +20,19 @@ import com.example.musicfun.fragment.login.SettingFragment;
 
 import java.util.Objects;
 
-
+/**
+ * SettingActivity directly starts SettingFragment and provides onBackPressed function.
+ */
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private Toolbar toolbar;
     private boolean isBound;
     private MutableLiveData<MusicbannerService> service;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,5 +103,7 @@ public class SettingActivity extends AppCompatActivity {
             isBound = false;
         }
     }
+
+
 
 }

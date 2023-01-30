@@ -5,7 +5,6 @@ public class Message {
     String sender;
     String date;
     String time;
-    long createdAt;
 
     public Message(String message, String date, String time, String sender){
         this.message = message;

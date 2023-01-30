@@ -11,6 +11,9 @@ import com.example.musicfun.R;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for setting options
+ */
 public class SettingAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> dataSet;

@@ -3,6 +3,8 @@ package com.example.musicfun.fragment.login;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,11 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.LocaleHelper;
 import com.example.musicfun.activity.MusicbannerService;
 import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.activity.SettingActivity;
@@ -32,6 +36,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Once we click on the face icon in the right top corner the fragment of settings will be displayed
+ *
+ */
 public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;
@@ -53,7 +61,8 @@ public class SettingFragment extends Fragment {
         if(sp.getInt("logged", 999) != 1) {
             System.out.println("The user has not logged in, but can see the setting page!");
         }
-        tv.setText("Welcome " + sp.getString("name", "") + "!");
+        String temp = getString(R.string.welcome) + " " + sp.getString("name", "") + "!";
+        tv.setText(temp);
         return root;
     }
 
@@ -64,10 +73,12 @@ public class SettingFragment extends Fragment {
         options = new ArrayList<>();
         String option1 = getString(R.string.reset_pw);
         String option2 = getString(R.string.change_genre);
-        String option3 = getString(R.string.action_logout);
+        String option3 = getString(R.string.switch_language);
+        String option4 = getString(R.string.action_logout);
         options.add(option1);
         options.add(option2);
         options.add(option3);
+        options.add(option4);
 
         listView.setAdapter(new SettingAdapter(options, getContext()));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,10 +92,40 @@ public class SettingFragment extends Fragment {
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new GenreFragment().newInstance(true)).commit();
                         break;
                     case 2:
+                        final String[] listItems = new String[]{getString(R.string.english), getString(R.string.chinese)};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        final int[] checkedItem = {-1};
+                        builder.setTitle("Buy Now")
+                                //.setMessage("You can buy our products without registration too. Enjoy the shopping")
+                                .setSingleChoiceItems(listItems, 0, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkedItem[0] = which;
+                                        if(listItems[which].equals("English")){
+                                            LocaleHelper.setLocale(getContext(), "en");
+                                            startActivity(new Intent(getContext(), SettingActivity.class));
+                                            getActivity().finish();
+                                        }
+                                        else if (listItems[which].equals("中文")){
+                                            System.out.println("chinese selected!!!");
+                                            LocaleHelper.setLocale(getContext(), "zh");
+                                            startActivity(new Intent(getContext(), SettingActivity.class));
+                                            getActivity().finish();
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case 3:
                         logout();
                         break;
-                    default:
-                        System.out.println("no match!");
                 }
             }
         });
@@ -107,9 +148,8 @@ public class SettingFragment extends Fragment {
         int startItemIndex = player.getCurrentMediaItemIndex();
         long startPosition = Math.max(0, player.getContentPosition());
         songInfo = service.getSongInfo();
-        List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
         Gson gson = new Gson();
-        String json = gson.toJson(restOfPlaylist);
+        String json = gson.toJson(songInfo);
         viewModel.saveDataWhenLogout(startItemIndex, startPosition, json);
         sp.edit().putInt("startItemIndex", 0).apply();
         sp.edit().putLong("startPosition", 0).apply();

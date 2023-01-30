@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_push_pin_24"
             android:visibility="gone"
+            android:layout_marginEnd="7dp"
             />
 
         <TextView
@@ -38,7 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
             android:text="Playlist 1"
             android:fontFamily="@font/merriweather"
             android:textSize="20sp"

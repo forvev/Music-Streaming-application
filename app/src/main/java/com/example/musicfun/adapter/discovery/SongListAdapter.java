@@ -1,8 +1,12 @@
 package com.example.musicfun.adapter.discovery;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -17,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicfun.R;
-import com.example.musicfun.interfaces.DiscoveryItemClick;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.SonglistMenuClick;
@@ -25,13 +28,18 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 
+/**
+ * Adapter for showing songs in discovery view. It provides two functions:
+ *      add this song to default playlist,
+ *      and add this song to one of the playlist which this user owns.
+ */
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Songs> songsList;
     public PassDataInterface mOnInputListner;
-    private boolean click = false;
     private SonglistMenuClick songlistMenuClick;
+    private SharedPreferences sp;
     private PopupMenu popup;
 
 
@@ -40,8 +48,12 @@ public class SongListAdapter extends BaseAdapter {
         this.songsList = songsList;
         inflater = LayoutInflater.from(mContext);
         this.songlistMenuClick = songlistMenuClick;
+        sp = context.getSharedPreferences("login",MODE_PRIVATE);
     }
 
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     private class SongListViewHolder {
         TextView name;
         TextView artist;
@@ -82,27 +94,36 @@ public class SongListAdapter extends BaseAdapter {
         else{
             holder = (SongListViewHolder) view.getTag();
         }
-        holder.imageView.setOnClickListener(view1 -> {
-            popup = new PopupMenu(mContext, view1);
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.discovery_menu, popup.getMenu());
-            popup.show();
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+//      hide "add to playlist" icon, if user did not log in
+        if(sp.getInt("logged", 999) != 1){
+            holder.imageView.setVisibility(View.INVISIBLE);
+        }
+        else{
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.add_to_playlist:
-                            songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
-                            break;
-//                        case R.id.share_song:
-//                            Toast.makeText(mContext, "NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
-//                            songlistMenuClick.share(i);
-//                            break;
-                    }
-                    return false;
+                public void onClick(View view) {
+                    popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.discovery_menu, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.add_to_default:
+                                    songlistMenuClick.addToDefault(songsList.get(i).getSongId());
+                                    break;
+                                case R.id.add_to_playlist:
+                                    songlistMenuClick.addToPlaylist(songsList.get(i).getSongId());
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
                 }
             });
-        });
+        }
         holder.clickField.setOnClickListener(click -> {
             playSong(i);
         });
@@ -113,12 +134,7 @@ public class SongListAdapter extends BaseAdapter {
     }
 
     private void playSong(int i) {
-        Songs s = songsList.get(i);
-        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL, false);
-    }
-
-    private void shareSong() {
-        Toast.makeText(inflater.getContext(), "Clicked: Share", Toast.LENGTH_SHORT).show();
+        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL);
     }
 
 }

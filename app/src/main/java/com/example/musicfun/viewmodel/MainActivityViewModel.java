@@ -19,6 +19,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * View model for :
+ * 1. fetching the lyrics from the server,
+ * 2. Sending listening history
+ */
 public class MainActivityViewModel extends AndroidViewModel {
 
     Application application;

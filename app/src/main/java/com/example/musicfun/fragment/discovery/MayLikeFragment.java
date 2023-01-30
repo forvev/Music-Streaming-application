@@ -37,9 +37,8 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MayLikeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays list of songs that you may like. The list is based on your listening history and will
+ * be updated all the time
  */
 public class MayLikeFragment extends Fragment {
     SharedPreferences sp;
@@ -72,8 +71,8 @@ public class MayLikeFragment extends Fragment {
         }
 
         @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
         }
     };
 
@@ -168,7 +167,7 @@ public class MayLikeFragment extends Fragment {
                     discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
                 }
                 else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
-                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         });

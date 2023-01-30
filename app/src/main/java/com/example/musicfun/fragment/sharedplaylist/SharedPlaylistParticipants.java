@@ -3,16 +3,11 @@ package com.example.musicfun.fragment.sharedplaylist;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,21 +16,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.adapter.friends.ParticipantsSharedListAdapter;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
-import com.example.musicfun.ui.friends.FriendsViewModel;
-import com.example.musicfun.ui.friends.List_of_friends_fragment;
-import com.example.musicfun.ui.friends.List_of_friends_fragmentArgs;
-import com.example.musicfun.ui.friends.List_of_friends_fragmentDirections;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 import java.util.ArrayList;
 
+/**implementation of the list of participants
+ * In other words this fragment will display a list of friends with which we share our playlist
+ *
+ */
 public class SharedPlaylistParticipants extends Fragment {
 
     FriendsViewModel friendsViewModel;
@@ -77,21 +70,18 @@ public class SharedPlaylistParticipants extends Fragment {
 
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int position) {
+        public void deleteFriend(int position, String name) {
         }
 
         @Override
         public void deleteFriend(int position, String user_id, String playlist_id) {
             playlist_id = passed_playlist_id;
-
-            //friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
-            //friendsViewModel.add_user_to_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id);
             friendsViewModel.delete_user_from_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id, position);
             Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
 
         }
 
@@ -102,6 +92,11 @@ public class SharedPlaylistParticipants extends Fragment {
 
         @Override
         public void startChat(String name) {
+
+        }
+
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
 
         }
 
@@ -134,7 +129,6 @@ public class SharedPlaylistParticipants extends Fragment {
         passed_playlist_id = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getSelectedSharedId3();
         Log.i("passed",passed_playlist_id);
         friendsViewModel.fetch_shared_friends("playlist/getUsersFromSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
-        //friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
 
         //user/allFriendsForSharedPlaylist
         //playlist/getUsersFromSharedPlaylist
@@ -148,11 +142,6 @@ public class SharedPlaylistParticipants extends Fragment {
             }
         });
 
-//        ImageView imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
-//
-//        imageView_delete.setOnClickListener(click ->{
-//            Log.i("hello","hehe");
-//        });
     }
 
 }

@@ -1,7 +1,10 @@
 package com.example.musicfun.fragment.sharedplaylist;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -46,6 +49,10 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+The implementation of shared playlist is included here. Once the fragment is opened the list of shared playlist will be displayed.
+
+ **/
 public class SharedPlaylistFragment extends Fragment {
 
     private FragmentMymusicBinding binding;
@@ -53,6 +60,7 @@ public class SharedPlaylistFragment extends Fragment {
     private ListView listView;
     private SharedPlaylistAdapter playlistAdapter;
     private ImageView add_playlist;
+    private String username;
 
 
     private PlaylistMenuClick playlistMenuClick = new PlaylistMenuClick(){
@@ -61,7 +69,6 @@ public class SharedPlaylistFragment extends Fragment {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
             viewModel.renamePlaylist(playlistName, position);
-            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -85,10 +92,10 @@ public class SharedPlaylistFragment extends Fragment {
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
-        public void transferFragment(String selected_shared_id) {
+        public void transferFragment(String selected_shared_id, boolean isOwner) {
             //selected_shared_id -> we pass by the id selected playlist to another fragment
             ((MainActivity)getActivity()).setPlaylistId(selected_shared_id);
-            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id);
+            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id, isOwner);
             Navigation.findNavController(getView()).navigate(action);
         }
     };
@@ -106,6 +113,8 @@ public class SharedPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences sp = getActivity().getSharedPreferences("login", MODE_PRIVATE);
+        username = sp.getString("name", "");
         add_playlist = binding.addPlaylist;
         add_playlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,12 +127,29 @@ public class SharedPlaylistFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Playlist> playlists) {
                 if(!playlists.isEmpty()){
+                    playlists = sortPlaylist(playlists);
                     listView = binding.playlist;
                     playlistAdapter = new SharedPlaylistAdapter(getContext(), playlists, playlistMenuClick, fragmentTransfer);
                     listView.setAdapter(playlistAdapter);
                 }
             }
         });
+    }
+
+//    Sort the playlists so that the ones this user owns are shown first.
+    private ArrayList<Playlist> sortPlaylist (ArrayList<Playlist> playlists){
+        ArrayList<Playlist> isOwner = new ArrayList<>();
+        ArrayList<Playlist> rest = new ArrayList<>();
+        for (Playlist p : playlists){
+            if (p.getOwner().equals(username)){
+                isOwner.add(p);
+            }
+            else{
+                rest.add(p);
+            }
+        }
+        isOwner.addAll(rest);
+        return isOwner;
     }
 
     private void createPlaylist(){
@@ -146,10 +172,9 @@ public class SharedPlaylistFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
                     viewModel.createSharedPlaylist(playlistName);
                     dialog.dismiss();
 

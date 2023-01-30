@@ -10,6 +10,10 @@ import com.example.musicfun.repository.Database;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This class was intended for all extra database accesses, as have to do with the friend system.
+ * However, these accesses were then implemented in the database class, so that this has no more use.
+ */
 public class Friends_DBAccess {
 
     Context context;
@@ -21,15 +25,12 @@ public class Friends_DBAccess {
     }
 
     public void sendMsgWithBody(String url, String user){
-        //db.test();
-        //Log.d("onSuccess", url + " " + user);
         db.addMsg(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
 
                 try{
                     String answer = result.getString("message");
-                    Log.d("onSuccess", answer);
                 }catch (JSONException e){
                     e.printStackTrace();
                 }

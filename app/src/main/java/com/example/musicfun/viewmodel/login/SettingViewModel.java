@@ -9,6 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import com.example.musicfun.repository.LoginRepository;
 
+/**
+ * This class serves as an intermediate station for setting related database accesses.
+ * It is used in the SettingFragment and is responsible for the status storage on the server in case of a logout.
+ */
 public class SettingViewModel extends AndroidViewModel {
 
     Application application;

@@ -1,6 +1,9 @@
 package com.example.musicfun.fragment.mymusic;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -38,6 +41,10 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * Once we click on the specific song that we want to add a song to the playlist this fragment will be displayed.
+ * We can use already created playlist or create a new one
+ */
 public class ChoosePlaylistFragment extends Fragment {
 
     private FragmentChoosePlaylistBinding binding;
@@ -48,6 +55,8 @@ public class ChoosePlaylistFragment extends Fragment {
     private Button save;
     private Button cancel;
     private int selected_pos;
+    private boolean hasChosen;
+    private String username;
 
     @Nullable
     @Override
@@ -63,6 +72,9 @@ public class ChoosePlaylistFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SharedPreferences sp = getActivity().getSharedPreferences("login", MODE_PRIVATE);
+        username = sp.getString("name", "");
+
         create_new_playlist = binding.createNewPlaylist;
         create_new_playlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,17 +88,25 @@ public class ChoosePlaylistFragment extends Fragment {
             public void onChanged(ArrayList<Playlist> playlists) {
                 if(!playlists.isEmpty()){
                     listView = binding.chooseOnePlaylist;
+                    playlists = sortPlaylist(playlists);
                     adapter = new ChoosePlaylistAdapter(getContext(), playlists, selectPlaylistInterface);
                     listView.setAdapter(adapter);
                     save = binding.savePlaylist;
                     cancel = binding.cancelSelection;
+                    ArrayList<Playlist> finalPlaylists = playlists;
                     save.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 //                            Limitation: Only one item can be transfered back to the previous fragment
-                            NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
-                            navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", playlists.get(selected_pos).getPlaylist_id());
-                            navController.popBackStack();
+                            if(hasChosen){
+                                Toast.makeText(getContext(), getString(R.string.added_to) + " " + finalPlaylists.get(selected_pos).getPlaylist_name(), Toast.LENGTH_SHORT).show();
+                                NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
+                                navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", finalPlaylists.get(selected_pos).getPlaylist_id());
+                                navController.popBackStack();
+                            }
+                            else{
+                                Toast.makeText(getContext(), "Please choose a playlist!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +122,35 @@ public class ChoosePlaylistFragment extends Fragment {
 
     }
 
+//    Sort the playlist so that the first item is Default playlist, then all personal playlists, then shared playlists which this owner owns, then the rest of the shared playlists.
+    private ArrayList<Playlist> sortPlaylist(ArrayList<Playlist> playlists){
+        ArrayList<Playlist> def = new ArrayList<>();
+        ArrayList<Playlist> personal = new ArrayList<>();
+        ArrayList<Playlist> owner = new ArrayList<>();
+        ArrayList<Playlist> rest = new ArrayList<>();
+        for (Playlist p : playlists){
+            if (p.isDefault()){
+                def.add(p);
+            }
+            else if (!p.isShared()){
+                personal.add(p);
+            }
+            else if (p.isShared() && p.getOwner().equals(username)){
+                owner.add(p);
+            }
+            else{
+                rest.add(p);
+            }
+        }
+        def.addAll(personal);
+        def.addAll(owner);
+        def.addAll(rest);
+        return def;
+    }
+
     SelectPlaylistInterface selectPlaylistInterface = new SelectPlaylistInterface() {
         public void setSelectedPlaylistIndex(int pos){
+            hasChosen = true;
             selected_pos = pos;
         }
     };
@@ -128,10 +175,9 @@ public class ChoosePlaylistFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.playlist_need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
                     viewModel.createPlaylists(playlistName);
                     dialog.dismiss();
 

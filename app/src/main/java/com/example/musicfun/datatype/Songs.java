@@ -11,11 +11,6 @@ public class Songs {
         this.id = id;
     }
 
-    public Songs(String songName){
-        this.songName = songName;
-        this.artist = "I'm the singer";
-    }
-
     public String getSongName() {
         return this.songName;
     }

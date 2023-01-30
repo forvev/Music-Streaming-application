@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.Playlist;
+import com.example.musicfun.R;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.PlaylistRepository;
 
@@ -20,8 +21,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
+/**
+ * Connection to the server to get:
+ * 1. All of the playlists,
+ * 2. All of the owned playlists,
+ * 3. All of the shared playlists,
+ * 4. the default playlist,
+ *
+ * Requests to create normal and shared playlist
+ * Requests to delete, rename, set as default, search by name and to share playlist
+ */
 public class PlaylistViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Playlist>> m_playlist;
@@ -223,7 +233,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-                Toast.makeText(application, "Sorry, only the playlist owner can rename it", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_rename), Toast.LENGTH_SHORT).show();
             }
         }, playlist.get(position).getPlaylist_id(), name, token);
     }
@@ -263,7 +273,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             }
             @Override
             public void onError(VolleyError error) {
-                Toast.makeText(application, "Sorry, only the playlist owner can delete it", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_delete), Toast.LENGTH_SHORT).show();
             }
         }, id, token);
     }

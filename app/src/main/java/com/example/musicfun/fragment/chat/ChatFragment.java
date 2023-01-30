@@ -2,10 +2,8 @@ package com.example.musicfun.fragment.chat;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MessageListActivity;
-import com.example.musicfun.adapter.MessageListAdapter;
+import com.example.musicfun.adapter.SharedPlaylist.MessageListAdapter;
 import com.example.musicfun.databinding.FragmentChatBinding;
 import com.example.musicfun.datatype.Message;
 import com.example.musicfun.datatype.SocketIOClient;
@@ -35,23 +33,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
-import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+/**
+ * Displays a chat view where you can communicate with the chosen friend
+ */
 public class ChatFragment extends Fragment {
 
-    String[] badWords = new String[]{"arse", "arsehead","arsehole","ass","asshole","bastard","bitch",
-    "bloody","bollocks","brotherfucker","bugger","bullshit","child-fucker","Christ on a bike", "Christ on a cracker",
-            "cock", "cocksucker", "crap", "cunt","damn", "damn it", "dick","dickhead","dyke",
-    "fatherfucker", "frigger", "fuck","goddamn", "godsdamn", "hell", "horseshit", "shit",
-    "kike", "motherfucker","nigga", "nigra","piss" , "prick" , "pussy","shite","sisterfucker",
-    "slut","son of a bitch", "son of a whore", "spastic","turd", "twat", "wanker"};
 
-    //private ChatViewBinding binding;
+    ArrayList<String> BadWordsList = new ArrayList<>();
+
     private FragmentChatBinding binding;
     private SharedPreferences sp;
     private String chatPartnerName;
@@ -85,6 +78,7 @@ public class ChatFragment extends Fragment {
 
 
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        chatViewModel.getBadWords(sp.getString("token", ""));
         return root;
     }
 
@@ -94,6 +88,16 @@ public class ChatFragment extends Fragment {
 
         int state = sp.getInt("logged", 999);
         String token = sp.getString("token", "");
+
+        chatViewModel.getBadWordsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                if(!strings.isEmpty()){
+                    BadWordsList = strings;
+                }
+
+            }
+        });
 
 
         toolbar = binding.toolbarGchannel;
@@ -120,7 +124,6 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Log.d("myTest", "closeEdittext");
                 closeKeyboard(chatView);
                 return false;
             }
@@ -146,7 +149,7 @@ public class ChatFragment extends Fragment {
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
-                //Log.d("SocketStuff", String.valueOf(mess));
+
                 socketIOClient.mSocket.emit("sendMsg",  mess);
                 editText.setText("");
             }
@@ -194,10 +197,9 @@ public class ChatFragment extends Fragment {
     private String testThisString(String toTest){
         String toTestMsg = toTest.toLowerCase();
         String[] parts = toTestMsg.split(" ");
-        List<String> badWordsList = Arrays.asList(badWords);
         for(int i = 0; i < parts.length; i++){
-            if(badWordsList.contains(parts[i])){
-                return  "Message censored - Bad word used";
+            if(BadWordsList.contains(parts[i])){
+                return  getString(R.string.bad_words);
             }
         }
         return toTest;

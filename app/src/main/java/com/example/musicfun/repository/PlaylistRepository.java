@@ -13,6 +13,10 @@ import com.example.musicfun.interfaces.ServerCallBack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This class handles most server accesses related to playlists.
+ * The exceptions are add_friends_to_playlist and all_friends_to_shared_playlist in the database class.
+ */
 public class PlaylistRepository {
     private String getDefaultPlaylist = "https://100.110.104.112:3000/user/getDefaultPlaylist?auth_token=";
     private String getAllPlaylists = "https://100.110.104.112:3000/playlist/getUsersPlaylists?auth_token=";

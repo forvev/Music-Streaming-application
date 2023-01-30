@@ -26,15 +26,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentLoginBinding;
 import com.example.musicfun.R;
+import com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment;
 import com.example.musicfun.viewmodel.login.RegisterViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 
+/**
+ * Displays a fragment where you can log into your already existed account
+ */
 public class LoginFragment extends Fragment {
 
     private RegisterViewModel registerViewModel;
@@ -42,6 +48,7 @@ public class LoginFragment extends Fragment {
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginBtn;
+    private TextView noAccount;
     private TextInputLayout reset_current;
     private TextInputLayout reset_new;
     private ProgressBar loadingProgressBar;
@@ -70,18 +77,34 @@ public class LoginFragment extends Fragment {
         passwordEditText = binding.loginPassword;
         loginBtn = binding.login;
         loadingProgressBar = binding.loading;
+        noAccount = binding.noAccount;
+        noAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backToRegister();
+            }
+        });
         registerViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean loginResult) {
                 loadingProgressBar.setVisibility(View.GONE);
                 if (!loginResult) {
-                    Toast.makeText(getContext(), "Wrong password or username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.invalid_login), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    sp.edit().putInt("logged",1).apply();
-                    sp.edit().putString("name",usernameEditText.getText().toString()).apply();
-                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(myIntent);
+//                    if login successful, fetch saved data from database
+                    registerViewModel.getDataWhenLogin();
+                    registerViewModel.getFetchData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            if(aBoolean){
+                                sp.edit().putInt("logged",1).apply();
+                                sp.edit().putString("name",usernameEditText.getText().toString()).apply();
+                                Intent myIntent = new Intent(getActivity(), MainActivity.class);
+                                getActivity().startActivity(myIntent);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -124,7 +147,6 @@ public class LoginFragment extends Fragment {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 try {
                     registerViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                    registerViewModel.getDataWhenLogin();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -138,5 +160,10 @@ public class LoginFragment extends Fragment {
             InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void backToRegister(){
+        NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+        navController.popBackStack();
     }
 }

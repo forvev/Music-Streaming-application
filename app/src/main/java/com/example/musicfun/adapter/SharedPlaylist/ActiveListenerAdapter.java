@@ -1,7 +1,6 @@
-package com.example.musicfun.adapter;
+package com.example.musicfun.adapter.SharedPlaylist;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.musicfun.R;
-import com.example.musicfun.datatype.User;
-import com.example.musicfun.interfaces.FriendFragmentInterface;
-import com.example.musicfun.ui.friends.Friends_DBAccess;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for listing users who are now active in a room
+ */
 public class ActiveListenerAdapter extends BaseAdapter {
 
     Context mContext;
@@ -46,8 +44,8 @@ public class ActiveListenerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = inflater.inflate(R.layout.fragment_active_listener_item, null);
-        TextView username = (TextView) view.findViewById(R.id.active_listeners_item_username);
+        view = inflater.inflate(R.layout.row_username, null);
+        TextView username = (TextView) view.findViewById(R.id.user_name);
         username.setText(userList.get(i));
         return view;
     }

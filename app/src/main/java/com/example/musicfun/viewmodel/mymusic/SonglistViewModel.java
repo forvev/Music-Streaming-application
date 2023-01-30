@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.R;
 import com.example.musicfun.interfaces.ServerCallBack;
 import com.example.musicfun.repository.PlaylistRepository;
 
@@ -20,6 +21,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Set of request to:
+ * 1. Get songs from the specific playlist,
+ * 2. Delete/add songs from the playlist,
+ * 3. Search songs
+ *
+ */
 public class SonglistViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Songs>> m_songlist;
@@ -43,8 +51,6 @@ public class SonglistViewModel extends AndroidViewModel {
         m_searchResult.setValue(searchResult);
         sp = getApplication().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
         token = sp.getString("token", "");
-        //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYzOTc5NGY1ZGQ2OTAyMGIwMTVlNDBhNSJ9LCJpYXQiOjE2NzA4Nzk4NDh9.0jHIAosQ7HrSA9LZmv1VfD3OWR5gfUfc4Fsa3QzVv3A";
-
     }
 
     public MutableLiveData<ArrayList<Songs>> getM_songlist(){
@@ -102,7 +108,7 @@ public class SonglistViewModel extends AndroidViewModel {
             @Override
             public void onError(VolleyError error) {
                 if (error.networkResponse.statusCode == 422){
-                    Toast.makeText(application, "This song was already added to your playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application, application.getApplicationContext().getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         }, playlist_position, song_id, token);

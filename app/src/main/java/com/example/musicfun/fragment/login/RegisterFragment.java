@@ -29,6 +29,9 @@ import com.example.musicfun.viewmodel.login.RegisterViewModel;
 
 import org.json.JSONException;
 
+/**
+ * Displays a fragment where you can register your account
+ */
 public class RegisterFragment extends Fragment {
 
     private RegisterViewModel registerViewModel;
@@ -54,6 +57,7 @@ public class RegisterFragment extends Fragment {
         usernameEditText = binding.registerUsername;
         passwordEditText = binding.registerPassword;
         registerBtn = binding.register;
+        registerBtn.setEnabled(false);
         loadingProgressBar = binding.loading;
 
         registerViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
@@ -77,7 +81,7 @@ public class RegisterFragment extends Fragment {
             public void onChanged(@Nullable Boolean registerResult) {
                 loadingProgressBar.setVisibility(View.GONE);
                 if (!registerResult) {
-                    Toast.makeText(getContext(), "This username already exists.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.duplicate_username), Toast.LENGTH_SHORT).show();
                 }
                 else{
 

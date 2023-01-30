@@ -22,6 +22,11 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 
+/**
+ * Adapter for showing all songs in a personal or shared playlist.
+ *      If it is a personal playlist or a shared playlist but user is the owner, he can remove this song from this playlist or add it to another playlist which he owns.
+ *      If it is a shared playlist but from a friend of user, he can only add this song to another playlist which he owns.
+ */
 public class SongListAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
@@ -30,12 +35,14 @@ public class SongListAdapter extends BaseAdapter {
     private PopupMenu popup;
     SonglistMenuClick songlistMenuClick;
     public PassDataInterface mOnInputListner;
+    private boolean isOwner;
 
-    public SongListAdapter(Context context, List<Songs> songList, SonglistMenuClick songlistMenuClick) {
+    public SongListAdapter(Context context, List<Songs> songList, SonglistMenuClick songlistMenuClick, boolean isOwner) {
         mContext = context;
         this.songList = songList;
         inflater = LayoutInflater.from(mContext);
         this.songlistMenuClick = songlistMenuClick;
+        this.isOwner = isOwner;
     }
 
     public SongListAdapter(Context context, List<Songs> songList){
@@ -43,7 +50,9 @@ public class SongListAdapter extends BaseAdapter {
         this.songList = songList;
         inflater = LayoutInflater.from(mContext);
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SonglistViewHolder {
         TextView name;
         TextView artist;
@@ -81,33 +90,47 @@ public class SongListAdapter extends BaseAdapter {
                         popup = new PopupMenu(mContext, view);
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.songlist_option_menu, popup.getMenu());
-                        popup.show();
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.remove_from_playlist:
-                                        AlertDialog.Builder adb=new AlertDialog.Builder(mContext);
-                                        adb.setTitle(R.string.delete_playlist);
-                                        adb.setMessage(mContext.getString(R.string.sure_delete_song));
-                                        final int positionToRemove = position;
-                                        adb.setNegativeButton("Cancel", null);
-                                        adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                songlistMenuClick.removeFromPlaylist(position);
-                                            }});
-                                        adb.show();
-                                        break;
-                                    case R.id.add_to_playlist:
-                                        songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
-                                        break;
-//                                    case R.id.share_song:
-//                                        songlistMenuClick.share(position);
-//                                        break;
+                        if (isOwner){
+                            popup.getMenu().findItem(R.id.remove_from_playlist).setVisible(true);
+                            popup.show();
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    switch (item.getItemId()) {
+                                        case R.id.remove_from_playlist:
+                                            AlertDialog.Builder adb=new AlertDialog.Builder(mContext);
+                                            adb.setTitle(R.string.delete_playlist);
+                                            adb.setMessage(mContext.getString(R.string.sure_delete_song));
+                                            adb.setNegativeButton(mContext.getString(R.string.cancel), null);
+                                            adb.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    songlistMenuClick.removeFromPlaylist(position);
+                                                }});
+                                            adb.show();
+                                            break;
+                                        case R.id.add_to_playlist:
+                                            songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
+                                            break;
+                                    }
+                                    return true;
                                 }
-                                return false;
-                            }
-                        });
+                            });
+                        }
+                        else{
+                            popup.getMenu().findItem(R.id.remove_from_playlist).setVisible(false);
+                            popup.show();
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    switch (item.getItemId()) {
+                                        case R.id.add_to_playlist:
+                                            songlistMenuClick.addToPlaylist(songList.get(position).getSongId());
+                                            break;
+                                    }
+                                    return true;
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -124,7 +147,7 @@ public class SongListAdapter extends BaseAdapter {
             holder.rl_clickable_song.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL, false);
+                    mOnInputListner.playSong(songList.subList(position, songList.size()), Player.REPEAT_MODE_ALL);
                 }
             });
         }

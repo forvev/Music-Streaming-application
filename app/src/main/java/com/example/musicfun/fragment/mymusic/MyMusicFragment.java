@@ -41,6 +41,9 @@ import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a list of your playlists. Features like rename, set as default playlist, remove, share are included here.
+ */
 public class MyMusicFragment extends Fragment {
     private FragmentMymusicBinding binding;
     private PlaylistViewModel viewModel;
@@ -54,7 +57,6 @@ public class MyMusicFragment extends Fragment {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
             viewModel.renamePlaylist(playlistName, position);
-            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -62,7 +64,7 @@ public class MyMusicFragment extends Fragment {
             // send playlist_id to server as default playlist
             if(!isDefault){
                 if(position == 0){
-                    Toast.makeText(getContext(), "You need to have a default playlist!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.at_least_one_default), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     viewModel.setAsDefault(0);
@@ -82,14 +84,14 @@ public class MyMusicFragment extends Fragment {
         @Override
         public void share(List<Playlist> my_playlists, int position) {
             // send this playlist to friends
-            Toast.makeText(getContext(), "This playlist is now shared!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), my_playlists.get(position).getPlaylist_name() + " " + getString(R.string.X_is_shared), Toast.LENGTH_SHORT).show();
             viewModel.setAsShare(position);
         }
     };
 
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
-        public void transferFragment(String selected_playlist_id) {
+        public void transferFragment(String selected_playlist_id, boolean isOwner) {
             ((MainActivity)getActivity()).setPlaylistId(selected_playlist_id);
             NavDirections action = MyMusicFragmentDirections.actionMyMusicToMyPlaylistFragment(selected_playlist_id);
             Navigation.findNavController(getView()).navigate(action);
@@ -147,10 +149,9 @@ public class MyMusicFragment extends Fragment {
                 String playlistName = nameEt.getText().toString();
                 // send the input playlist name to the server
                 if(TextUtils.isEmpty(playlistName)) {
-                    nameEt.setError("Please give your playlist a name!");
+                    nameEt.setError(getString(R.string.need_name));
                 }
                 else{
-                    Toast.makeText(getContext(), "playlist saved", Toast.LENGTH_SHORT).show();
                     viewModel.createPlaylists(playlistName);
                     dialog.dismiss();
 

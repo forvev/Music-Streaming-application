@@ -2,13 +2,17 @@ package com.example.musicfun.adapter.friends;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +33,7 @@ public class FriendsSharedListAdapter extends BaseAdapter {
     Friends_DBAccess dbAccess;
     SharedPreferences sp;
     FriendFragmentInterface fi;
+    private ArrayList<String> selected_users_list;
 
 
     public FriendsSharedListAdapter(Context context, List<User> userList, FriendFragmentInterface fi){
@@ -57,19 +62,59 @@ public class FriendsSharedListAdapter extends BaseAdapter {
         return i;
     }
 
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SharedPlaylistParticipantsHolder {
-        ListView listView;
-        ImageView imageView_delete;
+        private TextView user_name;
+        private RadioButton btn_selected;
+        private Button button_arrow;
+
+
     }
     //TODO: move this class to FriendslistAdapter. The problem is with the view below,
     //because I need to invoke different one.
     //Adapters call the getView() method which returns a view for each item within the adapter view.
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        view = inflater.inflate(R.layout.shared_playlist_friends_custom_v, null);
-        TextView username = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username);
+        SharedPlaylistParticipantsHolder holder;
+        if (view == null){
+            holder = new SharedPlaylistParticipantsHolder();
+            view = inflater.inflate(R.layout.shared_playlist_friends_custom_v, null);
+            holder.user_name = (TextView) view.findViewById(R.id.friends_shared_playlist_custom_view_username);
+            holder.btn_selected = (RadioButton) view.findViewById(R.id.btn_select_shared_friends);
+            holder.button_arrow = (Button) view.findViewById(R.id.buttonSharedFriends);
 
-        username.setText(userList.get(position).getUserName());
+            holder.user_name.setText(userList.get(position).getUserName());
+            //view.setTag(holder);
+        }else{
+            holder = (SharedPlaylistParticipantsHolder) view.getTag();
+        }
+
+        selected_users_list = new ArrayList<>();
+        holder.btn_selected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selected_users_list.contains(userList.get(position).getUser_id())){
+                    selected_users_list.remove(userList.get(position).getUser_id());
+                    holder.btn_selected.setChecked(false);
+                    //remove selected user to the list
+                    //selected_users_list.remove(users_list.get(position));
+                    //if there are no selected items we can hide the button
+                    //if (selected_users_list.isEmpty())  holder.button_arrow.setVisibility(View.INVISIBLE);
+                    fi.add_friends(selected_users_list);
+                }
+                else{
+                    holder.btn_selected.setChecked(true);
+                    //add selected user to the list
+                    selected_users_list.add(userList.get(position).getUser_id());
+                    //Log.i("User_name",String.valueOf(users_list.get(position).getUser_id()));
+                    //selectedItems.add(position);
+                    //holder.button_arrow.setVisibility(View.VISIBLE);
+                    fi.add_friends(selected_users_list);
+                }
+            }
+        });
         return view;
     }
 }

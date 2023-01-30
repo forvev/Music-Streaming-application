@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.friends;
+package com.example.musicfun.viewmodel;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -20,6 +20,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * This ViewModel class is used for data handling of all classes that make friend related server accesses.
+ * This class represents an intermediate station before the actual database access in the database class.
+ */
 public class FriendsViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<User>> m_userNames = new MutableLiveData<>();
@@ -52,7 +56,8 @@ public class FriendsViewModel extends AndroidViewModel {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for (int i = 0; i < userNames1.length(); i++) {
                         //TODO: ask server side about the names
-                        User user = new User(userNames1.getJSONObject(i).getString("username"), userNames1.getJSONObject(i).getString("_id"));
+                        JSONObject userObject = userNames1.getJSONObject(i);
+                        User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
                         userArrayList.add(user);
                     }
                     m_userNames.setValue(userArrayList);
@@ -63,6 +68,7 @@ public class FriendsViewModel extends AndroidViewModel {
 
             @Override
             public void onError(VolleyError error) {
+
             }
         }, "user/allFriends?auth_token=" + token);
     }
@@ -74,7 +80,6 @@ public class FriendsViewModel extends AndroidViewModel {
             public void onSuccess(JSONObject result) {
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("Users");
-                    //Log.d("onSucces", userNames1.getString(0));
                     for (int i = 0; i < userNames1.length(); i++) {
                         //TODO: ask server side about the names
                         User user = new User(userNames1.getString(i));
@@ -117,7 +122,8 @@ public class FriendsViewModel extends AndroidViewModel {
         }, name, token);
     }
 
-    public void sendMsgWithBodyDelete(String url, int i) {
+    public void sendMsgWithBodyDelete(String url, int i, String name) {
+        String delete = name;
         userArrayList.clear();
         db.sendMsg(new ServerCallBack() {
             @Override
@@ -125,27 +131,38 @@ public class FriendsViewModel extends AndroidViewModel {
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for (int i = 0; i < userNames1.length(); i++) {
-                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        JSONObject userObject = userNames1.getJSONObject(i);
+                        User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
                         userArrayList.add(user);
                     }
-                    String toDelete = userArrayList.get(i).getUserName();
-                    db.addMsg(new ServerCallBack() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            userArrayList.remove(i);
+                    if(userArrayList.size() > i){
+                        String toDelete = userArrayList.get(i).getUserName();
+                        if(toDelete.equals(delete)){
+                            db.addMsg(new ServerCallBack() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    //if needed, because when clicking to fast on same delete icon, IoB Exception would happen
+                                    if(userArrayList.size() != 0){
+                                        userArrayList.remove(i);
+                                    }
+                                    m_userNames.setValue(userArrayList);
+                                }
+
+                                @Override
+                                public void onError(VolleyError error) {
+                                }
+                            }, url, toDelete);
+                        }else{
                             m_userNames.setValue(userArrayList);
                         }
-
-                        @Override
-                        public void onError(VolleyError error) {
-                        }
-                    }, url, toDelete);
+                    }else{
+                        m_userNames.setValue(userArrayList);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onError(VolleyError error) {
             }
@@ -160,13 +177,14 @@ public class FriendsViewModel extends AndroidViewModel {
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for (int i = 0; i < userNames1.length(); i++) {
-                        User user = new User(userNames1.getJSONObject(i).getString("username"));
+                        JSONObject userObject = userNames1.getJSONObject(i);
+                        User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
                         userArrayList.add(user);
                     }
                     db.addMsg(new ServerCallBack() {
                         @Override
                         public void onSuccess(JSONObject result) {
-                            userArrayList.add(new User(userToBeAdded));
+                            userArrayList.add(new User(userToBeAdded, "", false, true));
                             m_userNames.setValue(userArrayList);
                         }
 
@@ -174,6 +192,43 @@ public class FriendsViewModel extends AndroidViewModel {
                         public void onError(VolleyError error) {
                         }
                     }, "user/addFriend?auth_token=" + token, userToBeAdded);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+            }
+        }, "user/allFriends?auth_token=" + token);
+
+    }
+
+    public void sendMsgWithBodyAccept(String userToBeAdded, int i) {
+        userArrayList.clear();
+        db.sendMsg(new ServerCallBack() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONArray userNames1 = (JSONArray) result.get("friends");
+                    for (int i = 0; i < userNames1.length(); i++) {
+                        JSONObject userObject = userNames1.getJSONObject(i);
+                        User user = new User(userObject.getString("username"), userObject.getString("_id"), userObject.getBoolean("accepted"), userObject.getBoolean("addedByMe"));
+                        userArrayList.add(user);
+                    }
+                    db.addMsg(new ServerCallBack() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            userArrayList.add(i, new User(userToBeAdded, "", true, false));
+                            userArrayList.remove(i+1);
+                            m_userNames.setValue(userArrayList);
+                        }
+
+                        @Override
+                        public void onError(VolleyError error) {
+                        }
+                    }, "user/acceptFriend?auth_token=" + token, userToBeAdded);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,7 +288,8 @@ public class FriendsViewModel extends AndroidViewModel {
                     JSONArray userNames1 = (JSONArray) result.get("friends");
                     for (int i = 0; i < userNames1.length(); i++) {
                         //TODO: ask server side about the names
-                        User user = new User(userNames1.getJSONObject(i).getString("username"), userNames1.getJSONObject(i).getString("_id"));
+                        JSONObject u = userNames1.getJSONObject(i);
+                        User user = new User(u.getString("username"), u.getString("_id"), u.getBoolean("accepted"), u.getBoolean("addedByMe"));
                         userArrayList.add(user);
 
                     }

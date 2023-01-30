@@ -20,6 +20,9 @@ import com.example.musicfun.interfaces.SelectPlaylistInterface;
 
 import java.util.List;
 
+/**
+ * Adapter for all playlists available when user wants to add a song to a playlist.
+ */
 public class ChoosePlaylistAdapter extends BaseAdapter {
 
     Context mContext;
@@ -37,7 +40,9 @@ public class ChoosePlaylistAdapter extends BaseAdapter {
         sp = context.getSharedPreferences("login", MODE_PRIVATE);
         this.selectPlaylistInterface = selectPlaylistInterface;
     }
-
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     private class ChoosePlaylistViewHolder {
         private TextView playlist_name;
         private TextView owner_name;
@@ -81,6 +86,7 @@ public class ChoosePlaylistAdapter extends BaseAdapter {
         } else {
             holder = (ChoosePlaylistViewHolder) view.getTag();
         }
+
 
 
         holder.btn_select.setOnClickListener(new View.OnClickListener() {

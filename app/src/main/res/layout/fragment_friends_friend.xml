@@ -6,13 +6,14 @@
     tools:context=".fragment.discovery.ChartsFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <!--tools:listitem="@layout/friends_custom_view"-->
 
     <ListView
         android:id="@+id/lvfriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/friends_custom_view"
         android:divider="@color/purple_200"
+        tools:listitem="@layout/friends_custom_view"
         android:dividerHeight="2dp"
         android:clickable="false"
         android:focusable="false"

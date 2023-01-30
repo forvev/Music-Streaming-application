@@ -2,38 +2,40 @@ package com.example.musicfun.ui.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.friends.FriendsListAdapter;
 import com.example.musicfun.adapter.friends.FriendsSharedListAdapter;
 import com.example.musicfun.datatype.User;
-import com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragmentDirections;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
+import com.example.musicfun.viewmodel.FriendsViewModel;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
+/**
+ * This class is there for representing the friends and their selection option (add) for a particular shared playlist.
+ */
 public class List_of_friends_fragment extends Fragment {
 
     FriendsViewModel friendsViewModel;
@@ -41,10 +43,11 @@ public class List_of_friends_fragment extends Fragment {
     SharedPreferences sp;
     FriendsSharedListAdapter adapter;
     //to check if the item in the listView was selected
-    ArrayList<User> users_list;//, selected_users_list;
+    ArrayList<User> users_list;
     String selected_shared_id_2;
+    private RadioButton btn_selected;
+    private Button my_button;
 
-    //private HashSet<String> selectedItems = new HashSet<>();
     private ArrayList<String> selected_users_list;
     private long mLastClickTime = 0;
 
@@ -81,10 +84,18 @@ public class List_of_friends_fragment extends Fragment {
 
     private FriendFragmentInterface friendFragmentInterface = new FriendFragmentInterface() {
         @Override
-        public void deleteFriend(int i) {
-            Toast.makeText(getContext(),"Deleted ",Toast.LENGTH_SHORT).show();
+        public void deleteFriend(int i, String name) {
+            AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
+            adb.setTitle(R.string.delete_friend);
+            adb.setMessage(getString(R.string.sure_delete_friend));
+            adb.setNegativeButton(getString(R.string.cancel), null);
+            adb.setPositiveButton(getString(R.string.confirm), new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i, name);
+                }
+            });
+            adb.show();
 
-            friendsViewModel.sendMsgWithBodyDelete("user/deleteFriend?auth_token=" + sp.getString("token", ""),i);
         }
 
         @Override
@@ -98,7 +109,7 @@ public class List_of_friends_fragment extends Fragment {
         //}
 
         @Override
-        public void addFriend(String name) {
+        public void addFriend(String name, int i) {
 
         }
 
@@ -111,6 +122,15 @@ public class List_of_friends_fragment extends Fragment {
         public void startChat(String name) {
 
         }
+
+        @Override
+        public void add_friends(ArrayList<String> arrayList) {
+            selected_users_list = new ArrayList<>();
+            selected_users_list = arrayList;
+            if(selected_users_list.size()==0) my_button.setVisibility(View.INVISIBLE);
+            else my_button.setVisibility(View.VISIBLE);
+        }
+
 
     };
 
@@ -140,8 +160,6 @@ public class List_of_friends_fragment extends Fragment {
 
         //Find selected playlist id for the request to db
         selected_shared_id_2 = List_of_friends_fragmentArgs.fromBundle(getArguments()).getSelectedSharedId2();
-        Log.i("play_id", selected_shared_id_2);
-        //friendsViewModel.init("user/allFriends?auth_token=" + sp.getString("token", ""));
         friendsViewModel.fetch_shared_friends("user/allFriendsForSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_shared_id_2);
         listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
         friendsViewModel.getUserNames().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
@@ -151,71 +169,32 @@ public class List_of_friends_fragment extends Fragment {
                 users_list = new ArrayList<>();
                 users_list = users;
                 listView.setAdapter(adapter);
-                //adapter.notifyDataSetChanged(); Not working like that!
 
             }
         });
 
-        Button my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
+        my_button = (Button)view.findViewById(R.id.buttonSharedFriends);
         my_button.setVisibility(View.INVISIBLE);
-        selected_users_list = new ArrayList<>();
-
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(@NonNull View view, MotionEvent motionEvent) {
-
-                // mis-clicking prevention, using threshold of 500 ms
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 100){
-                    return false;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                int position = listView.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
-                if (position == -1){
-                    return false;
-                }else{
-                    Log.i("info of users",String.valueOf(position));
-                    View item = listView.getChildAt(position);
-
-                    String user_id = users_list.get(position).getUser_id();
-
-
-                    if (selected_users_list.contains(user_id)){
-                        item.setBackgroundColor(Color.WHITE);
-                        selected_users_list.remove(user_id);
-                        //remove selected user to the list
-                        //selected_users_list.remove(users_list.get(position));
-                        //if there are no selected items we can hide the button
-                        if (selected_users_list.isEmpty())  my_button.setVisibility(View.INVISIBLE);
-                    }
-                    else{
-                        item.setBackgroundColor(Color.rgb(177, 151, 229));
-                        //add selected user to the list
-                        selected_users_list.add(user_id);
-                        //Log.i("User_name",String.valueOf(users_list.get(position).getUser_id()));
-                        //selectedItems.add(position);
-                        my_button.setVisibility(View.VISIBLE);
-                    }
-                    Log.i("actual users",String.valueOf(selected_users_list));
-                    return false;
-                }
-            }
-        });
-
 
         my_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("selected_users",String.valueOf(selected_users_list));
-
                 for(int i=0; i<selected_users_list.size(); i++){
-                    Log.i("user:",selected_users_list.get(i));
                     friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_users_list.get(i), selected_shared_id_2);
                 }
 
                 NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToFriendsSharedPlaylist4();
-                //NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToSharedPlaylistParticipants2();
                 Navigation.findNavController(getView()).navigate(action);
+            }
+        });
+
+        Button button_cancel = (Button) view.findViewById(R.id.cancel_selection_friends);
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = NavHostFragment.findNavController(List_of_friends_fragment.this);
+                navController.popBackStack();
             }
         });
 

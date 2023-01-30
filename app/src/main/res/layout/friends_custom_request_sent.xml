@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/user_and_id"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/friend_request_sent_friends_custom_view_username"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/merriweather"
+            android:textColor="@color/purple_900"
+            android:textSize="16sp"
+            tools:text="Username" />
+
+        <TextView
+            android:id="@+id/friend_request_sent_pending"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/request_pending"
+            android:layout_gravity="center"
+            android:fontFamily="@font/merriweather"
+            android:textColor="@color/purple_900"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/friend_request_sent_friends_custom_view_delete"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_outline_delete_24" />
+
+</LinearLayout>

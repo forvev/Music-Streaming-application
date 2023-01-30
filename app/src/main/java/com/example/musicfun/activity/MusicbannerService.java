@@ -2,6 +2,8 @@ package com.example.musicfun.activity;
 
 import static android.app.NotificationManager.IMPORTANCE_HIGH;
 
+import static com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -14,26 +16,39 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.LifecycleService;
+import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.MainActivityViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.PlaybackStatsListener;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.source.ShuffleOrder;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public class MusicbannerService extends Service {
+/**
+ * MusicbannerService is the only place to create new Exoplayer. Basic player listeners are implemented,
+*          including send out broadcasts when player starts the next song,
+*         and determine the seed of shuffle order, if shuffle is enabled.
+*  MusicbannerService runs above all activities. If a java class wants to have control to the player, it has to be bound to this service first.
+ */
+public class MusicbannerService extends LifecycleService {
 
     //member
     private final IBinder serviceBinder = new ServiceBinder();
@@ -44,6 +59,7 @@ public class MusicbannerService extends Service {
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
+    private ArrayList<Integer> preOrder = new ArrayList<>();
 
     private SharedPreferences sp;
 
@@ -52,9 +68,23 @@ public class MusicbannerService extends Service {
     private List<Songs> songInfo = new ArrayList<>();
     LocalBroadcastManager broadcaster;
     MainActivityViewModel viewModel;
+    SonglistViewModel songlistViewModel;
+    private boolean isSession;
+    private String current_playlist_id;
+    private int numberOfSongs;
+
+    public boolean isSession() {
+        return isSession;
+    }
+
+    public void setSession(boolean session, String current_playlist_id) {
+        this.isSession = session;
+        this.current_playlist_id = current_playlist_id;
+    }
 
     public void setSongInfo (List<Songs> songInfo){
         this.songInfo = songInfo;
+        this.numberOfSongs = songInfo.size();
     }
 
     public List<Songs> getSongInfo(){
@@ -70,6 +100,7 @@ public class MusicbannerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        super.onBind(intent);
         return serviceBinder;
     }
 
@@ -80,6 +111,7 @@ public class MusicbannerService extends Service {
         //assign variables
         player = new ExoPlayer.Builder(getApplicationContext()).build();
         viewModel = new MainActivityViewModel(getApplication());
+        songlistViewModel = new SonglistViewModel(getApplication());
         //audio focus attributes
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -90,10 +122,9 @@ public class MusicbannerService extends Service {
         player.addAnalyticsListener(new PlaybackStatsListener(false, (eventTime, playbackStats) -> {
                     // Analytics data for the session started at `eventTime` is ready
                     // Songs which are played more than 10 seconds are considered as listen history and will be sent to database
-                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null){
+                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null && sp.getInt("logged", 999) == 1){
                         viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
                     }
-                    // TODO: add listen history UI to setting activity
                 }));
 
         sp = getSharedPreferences("login",MODE_PRIVATE);
@@ -188,17 +219,10 @@ public class MusicbannerService extends Service {
     private class PlayerEventListener implements Player.Listener {
 
         @Override
-        public void onPlaybackStateChanged(@Player.State int playbackState) {
-            if (playbackState == Player.STATE_ENDED) {
-            }
-        }
-
-        @Override
         public void onPlayerError(PlaybackException error) {
             if (error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
                 player.seekToDefaultPosition();
                 player.prepare();
-            } else {
             }
         }
 
@@ -215,11 +239,62 @@ public class MusicbannerService extends Service {
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist, coverUrl);
 
-            // TODO: update lyrics file
+            if (isSession){
+                songlistViewModel.getSongsFromPlaylist(current_playlist_id);
+                songlistViewModel.getM_songlist().observe(MusicbannerService.this, new Observer<ArrayList<Songs>>() {
+                    @Override
+                    public void onChanged(ArrayList<Songs> songs) {
+                        if(!songs.isEmpty() && numberOfSongs != songs.size()){
+                            player.setShuffleModeEnabled(false);
+                            numberOfSongs = songs.size();
+                            updateSharedPlaylist(songs);
+                        }
+                    }
+                });
+            }
         }
 
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled){
+            if(shuffleModeEnabled){
+                preOrder.clear();
+                for (int i = 0; i < player.getMediaItemCount(); i++){
+                    preOrder.add(i);
+                }
+                Collections.shuffle(preOrder, new Random(player.getMediaItemCount()));
+                int [] array_order = new int[player.getMediaItemCount()];
+                for (int i = 0; i < preOrder.size(); i++){
+                    array_order[i] = preOrder.get(i);
+                }
+                ShuffleOrder.DefaultShuffleOrder order = new ShuffleOrder.DefaultShuffleOrder(array_order, 1);
+                player.setShuffleOrder(order);
+            }
+        }
     }
 
+    private void updateSharedPlaylist(List<Songs> playlist){
+        mediaItems.clear();
+        numberOfSongs = playlist.size();
+        for(int i = 0; i < playlist.size(); i++){
+            Songs s = playlist.get(i);
+            MediaMetadata m = new MediaMetadata.Builder()
+                    .setTitle((s.getSongName()))
+                    .setArtist(s.getArtist())
+                    .setDescription(s.getSongId())
+                    .build();
+            MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+                    .setMediaId(Integer.toString(i))
+                    .setMediaMetadata(m)
+                    .build();
+            mediaItems.add(mediaItem);
+        }
+        setSongInfo(playlist);
+        player.setMediaItems(mediaItems, false);
+    }
+
+    public ArrayList<Integer> getList_order (){
+        return preOrder;
+    }
 
     public void setPlaylist(List<MediaItem> mediaItems, int startItemIndex, long startPosition, boolean startAutoPlay){
         boolean haveStartPosition = startItemIndex != C.INDEX_UNSET;
@@ -256,11 +331,11 @@ public class MusicbannerService extends Service {
             startPosition = Math.max(0, player.getContentPosition());
             sp.edit().putInt("startItemIndex", startItemIndex).apply();
             sp.edit().putLong("startPosition", startPosition).apply();
-            List<Songs> restOfPlaylist = songInfo.subList(startItemIndex, songInfo.size());
             Gson gson = new Gson();
-            String json = gson.toJson(restOfPlaylist);
+            String json = gson.toJson(songInfo);
             sp.edit().putString("saved_playlist", json).apply();
         }
     }
+
 
 }

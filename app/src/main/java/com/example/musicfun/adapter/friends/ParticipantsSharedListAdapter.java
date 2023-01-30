@@ -55,6 +55,9 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
         return i;
     }
 
+    /**
+     * ViewHolder structure prevents repeated use of findViewById() for a list adapter
+     */
     public class SharedPlaylistParticipantsHolder {
         ListView listView;
         ImageView imageView_delete;

@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -20,6 +22,7 @@ import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityLyricsBinding;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.interfaces.PassDataInterface;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
@@ -27,23 +30,32 @@ import com.google.android.exoplayer2.MediaMetadata;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * LyricsActivity does preparation for playlist items and provides onBackPressed feature
+ */
 public class LyricsActivity extends AppCompatActivity implements PassDataInterface {
 
     private ActivityLyricsBinding binding;
     private MusicbannerService service;
     private boolean isBound;
+    private SonglistViewModel songlistViewModel;
+    private int numberOfSongs;
     private MutableLiveData<String> title = new MutableLiveData<>();
     private MutableLiveData<String> artist = new MutableLiveData<>();
     private MutableLiveData<Boolean> session = new MutableLiveData<>();
     private MutableLiveData<String> playlistID = new MutableLiveData<>();
-    private MutableLiveData<List<Songs>> m_playlist = new MutableLiveData<>();
-    private List<Songs> playlist = new ArrayList<>();
 
     private ExoPlayer player;
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
     private List<MediaItem> mediaItems = new ArrayList<>();
+    private SharedPreferences sp;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +64,11 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
         //creates a full screen view and hides the default action bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        sp = getSharedPreferences("login",MODE_PRIVATE);
 
         binding = ActivityLyricsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        songlistViewModel = new SonglistViewModel(getApplication());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -63,12 +77,12 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
             session.setValue(extras.getBoolean("listenTogether"));
             playlistID.setValue(extras.getString("playlistID"));
         }
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_lyrics);
         navController.navigate(R.id.lyricsFragment);
 
     }
 
+//    bind service to the activity
     ServiceConnection playerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -109,6 +123,8 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
     @Override
     public void onStop() {
+        MediaItem m = player.getCurrentMediaItem();
+        service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "http://10.0.2.2:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
         doUnbindService();
         super.onStop();
     }
@@ -129,6 +145,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private void createMediaItems(List<Songs> playlist) {
         // if the app just started, the songs in the new releases are set as default playlist
         mediaItems.clear();
+        numberOfSongs = playlist.size();
         for(int i = 0; i < playlist.size(); i++){
             Songs s = playlist.get(i);
             MediaMetadata m = new MediaMetadata.Builder()
@@ -143,18 +160,18 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
             mediaItems.add(mediaItem);
         }
         if(isBound){
+            service.setSongInfo(playlist);
             service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
         }
     }
 
     @Override
-    public void playSong(List<Songs> playlist, int repeatMode, boolean shuffle) {
+    public void playSong(List<Songs> playlist, int repeatMode) {
         startAutoPlay = true;
         startPosition = 0;
         startItemIndex = 0;
         createMediaItems(playlist);
         player.setRepeatMode(repeatMode);
-        player.setShuffleModeEnabled(shuffle);
     }
 
     @Override
@@ -165,7 +182,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
 
     @Override
     public void seek(List<Songs> playlist, long startPosition, int startItemIndex) {
-        this.startAutoPlay = true;
+        this.startAutoPlay = false;
         this.startPosition = startPosition;
         this.startItemIndex = 0;
         createMediaItems(playlist);

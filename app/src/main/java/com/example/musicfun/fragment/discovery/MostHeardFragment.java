@@ -36,9 +36,7 @@ import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MostHeardFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays a list of songs that will be based on friends' history
  */
 public class MostHeardFragment extends Fragment {
     SharedPreferences sp;
@@ -71,8 +69,8 @@ public class MostHeardFragment extends Fragment {
         }
 
         @Override
-        public void share(int position) {
-            Toast.makeText(getContext(), "share this song", Toast.LENGTH_SHORT).show();
+        public void addToDefault(String position) {
+            discoveryViewModel.getDefaultPlaylist(position);
         }
     };
     // TODO: Rename parameter arguments, choose names that match
@@ -164,7 +162,7 @@ public class MostHeardFragment extends Fragment {
                     discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
                 }
                 else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
-                    Toast.makeText(getContext(), "This song is already added to this playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
                 }
             }
         });

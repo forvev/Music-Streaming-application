@@ -27,9 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -46,14 +48,18 @@ import com.google.android.exoplayer2.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * This fragment shows us sections to choose like new releases or friends' taste
+ * Moreover the navigation graph is implemented here
+ */
 public class DiscoveryFragment extends Fragment {
 
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
     DiscoveryViewModel discoveryViewModel;
     public PassDataInterface mOnInputListner;
-    private SharedPreferences sp;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,13 +113,17 @@ public class DiscoveryFragment extends Fragment {
         // check internet connection
         boolean temp = isNetworkAvailable(getActivity().getApplication());
         if (!temp){
-            System.out.println("network not connected!!");
+            Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
             return;
         }
+        SharedPreferences sp = getActivity().getSharedPreferences("login",MODE_PRIVATE);
+        NavController controller = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
+        if(sp.getInt("logged",0) == 0){
+            binding.DiscoveryNav.getMenu().removeItem(R.id.most_heard);
+            binding.DiscoveryNav.getMenu().removeItem(R.id.may_like);
+        }
+        NavigationUI.setupWithNavController(binding.DiscoveryNav, controller);
 
-        sp = getContext().getSharedPreferences("login", MODE_PRIVATE);
-        NavController navController = NavHostFragment.findNavController(getChildFragmentManager().findFragmentById(R.id.nav_host_discovery));
-        NavigationUI.setupWithNavController(binding.DiscoveryNav, navController);
     }
 
     private Boolean isNetworkAvailable(Application application) {
