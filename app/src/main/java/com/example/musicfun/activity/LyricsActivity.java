@@ -124,7 +124,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     @Override
     public void onStop() {
         MediaItem m = player.getCurrentMediaItem();
-        service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "http://10.0.2.2:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
+        service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "https://10.0.2.2:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
         doUnbindService();
         super.onStop();
     }

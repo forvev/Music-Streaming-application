@@ -282,7 +282,7 @@ public class MusicbannerService extends LifecycleService {
                     .setArtist(s.getArtist())
                     .setDescription(s.getSongId())
                     .build();
-            MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+            MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
                     .setMediaId(Integer.toString(i))
                     .setMediaMetadata(m)
                     .build();
