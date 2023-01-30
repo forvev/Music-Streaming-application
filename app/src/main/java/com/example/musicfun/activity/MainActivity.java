@@ -204,6 +204,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
         });
     }
 
+    @Override
+    public void onBackPressed()
+    {
+
+    }
+
+
     public void listenNavController(){
 //        special care for the MyPlaylistFragment and ChooseOnePlaylistFragment
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
