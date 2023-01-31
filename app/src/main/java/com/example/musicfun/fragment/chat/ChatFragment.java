@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -138,19 +139,25 @@ public class ChatFragment extends Fragment {
             public void onClick(View view) {
 
                 String newMessage = editText.getText().toString();
-                newMessage = testThisString(newMessage);
+                String trimmedMsg = newMessage.trim();
+                boolean check = trimmedMsg.length() > 0;
 
-                chatViewModel.sendMsg(token,chatPartnerName,newMessage, sp.getString("name",""));
+                if(check){
+                    String checkedMessage = testThisString(trimmedMsg);
 
-                JSONObject mess = new JSONObject();
-                try{
-                    mess.put("username", chatPartnerName);
-                    mess.put("msg", newMessage);
-                }catch(JSONException e){
-                    e.printStackTrace();
+                    chatViewModel.sendMsg(token,chatPartnerName,checkedMessage, sp.getString("name",""));
+
+                    JSONObject mess = new JSONObject();
+                    try{
+                        mess.put("username", chatPartnerName);
+                        mess.put("msg", checkedMessage);
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+
+                    socketIOClient.mSocket.emit("sendMsg",  mess);
                 }
 
-                socketIOClient.mSocket.emit("sendMsg",  mess);
                 editText.setText("");
             }
         });
