@@ -553,7 +553,8 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                                     .setArtist(s.getArtist())
                                     .setDescription(s.getSongId())
                                     .build();
-                            MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+                            //MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+                            MediaItem mediaItem = new MediaItem.Builder().setUri("https://100.110.104.112:3000/songs/" + s.getSongId() + "/output.m3u8")
                                     .setMediaMetadata(m)
                                     .build();
                             mediaItems.add(mediaItem);
@@ -573,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
                         .setArtist(s.getArtist())
                         .setDescription(s.getSongId())
                         .build();
+                //MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
                 MediaItem mediaItem = new MediaItem.Builder().setUri("https://100.110.104.112:3000/songs/" + s.getSongId() + "/output.m3u8")
 //                        .setMediaId(Integer.toString(i))
                         .setMediaMetadata(m)

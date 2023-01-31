@@ -124,7 +124,8 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     @Override
     public void onStop() {
         MediaItem m = player.getCurrentMediaItem();
-        service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "https://10.0.2.2:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
+        //service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "https://10.0.2.2:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
+        service.sendSongInfo(m.mediaMetadata.title.toString(), m.mediaMetadata.artist.toString(), "https://100.110.104.112:3000/images/" + m.mediaMetadata.description.toString() + ".jpg");
         doUnbindService();
         super.onStop();
     }
@@ -153,6 +154,7 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
                     .setArtist(s.getArtist())
                     .setDescription(s.getSongId())
                     .build();
+            //MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
             MediaItem mediaItem = new MediaItem.Builder().setUri("https://100.110.104.112:3000/songs/" + s.getSongId() + "/output.m3u8")
                     .setMediaId(Integer.toString(i))
                     .setMediaMetadata(m)

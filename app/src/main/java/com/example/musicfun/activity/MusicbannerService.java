@@ -234,6 +234,7 @@ public class MusicbannerService extends LifecycleService {
                 return;
             }
             String id = mediaItem.mediaMetadata.description.toString();
+            //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
             String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
@@ -282,7 +283,8 @@ public class MusicbannerService extends LifecycleService {
                     .setArtist(s.getArtist())
                     .setDescription(s.getSongId())
                     .build();
-            MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+            //MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+            MediaItem mediaItem = new MediaItem.Builder().setUri("https://100.110.104.112:3000/songs/" + s.getSongId() + "/output.m3u8")
                     .setMediaId(Integer.toString(i))
                     .setMediaMetadata(m)
                     .build();
