@@ -14,6 +14,8 @@ import com.example.musicfun.R;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.databinding.ActivitySettingBinding;
 import com.example.musicfun.fragment.login.SettingFragment;
@@ -23,16 +25,11 @@ import java.util.Objects;
 /**
  * SettingActivity directly starts SettingFragment and provides onBackPressed function.
  */
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
     private ActivitySettingBinding binding;
     private Toolbar toolbar;
     private boolean isBound;
     private MutableLiveData<MusicbannerService> service;
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +52,13 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         service = new MutableLiveData<>();
-        getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new SettingFragment()).commit();
+        NavController navController = Navigation.findNavController(this, R.id.setting_container);
+        navController.navigate(R.id.settingFragment);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     ServiceConnection playerServiceConnection = new ServiceConnection() {

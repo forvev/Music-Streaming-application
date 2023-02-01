@@ -224,21 +224,25 @@ public class PlaylistViewModel extends AndroidViewModel {
         }, name, token);
     }
 
-    public void renamePlaylist(String name, int position){
+    public void renamePlaylist(String name, String playlist_id){
         db.renamePlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
-                playlist.get(position).setPlaylist_name(name);
+                for (Playlist p :playlist){
+                    if (p.getPlaylist_id().equals(playlist_id)){
+                        p.setPlaylist_name(name);
+                    }
+                }
                 m_playlist.setValue(playlist);
             }
             @Override
             public void onError(VolleyError error) {
                 Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_rename), Toast.LENGTH_SHORT).show();
             }
-        }, playlist.get(position).getPlaylist_id(), name, token);
+        }, playlist_id, name, token);
     }
 
-    public void setAsDefault (int position){
+    public void setAsDefault (String playlist_id){
         db.setAsDefault(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -247,25 +251,32 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onError(VolleyError error) {
 
             }
-        }, playlist.get(position).getPlaylist_id(), token);
+        }, playlist_id, token);
 
     }
 
-    public void deletePlaylist (int position){
-        String id = playlist.get(position).getPlaylist_id();
+    public void deletePlaylist (String playlist_id){
+        int index = 0;
+        for(Playlist p : playlist){
+            if (p.getPlaylist_id().equals(playlist_id)){
+                break;
+            }
+            index += 1;
+        }
+        int finalIndex = index;
         db.deletePlaylist(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject response) {
                 try{
                     if (response.getBoolean("isDefault")){
-                        if(position == 0){
+                        if(finalIndex == 0){
                             playlist.get(1).setDefault(true);
                         }
                         else{
                             playlist.get(0).setDefault(true);
                         }
                     }
-                    playlist.remove(position);
+                    playlist.remove(finalIndex);
                     m_playlist.setValue(playlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -275,7 +286,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onError(VolleyError error) {
                 Toast.makeText(application, application.getApplicationContext().getString(R.string.owner_right_delete), Toast.LENGTH_SHORT).show();
             }
-        }, id, token);
+        }, playlist_id, token);
     }
 
     public void searchPlaylistByName(String letter){
@@ -301,7 +312,7 @@ public class PlaylistViewModel extends AndroidViewModel {
         }, letter, token);
     }
 
-    public void setAsShare(int position){
+    public void setAsShare(String playlist_id){
         db.setAsShare(new ServerCallBack() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -312,7 +323,7 @@ public class PlaylistViewModel extends AndroidViewModel {
             public void onError(VolleyError error) {
 
             }
-        }, token, playlist.get(position).getPlaylist_id());
+        }, token, playlist_id);
     }
 
 }

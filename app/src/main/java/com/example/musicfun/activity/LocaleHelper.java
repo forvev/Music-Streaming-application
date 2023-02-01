@@ -19,6 +19,7 @@ public class LocaleHelper {
     private static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
 
     public static Context onAttach(Context context) {
+        System.out.println("get Language = " + getLanguage(context));
         String lang = getPersistedData(context, Locale.getDefault().getLanguage());
         return setLocale(context, lang);
     }
@@ -33,8 +34,8 @@ public class LocaleHelper {
     }
 
     private static String getPersistedData(Context context, String defaultLanguage) {
-        SharedPreferences sp = context.getSharedPreferences("login", MODE_PRIVATE);
-        return sp.getString(SELECTED_LANGUAGE, defaultLanguage);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(SELECTED_LANGUAGE, defaultLanguage);
     }
 
     // the method is used to set the language at runtime

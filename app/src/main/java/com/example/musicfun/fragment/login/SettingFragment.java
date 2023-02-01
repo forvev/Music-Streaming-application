@@ -17,9 +17,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.LocaleHelper;
@@ -32,6 +36,7 @@ import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.login.SettingViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.gson.Gson;
+import com.zeugmasolutions.localehelper.Locales;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,10 +91,12 @@ public class SettingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new ResetFragment()).commit();
+                        NavDirections action = SettingFragmentDirections.actionSettingFragmentToResetFragment();
+                        Navigation.findNavController(view).navigate(action);
                         break;
                     case 1:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.setting_container, new GenreFragment().newInstance(true)).commit();
+                        NavDirections action_2 = SettingFragmentDirections.actionSettingFragmentToGenreFragment2(true);
+                        Navigation.findNavController(view).navigate(action_2);
                         break;
                     case 2:
                         final String[] listItems = new String[]{getString(R.string.english), getString(R.string.chinese)};
@@ -107,7 +114,6 @@ public class SettingFragment extends Fragment {
                                             getActivity().finish();
                                         }
                                         else if (listItems[which].equals("中文")){
-                                            System.out.println("chinese selected!!!");
                                             LocaleHelper.setLocale(getContext(), "zh");
                                             startActivity(new Intent(getContext(), SettingActivity.class));
                                             getActivity().finish();

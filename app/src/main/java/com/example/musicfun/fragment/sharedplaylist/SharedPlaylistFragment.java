@@ -3,13 +3,11 @@ package com.example.musicfun.fragment.sharedplaylist;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,32 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.LyricsActivity;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.SharedPlaylist.SharedPlaylistAdapter;
 import com.example.musicfun.databinding.FragmentMymusicBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
-import com.example.musicfun.ui.friends.FriendsFragment;
-import com.example.musicfun.ui.friends.Friends_friend_Fragment;
-import com.example.musicfun.ui.friends.List_of_friends_fragment;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
 
 import java.util.ArrayList;
@@ -65,27 +53,27 @@ public class SharedPlaylistFragment extends Fragment {
 
     private PlaylistMenuClick playlistMenuClick = new PlaylistMenuClick(){
         @Override
-        public void renamePlaylist(String playlistName, int position) {
+        public void renamePlaylist(String playlistName, String playlist_id) {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
-            viewModel.renamePlaylist(playlistName, position);
+            viewModel.renamePlaylist(playlistName, playlist_id);
         }
 
         @Override
-        public void setDefaultPlaylist(int position, boolean isDefault) {
+        public void setDefaultPlaylist(String playlist_id, boolean isDefault) {
 //          Do nothing for shared playlists
         }
 
         @Override
-        public void deletePlaylist(int position) {
+        public void deletePlaylist(String playlist_id) {
             // remove this playlist from server
-            viewModel.deletePlaylist(position);
+            viewModel.deletePlaylist(playlist_id);
         }
 
         @Override
-        public void share(List<Playlist> my_playlists, int position) {
+        public void share(List<Playlist> my_playlists, String playlist_id) {
             //Using navigation approach move to another fragment
-            NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment(my_playlists.get(position).getPlaylist_id());
+            NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment(playlist_id);
             Navigation.findNavController(getView()).navigate(action);
         }
 

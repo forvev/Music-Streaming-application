@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface PlaylistMenuClick {
-    void renamePlaylist(String playlistName, int position);
-    void setDefaultPlaylist(int position, boolean isDefault);
-    void deletePlaylist(int position);
-    void share(List<Playlist> my_playlists, int position);
+    void renamePlaylist(String playlistName, String playlist_id);
+    void setDefaultPlaylist(String playlist_id, boolean isDefault);
+    void deletePlaylist(String playlist_id);
+    void share(List<Playlist> my_playlists, String playlist_id);
 }

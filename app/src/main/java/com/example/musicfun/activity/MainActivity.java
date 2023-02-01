@@ -73,7 +73,7 @@ import java.util.Objects;
  *      and does preparation for playlist contents,
  *      and update music banner UI components, when service sends out a broadcast.
  */
-public class MainActivity extends AppCompatActivity implements PassDataInterface {
+public class MainActivity extends BaseActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private SharedPreferences sp;
@@ -110,11 +110,6 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 //    Otherwise the view will not be updated
     public MutableLiveData<ArrayList<User>> reply = new MutableLiveData<>();
     public MutableLiveData<ArrayList<User>> getReply() {return reply;}
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +198,13 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
             }
         });
     }
+
+    @Override
+    public void onBackPressed()
+    {
+
+    }
+
 
     public void listenNavController(){
 //        special care for the MyPlaylistFragment and ChooseOnePlaylistFragment
@@ -587,6 +589,7 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
 
 //    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
+        System.out.println("isBound? " + (isBound));
         if(!isBound){
             if(initBound){
                 startItemIndex = sp.getInt("startItemIndex", 0);

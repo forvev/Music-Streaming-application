@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.friends;
+package com.example.musicfun.fragment.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -18,7 +18,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

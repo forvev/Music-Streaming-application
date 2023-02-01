@@ -3,7 +3,9 @@ package com.example.musicfun.fragment.chat;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -102,8 +104,10 @@ public class ChatFragment extends Fragment {
 
         toolbar = binding.toolbarGchannel;
         toolbar.setTitle(chatPartnerName);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.purple_50));
         ((MessageListActivity)getActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((MessageListActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24));
         toolbar.setNavigationOnClickListener(((MessageListActivity) getActivity()).getBackPress());
 
         chatViewModel.init(token, chatPartnerName);
@@ -138,19 +142,25 @@ public class ChatFragment extends Fragment {
             public void onClick(View view) {
 
                 String newMessage = editText.getText().toString();
-                newMessage = testThisString(newMessage);
+                String trimmedMsg = newMessage.trim();
+                boolean check = trimmedMsg.length() > 0;
 
-                chatViewModel.sendMsg(token,chatPartnerName,newMessage, sp.getString("name",""));
+                if(check){
+                    String checkedMessage = testThisString(trimmedMsg);
 
-                JSONObject mess = new JSONObject();
-                try{
-                    mess.put("username", chatPartnerName);
-                    mess.put("msg", newMessage);
-                }catch(JSONException e){
-                    e.printStackTrace();
+                    chatViewModel.sendMsg(token,chatPartnerName,checkedMessage, sp.getString("name",""));
+
+                    JSONObject mess = new JSONObject();
+                    try{
+                        mess.put("username", chatPartnerName);
+                        mess.put("msg", checkedMessage);
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+
+                    socketIOClient.mSocket.emit("sendMsg",  mess);
                 }
 
-                socketIOClient.mSocket.emit("sendMsg",  mess);
                 editText.setText("");
             }
         });

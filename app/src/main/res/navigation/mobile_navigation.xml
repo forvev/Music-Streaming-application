@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/friends"
-        android:name="com.example.musicfun.ui.friends.FriendsFragment"
+        android:name="com.example.musicfun.fragment.friends.FriendsFragment"
         tools:layout="@layout/fragment_friends" />
 
 </navigation>

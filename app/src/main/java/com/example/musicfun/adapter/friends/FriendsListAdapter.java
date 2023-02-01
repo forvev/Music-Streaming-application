@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.musicfun.R;
 import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
-import com.example.musicfun.ui.friends.Friends_DBAccess;
+import com.example.musicfun.repository.Friends_DBAccess;
 
 import java.util.ArrayList;
 import java.util.List;
