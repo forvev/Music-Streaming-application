@@ -72,6 +72,7 @@ public class MusicbannerService extends LifecycleService {
     private boolean isSession;
     private String current_playlist_id;
     private int numberOfSongs;
+    private String temp_playlist_id;
 
     public boolean isSession() {
         return isSession;
@@ -107,6 +108,7 @@ public class MusicbannerService extends LifecycleService {
     @Override
     public void onCreate(){
         super.onCreate();
+        System.out.println("onCreate in Service!!!");
         broadcaster = LocalBroadcastManager.getInstance(this);
         //assign variables
         player = new ExoPlayer.Builder(getApplicationContext()).build();
@@ -122,8 +124,10 @@ public class MusicbannerService extends LifecycleService {
         player.addAnalyticsListener(new PlaybackStatsListener(false, (eventTime, playbackStats) -> {
                     // Analytics data for the session started at `eventTime` is ready
                     // Songs which are played more than 10 seconds are considered as listen history and will be sent to database
+
                     if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null && sp.getInt("logged", 999) == 1){
-                        viewModel.sendListenHistory(player.getCurrentMediaItem().mediaMetadata.description.toString());
+                        System.out.println("current media item = " + temp_playlist_id);
+                        viewModel.sendListenHistory(temp_playlist_id);
                     }
                 }));
 
@@ -233,6 +237,7 @@ public class MusicbannerService extends LifecycleService {
             if(mediaItem == null){
                 return;
             }
+            temp_playlist_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
             String id = mediaItem.mediaMetadata.description.toString();
             String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();

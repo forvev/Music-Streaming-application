@@ -197,6 +197,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 startActivity(i);
             }
         });
+
     }
 
     @Override
@@ -584,6 +585,24 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
             initializePlayer();
         }
     }
+
+    private void continuePlaying (){
+        doBindService();
+    }
+
+//    ServiceConnection continueConnection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+//            isBound = true;
+//            MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
+//            binder.getMusicbannerService();
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//
+//        }
+//    };
 
 //    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
