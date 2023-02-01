@@ -300,7 +300,7 @@ public class LyricsFragment extends Fragment {
                                     }
                                     playerpause = false;
                                 }
-                            }, 500);
+                            }, 1000);
                         }
                     }
                     playerseek = false;
@@ -703,6 +703,7 @@ public class LyricsFragment extends Fragment {
                 });
             }
             if (message.equals("syncTime") && !info.equals(lastTimestamp)) {
+                Log.d("syncTime", "SYNCTIME");
                 lastTimestamp = info;
                 long finalInfo = Long.parseLong(info);
                 getActivity().runOnUiThread(new Runnable() {
