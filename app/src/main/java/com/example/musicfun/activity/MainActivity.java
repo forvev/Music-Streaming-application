@@ -587,6 +587,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
 
 //    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
+        System.out.println("isBound? " + (isBound));
         if(!isBound){
             if(initBound){
                 startItemIndex = sp.getInt("startItemIndex", 0);

@@ -3,6 +3,7 @@ package com.example.musicfun.fragment.chat;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,8 +104,10 @@ public class ChatFragment extends Fragment {
 
         toolbar = binding.toolbarGchannel;
         toolbar.setTitle(chatPartnerName);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.purple_50));
         ((MessageListActivity)getActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((MessageListActivity)getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24));
         toolbar.setNavigationOnClickListener(((MessageListActivity) getActivity()).getBackPress());
 
         chatViewModel.init(token, chatPartnerName);
