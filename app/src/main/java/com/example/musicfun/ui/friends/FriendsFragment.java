@@ -17,13 +17,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
+import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.viewmodel.FriendsViewModel;
 import com.google.android.material.navigation.NavigationBarView;
@@ -42,6 +46,7 @@ public class FriendsFragment extends Fragment {
     private FragmentFriendsBinding binding;
 
     FriendsViewModel friendsViewModel;
+    private Toolbar toolbar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,6 +119,28 @@ public class FriendsFragment extends Fragment {
                 return true;
             }
         });
+
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        if(toolbar != null){
+            navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+                @Override
+                public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                    if (navDestination.getId() == R.id.sharedPlaylistSongsFragment || navDestination.getId() == R.id.sharedPlaylistParticipants3){
+                        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_purple);
+                        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toolbar.setNavigationIcon(null);
+                                navController.popBackStack();
+                            }
+                        });
+                    }
+                    else if (navDestination.getId() == R.id.choosePlaylistFragment3){
+                        toolbar.setNavigationIcon(null);
+                    }
+                }
+            });
+        }
     }
 
     private Boolean isNetworkAvailable(Application application) {

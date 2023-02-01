@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,6 +36,7 @@ import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.login.SettingViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.gson.Gson;
+import com.zeugmasolutions.localehelper.Locales;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +114,6 @@ public class SettingFragment extends Fragment {
                                             getActivity().finish();
                                         }
                                         else if (listItems[which].equals("中文")){
-                                            System.out.println("chinese selected!!!");
                                             LocaleHelper.setLocale(getContext(), "zh");
                                             startActivity(new Intent(getContext(), SettingActivity.class));
                                             getActivity().finish();

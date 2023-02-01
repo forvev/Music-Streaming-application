@@ -25,16 +25,16 @@ import java.util.Objects;
 /**
  * SettingActivity directly starts SettingFragment and provides onBackPressed function.
  */
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
     private ActivitySettingBinding binding;
     private Toolbar toolbar;
     private boolean isBound;
     private MutableLiveData<MusicbannerService> service;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,11 @@ public class SettingActivity extends AppCompatActivity {
         service = new MutableLiveData<>();
         NavController navController = Navigation.findNavController(this, R.id.setting_container);
         navController.navigate(R.id.settingFragment);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     ServiceConnection playerServiceConnection = new ServiceConnection() {

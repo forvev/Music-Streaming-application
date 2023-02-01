@@ -20,13 +20,13 @@ import com.example.musicfun.ui.friends.Friends_friend_Fragment;
 /**
  * MessageListActivity starts chatting function directly and provides onBackPressed function.
  */
-public class MessageListActivity extends AppCompatActivity {
+public class MessageListActivity extends BaseActivity {
     private ActivityChatBinding binding;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

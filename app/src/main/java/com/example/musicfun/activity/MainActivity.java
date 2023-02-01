@@ -73,7 +73,7 @@ import java.util.Objects;
  *      and does preparation for playlist contents,
  *      and update music banner UI components, when service sends out a broadcast.
  */
-public class MainActivity extends AppCompatActivity implements PassDataInterface {
+public class MainActivity extends BaseActivity implements PassDataInterface {
 
     private ActivityMainBinding binding;
     private SharedPreferences sp;
@@ -111,10 +111,12 @@ public class MainActivity extends AppCompatActivity implements PassDataInterface
     public MutableLiveData<ArrayList<User>> reply = new MutableLiveData<>();
     public MutableLiveData<ArrayList<User>> getReply() {return reply;}
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+//        LocaleHelper.setLocale(getApplicationContext(), LocaleHelper.getLanguage(getApplicationContext()));
+//        System.out.println("language = " + LocaleHelper.getLanguage(getApplicationContext()));
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

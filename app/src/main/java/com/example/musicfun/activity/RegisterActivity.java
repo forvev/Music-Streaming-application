@@ -23,15 +23,15 @@ import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 /**
  * RegisterActivity handles register and login processes. Users can register, login, or start app without an account.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private ActivityRegisterBinding binding;
     SharedPreferences sp;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * LyricsActivity does preparation for playlist items and provides onBackPressed feature
  */
-public class LyricsActivity extends AppCompatActivity implements PassDataInterface {
+public class LyricsActivity extends BaseActivity implements PassDataInterface {
 
     private ActivityLyricsBinding binding;
     private MusicbannerService service;
@@ -52,10 +52,10 @@ public class LyricsActivity extends AppCompatActivity implements PassDataInterfa
     private List<MediaItem> mediaItems = new ArrayList<>();
     private SharedPreferences sp;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
