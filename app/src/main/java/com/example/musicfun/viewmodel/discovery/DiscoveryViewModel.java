@@ -123,7 +123,15 @@ public class DiscoveryViewModel extends AndroidViewModel {
                     JSONArray songTitles = (JSONArray) response.get("Songs");
                     for (int i = 0; i < songTitles.length(); i++) {
                         Songs s = new Songs(songTitles.getJSONObject(i).getString("title"), songTitles.getJSONObject(i).getString("artist"), songTitles.getJSONObject(i).getString("_id"));
-                        songsArrayList.add(s);
+                        boolean alreadyAdded = false;
+                        for (int j = 0; j < songsArrayList.size(); j++) {
+                            if (songsArrayList.get(j).getSongId().equals(s.getSongId())) {
+                                alreadyAdded = true;
+                            }
+                        }
+                        if (!alreadyAdded) {
+                            songsArrayList.add(s);
+                        }
                     }
                     songNames.setValue(songsArrayList);
                 } catch (JSONException e) {
