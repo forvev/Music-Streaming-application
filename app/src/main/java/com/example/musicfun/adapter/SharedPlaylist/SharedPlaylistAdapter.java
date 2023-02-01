@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,21 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.musicfun.R;
-import com.example.musicfun.adapter.mymusic.PlaylistAdapter;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
-import com.example.musicfun.ui.friends.Friends_friend_Fragment;
-import com.example.musicfun.ui.friends.List_of_friends_fragment;
 
 import java.util.List;
 
@@ -104,88 +94,90 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
             holder.menu = (ImageView) view.findViewById(R.id.shared_playlist_menu);
             holder.playlist_owner_icon = (ImageView) view.findViewById(R.id.playlist_owner_icon);
             isOwner = playlist.get(position).getOwner().equals(username);
-            if (isOwner){
-                holder.playlist_owner_icon.setVisibility(View.VISIBLE);
-                holder.menu.setVisibility(View.VISIBLE);
-                holder.menu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popup = new PopupMenu(mContext, view);
-                        MenuInflater inflater = popup.getMenuInflater();
-                        inflater.inflate(R.menu.shared_playlist_option_menu, popup.getMenu());
-                        popup.show();
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.rename_playlist:
-                                        final Dialog dialog = new Dialog(mContext);
-                                        //We have added a title in the custom layout. So let's disable the default title.
-                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
-                                        dialog.setCancelable(true);
-                                        //Mention the name of the layout of your custom dialog.
-                                        dialog.setContentView(R.layout.dialog_rename_playlist);
-                                        dialog.show();
 
-                                        //Initializing the views of the dialog.
-                                        Button submitButton = dialog.findViewById(R.id.submit_button);
-                                        submitButton.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                final EditText nameEt = dialog.findViewById(R.id.name_et);
-                                                String playlistName = nameEt.getText().toString();
-                                                // send the input playlist name to the server
-                                                if(TextUtils.isEmpty(playlistName)) {
-                                                    nameEt.setError(mContext.getString(R.string.playlist_need_name));
-                                                }
-                                                else{
-                                                    playlistMenuClick.renamePlaylist(playlistName, position);
-                                                    playlist.get(position).setPlaylist_name(playlistName);
-                                                    dialog.dismiss();
-
-                                                }
-                                            }
-                                        });
-                                        break;
-                                    case R.id.remove_playlist:
-                                        // remove this list item
-                                        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
-                                        adb.setTitle(R.string.delete_playlist);
-                                        adb.setMessage(mContext.getString(R.string.sure_delete_playlist));
-                                        final int positionToRemove = position;
-                                        adb.setNegativeButton(mContext.getString(R.string.cancel), null);
-                                        adb.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (playlist.get(position).isDefault()) {
-                                                    playlist.get(position).setDefault(false);
-                                                    playlist.get(0).setDefault(true);
-                                                }
-                                                playlistMenuClick.deletePlaylist(position);
-                                            }
-                                        });
-                                        adb.show();
-                                        break;
-                                    case R.id.add_friend:
-                                        playlistMenuClick.share(playlist, position);
-                                        break;
-
-                                }
-                                return false;
-                            }
-                        });
-                    }
-                });
-            }
-            else{
-                holder.menu.setVisibility(View.INVISIBLE);
-                holder.playlist_owner_icon.setVisibility(View.GONE);
-            }
             view.setTag(holder);
         } else {
             holder = (SharedPlaylistViewHolder) view.getTag();
         }
 
+        if (isOwner){
+            holder.playlist_owner_icon.setVisibility(View.VISIBLE);
+            holder.menu.setVisibility(View.VISIBLE);
+            holder.menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.shared_playlist_option_menu, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.rename_playlist:
+                                    final Dialog dialog = new Dialog(mContext);
+                                    //We have added a title in the custom layout. So let's disable the default title.
+                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+                                    dialog.setCancelable(true);
+                                    //Mention the name of the layout of your custom dialog.
+                                    dialog.setContentView(R.layout.dialog_rename_playlist);
+                                    dialog.show();
+
+                                    //Initializing the views of the dialog.
+                                    Button submitButton = dialog.findViewById(R.id.submit_button);
+                                    submitButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            final EditText nameEt = dialog.findViewById(R.id.name_et);
+                                            String playlistName = nameEt.getText().toString();
+                                            // send the input playlist name to the server
+                                            if(TextUtils.isEmpty(playlistName)) {
+                                                nameEt.setError(mContext.getString(R.string.playlist_need_name));
+                                            }
+                                            else{
+                                                playlistMenuClick.renamePlaylist(playlistName, playlist.get(position).getPlaylist_id());
+                                                playlist.get(position).setPlaylist_name(playlistName);
+                                                dialog.dismiss();
+
+                                            }
+                                        }
+                                    });
+                                    break;
+                                case R.id.remove_playlist:
+                                    // remove this list item
+                                    System.out.println("what was clicked? " + playlist.get(position).getPlaylist_name());
+                                    AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
+                                    adb.setTitle(R.string.delete_playlist);
+                                    adb.setMessage(mContext.getString(R.string.sure_delete_playlist));
+                                    final int positionToRemove = position;
+                                    adb.setNegativeButton(mContext.getString(R.string.cancel), null);
+                                    adb.setPositiveButton(mContext.getString(R.string.confirm), new AlertDialog.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (playlist.get(position).isDefault()) {
+                                                playlist.get(position).setDefault(false);
+                                                playlist.get(0).setDefault(true);
+                                            }
+                                            playlistMenuClick.deletePlaylist(playlist.get(position).getPlaylist_id());
+                                        }
+                                    });
+                                    adb.show();
+                                    break;
+                                case R.id.add_friend:
+                                    playlistMenuClick.share(playlist, playlist.get(position).getPlaylist_id());
+                                    break;
+
+                            }
+                            return false;
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            holder.menu.setVisibility(View.INVISIBLE);
+            holder.playlist_owner_icon.setVisibility(View.GONE);
+        }
 
         holder.linearLayout = view.findViewById(R.id.ll_shared_playlist_name);
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {

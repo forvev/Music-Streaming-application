@@ -53,39 +53,40 @@ public class MyMusicFragment extends Fragment {
 
     private PlaylistMenuClick playlistMenuClick = new PlaylistMenuClick(){
         @Override
-        public void renamePlaylist(String playlistName, int position) {
+        public void renamePlaylist(String playlistName, String playlist_id) {
             // send playlist_id and new name to server
             // check whether the playlist names are duplicated
-            viewModel.renamePlaylist(playlistName, position);
+            viewModel.renamePlaylist(playlistName, playlist_id);
         }
 
         @Override
-        public void setDefaultPlaylist(int position, boolean isDefault) {
+        public void setDefaultPlaylist(String playlist_id, boolean isDefault) {
             // send playlist_id to server as default playlist
             if(!isDefault){
-                if(position == 0){
-                    Toast.makeText(getContext(), getString(R.string.at_least_one_default), Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    viewModel.setAsDefault(0);
-                }
+
             }
             else{
-                viewModel.setAsDefault(position);
+                viewModel.setAsDefault(playlist_id);
             }
         }
 
         @Override
-        public void deletePlaylist(int position) {
+        public void deletePlaylist(String playlist_id) {
             // remove this playlist from server
-            viewModel.deletePlaylist(position);
+            viewModel.deletePlaylist(playlist_id);
         }
 
         @Override
-        public void share(List<Playlist> my_playlists, int position) {
+        public void share(List<Playlist> my_playlists, String playlist_id) {
             // send this playlist to friends
-            Toast.makeText(getContext(), my_playlists.get(position).getPlaylist_name() + " " + getString(R.string.X_is_shared), Toast.LENGTH_SHORT).show();
-            viewModel.setAsShare(position);
+            String temp_name = "";
+            for (Playlist p : my_playlists){
+                if (p.getPlaylist_id().equals(playlist_id)){
+                    temp_name = p.getPlaylist_name();
+                }
+            }
+            Toast.makeText(getContext(), temp_name + " " + getString(R.string.X_is_shared), Toast.LENGTH_SHORT).show();
+            viewModel.setAsShare(playlist_id);
         }
     };
 

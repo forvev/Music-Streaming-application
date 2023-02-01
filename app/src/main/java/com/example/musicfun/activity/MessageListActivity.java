@@ -1,32 +1,21 @@
 package com.example.musicfun.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.appcompat.widget.Toolbar;
-
 import com.example.musicfun.R;
 import com.example.musicfun.databinding.ActivityChatBinding;
 import com.example.musicfun.fragment.chat.ChatFragment;
-import com.example.musicfun.ui.friends.Friends_friend_Fragment;
+import com.example.musicfun.fragment.friends.Friends_friend_Fragment;
 
 /**
  * MessageListActivity starts chatting function directly and provides onBackPressed function.
  */
 public class MessageListActivity extends BaseActivity {
     private ActivityChatBinding binding;
-
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

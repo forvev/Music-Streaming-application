@@ -31,11 +31,6 @@ public class SettingActivity extends BaseActivity {
     private boolean isBound;
     private MutableLiveData<MusicbannerService> service;
 
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -111,13 +111,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     public MutableLiveData<ArrayList<User>> reply = new MutableLiveData<>();
     public MutableLiveData<ArrayList<User>> getReply() {return reply;}
 
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-//        LocaleHelper.setLocale(getApplicationContext(), LocaleHelper.getLanguage(getApplicationContext()));
-//        System.out.println("language = " + LocaleHelper.getLanguage(getApplicationContext()));
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

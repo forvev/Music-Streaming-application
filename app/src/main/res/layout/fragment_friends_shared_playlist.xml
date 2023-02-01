@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.friends.List_of_friends_fragment"
+        tools:context=".fragment.friends.List_of_friends_fragment"
         android:background="@color/cardview_light_background">
 
         <ListView

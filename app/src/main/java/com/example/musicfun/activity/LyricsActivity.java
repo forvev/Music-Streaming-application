@@ -52,11 +52,6 @@ public class LyricsActivity extends BaseActivity implements PassDataInterface {
     private List<MediaItem> mediaItems = new ArrayList<>();
     private SharedPreferences sp;
 
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

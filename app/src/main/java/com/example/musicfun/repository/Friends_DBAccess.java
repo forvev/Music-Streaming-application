@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.friends;
+package com.example.musicfun.repository;
 
 import android.content.Context;
 import android.util.Log;

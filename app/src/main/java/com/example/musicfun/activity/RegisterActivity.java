@@ -28,11 +28,6 @@ public class RegisterActivity extends BaseActivity {
     private ActivityRegisterBinding binding;
     SharedPreferences sp;
 
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

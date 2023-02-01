@@ -127,7 +127,7 @@ public class PlaylistAdapter extends BaseAdapter {
                                             nameEt.setError(mContext.getString(R.string.playlist_need_name));
                                         }
                                         else{
-                                            playlistMenuClick.renamePlaylist(playlistName, position);
+                                            playlistMenuClick.renamePlaylist(playlistName, playlist.get(position).getPlaylist_id());
                                             playlist.get(position).setPlaylist_name(playlistName);
                                             dialog.dismiss();
 
@@ -145,9 +145,11 @@ public class PlaylistAdapter extends BaseAdapter {
                                     }
                                     notifyDataSetChanged();
                                 }
+                                else if(position == 0){
+                                    Toast.makeText(mContext, mContext.getString(R.string.at_least_one_default), Toast.LENGTH_SHORT).show();
+                                }
                                 else{
                                     playlist.get(position).setDefault(false);
-//                                        holder.pin.setVisibility(View.GONE);
                                     int temp = 0;
                                     for (int i = 0; i < playlist.size(); i++){
                                         if (playlist.get(i).isDefault()){
@@ -159,7 +161,7 @@ public class PlaylistAdapter extends BaseAdapter {
                                     }
                                     notifyDataSetChanged();
                                 }
-                                playlistMenuClick.setDefaultPlaylist(position, playlist.get(position).isDefault());
+                                playlistMenuClick.setDefaultPlaylist(playlist.get(position).getPlaylist_id(), playlist.get(position).isDefault());
                                 break;
                             case R.id.remove_playlist:
                                 if(playlist.size() == 1){
@@ -178,14 +180,14 @@ public class PlaylistAdapter extends BaseAdapter {
                                                 playlist.get(position).setDefault(false);
                                                 playlist.get(0).setDefault(true);
                                             }
-                                            playlistMenuClick.deletePlaylist(position);
+                                            playlistMenuClick.deletePlaylist(playlist.get(position).getPlaylist_id());
                                         }
                                     });
                                     adb.show();
                                 }
                                 break;
                             case R.id.share_playlist:
-                                playlistMenuClick.share(playlist,position);
+                                playlistMenuClick.share(playlist, playlist.get(position).getPlaylist_id());
                                 break;
                         }
                         return true;

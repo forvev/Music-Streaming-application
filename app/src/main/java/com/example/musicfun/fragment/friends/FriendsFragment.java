@@ -1,4 +1,4 @@
-package com.example.musicfun.ui.friends;
+package com.example.musicfun.fragment.friends;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,14 +26,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.musicfun.R;
-import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.databinding.FragmentFriendsBinding;
 import com.example.musicfun.viewmodel.FriendsViewModel;
 import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Objects;
 
 /**
  * This class hosts the Friends_friend_fragment view and SharedPlaylistFragment view,
