@@ -635,6 +635,9 @@ public class LyricsFragment extends Fragment {
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialog.dismiss();
+                        service.setSession(false, null);
+                        sp.edit().putBoolean("initBound", false).apply();
                         getActivity().finish();
                     }
                 });
@@ -649,6 +652,8 @@ public class LyricsFragment extends Fragment {
 
             }
             else{
+                sp.edit().putBoolean("initBound", false).apply();
+                service.setSession(false, null);
                 getActivity().finish();
             }
         }

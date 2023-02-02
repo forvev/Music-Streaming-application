@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Binder;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.widget.ImageView;
 
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * MusicbannerService is the only place to create new Exoplayer. Basic player listeners are implemented,
@@ -72,7 +75,14 @@ public class MusicbannerService extends LifecycleService {
     private boolean isSession;
     private String current_playlist_id;
     private int numberOfSongs;
-    private String temp_playlist_id;
+
+//    for analytics listener
+    private boolean isMediaTransfer;
+    private boolean listenerIsPlaying;
+    private long timeLeft = 10000;
+    private String last_song_id;
+    private String new_song_id;
+    private CountDownTimer timer;
 
     public boolean isSession() {
         return isSession;
@@ -108,7 +118,6 @@ public class MusicbannerService extends LifecycleService {
     @Override
     public void onCreate(){
         super.onCreate();
-        System.out.println("onCreate in Service!!!");
         broadcaster = LocalBroadcastManager.getInstance(this);
         //assign variables
         player = new ExoPlayer.Builder(getApplicationContext()).build();
@@ -121,16 +130,6 @@ public class MusicbannerService extends LifecycleService {
                 .build();
         player.setAudioAttributes(audioAttributes, true);
         player.addListener(new PlayerEventListener());
-        player.addAnalyticsListener(new PlaybackStatsListener(false, (eventTime, playbackStats) -> {
-                    // Analytics data for the session started at `eventTime` is ready
-                    // Songs which are played more than 10 seconds are considered as listen history and will be sent to database
-
-                    if(playbackStats.getTotalPlayTimeMs() > 1000 && player != null && sp.getInt("logged", 999) == 1){
-                        System.out.println("current media item = " + temp_playlist_id);
-                        viewModel.sendListenHistory(temp_playlist_id);
-                    }
-                }));
-
         sp = getSharedPreferences("login",MODE_PRIVATE);
 
         //notification manager
@@ -232,12 +231,16 @@ public class MusicbannerService extends LifecycleService {
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, @Player.MediaItemTransitionReason int reason) {
+            timeLeft = 10000;
+            if(timer != null){
+                timer.cancel();
+            }
             // detects whether a song in the playlist is finished
             Player.Listener.super.onMediaItemTransition(mediaItem, reason);
             if(mediaItem == null){
                 return;
             }
-            temp_playlist_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+            new_song_id = mediaItem.mediaMetadata.description.toString();
             String id = mediaItem.mediaMetadata.description.toString();
             String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();
@@ -257,6 +260,22 @@ public class MusicbannerService extends LifecycleService {
                     }
                 });
             }
+            if(sp.getInt("logged", 999) == 1){
+                isMediaTransfer = true;
+                startCountDown();
+            }
+
+        }
+
+        @Override
+        public void onIsPlayingChanged(boolean isPlaying) {
+            if(isPlaying){
+                listenerIsPlaying = true;
+            }
+            else{
+                listenerIsPlaying = false;
+            }
+            startCountDown();
         }
 
         @Override
@@ -274,6 +293,24 @@ public class MusicbannerService extends LifecycleService {
                 ShuffleOrder.DefaultShuffleOrder order = new ShuffleOrder.DefaultShuffleOrder(array_order, 1);
                 player.setShuffleOrder(order);
             }
+        }
+    }
+
+    private void startCountDown(){
+        if (listenerIsPlaying && isMediaTransfer){
+            timer = new CountDownTimer(timeLeft, 1000) {
+                public void onTick(long millisUntilFinished) {
+                    timeLeft = millisUntilFinished;
+                }
+
+                public void onFinish() {
+                    viewModel.sendListenHistory(last_song_id);
+                    last_song_id = new_song_id;
+                }
+            }.start();
+        }
+        else if (!listenerIsPlaying && timer != null){
+            timer.cancel();
         }
     }
 
@@ -308,6 +345,7 @@ public class MusicbannerService extends LifecycleService {
         }
         player.setMediaItems(mediaItems, /* resetPosition= */ !haveStartPosition);
         player.prepare();
+        last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
         player.setPlayWhenReady(startAutoPlay);
     }
 

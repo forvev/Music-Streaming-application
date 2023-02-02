@@ -3,6 +3,7 @@ package com.example.musicfun.activity;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.MenuItem;
@@ -91,7 +93,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     private TextView tv_title;
     private TextView tv_artist;
     private boolean isBound;
-    private boolean initBound = true;
     private MusicbannerService service;
     private BroadcastReceiver broadcastReceiver;
     private Intent intent;
@@ -161,18 +162,24 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 tv_artist.setText(artist);
             }
         };
+        if (sp.getBoolean("initBound", true)){
+            intent = new Intent(getApplicationContext(), MusicbannerService.class);
+            startService(intent);
+        }
         // check whether any songs were saved in the playlist
         String serializedObject = sp.getString("saved_playlist", null);
-        if (serializedObject != null) {
+        if (serializedObject != null && sp.getBoolean("initBound", true)) {
             Gson gson = new Gson();
             Type type = new TypeToken<List<Songs>>(){}.getType();
             songInfo = gson.fromJson(serializedObject, type);
             createMediaItems(songInfo);
+            startAutoPlay = false;
         }
-        else {
+        else if (sp.getBoolean("initBound", true)){
             createMediaItems(null);
+            startAutoPlay = false;
         }
-        startAutoPlay = false;
+//        startAutoPlay = false;
 
 //        handel toolbar functions
         searchView = binding.actionSearch;
@@ -205,7 +212,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     {
 
     }
-
 
     public void listenNavController(){
 //        special care for the MyPlaylistFragment and ChooseOnePlaylistFragment
@@ -296,6 +302,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         public void onClick(View view) {
             if(sp.getInt("logged", 999) == 1){
                 Intent gotoSetting = new Intent(MainActivity.this, SettingActivity.class);
+//                startActivityForResult(gotoSetting, 123);
                 startActivity(gotoSetting);
             }
             else{
@@ -330,9 +337,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         }
         else if(currentFragmentId == R.id.friends){
             searchFriend();
-        }
-        else{
-            System.out.println("No Fragment is visible in Main activity!");
         }
     }
 
@@ -515,6 +519,8 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(COPA_RESULT));
+        Intent MusicbannerServiceIntent = new Intent(this, MusicbannerService.class);
+        bindService(MusicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -586,34 +592,11 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         }
     }
 
-    private void continuePlaying (){
-        doBindService();
-    }
-
-//    ServiceConnection continueConnection = new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-//            isBound = true;
-//            MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
-//            binder.getMusicbannerService();
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//
-//        }
-//    };
-
 //    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
-        System.out.println("isBound? " + (isBound));
-        if(!isBound){
-            if(initBound){
-                startItemIndex = sp.getInt("startItemIndex", 0);
-                startPosition = sp.getLong("startPosition", 0);
-                initBound = false;
-            }
-            doBindService();
+        if(!isBound && sp.getBoolean("initBound", true)){
+            startItemIndex = sp.getInt("startItemIndex", 0);
+            startPosition = sp.getLong("startPosition", 0);
         }
         else{
             service.setSongInfo(songInfo);
@@ -622,30 +605,26 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         return true;
     }
 
-    private void doBindService(){
-        Intent MusicbannerServiceIntent = new Intent(this, MusicbannerService.class);
-        bindService(MusicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
     ServiceConnection playerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service = binder.getMusicbannerService();
             player = service.player;
-
             isBound = true;
-            //Get the initialized player from service
-            intent = new Intent(getApplicationContext(), MusicbannerService.class);
-            startService(intent);
-            service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
-            service.setSongInfo(songInfo);
             control.setPlayer(player);
+            if(sp.getBoolean("initBound", true)){
+                service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
+                service.setSongInfo(songInfo);
+            }
+            else{
+                tv_title.setText(player.getCurrentMediaItem().mediaMetadata.title);
+                tv_artist.setText(player.getCurrentMediaItem().mediaMetadata.artist);
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            System.out.println("the service was killed! ");
         }
     };
 
