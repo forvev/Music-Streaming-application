@@ -298,7 +298,15 @@ public class PlaylistViewModel extends AndroidViewModel {
                     JSONArray playlistObject = (JSONArray) response.get("playlists");
                     for (int i = 0; i < playlistObject.length(); i++) {
                         Playlist p = new Playlist(playlistObject.getJSONObject(i).getString("name"), playlistObject.getJSONObject(i).getString("_id"),username, false, playlistObject.getJSONObject(i).getBoolean("isSharedPlaylist"));
-                        searchResult.add(p);
+                        boolean alreadyAdded = false;
+                        for (int j = 0; j < searchResult.size(); j++) {
+                            if (searchResult.get(j).getPlaylist_id().equals(p.getPlaylist_id())) {
+                                alreadyAdded = true;
+                            }
+                        }
+                        if (!alreadyAdded) {
+                            searchResult.add(p);
+                        }
                     }
                     m_searchResult.setValue(searchResult);
                 } catch (JSONException e) {
