@@ -106,9 +106,16 @@ public class FriendsViewModel extends AndroidViewModel {
                 try {
                     JSONArray userNames1 = (JSONArray) result.get("Users");
                     for (int i = 0; i < userNames1.length(); i++) {
-                        //TODO: ask server side about the names
                         User user = new User(userNames1.getString(i));
-                        searchUserResult.add(user);
+                        boolean alreadyAdded = false;
+                        for (int j = 0; j < searchUserResult.size(); j++) {
+                            if (searchUserResult.get(j).getUserName().equals(user.getUserName())) {
+                                alreadyAdded = true;
+                            }
+                        }
+                        if (!alreadyAdded) {
+                            searchUserResult.add(user);
+                        }
                     }
                     m_searchUserResult.setValue(searchUserResult);
                 } catch (JSONException e) {
