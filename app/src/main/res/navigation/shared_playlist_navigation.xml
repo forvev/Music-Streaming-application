@@ -41,15 +41,15 @@
         <argument
             android:name="isOwner"
             app:argType="boolean" />
+        <argument
+            android:name="playlist_name"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/list_of_friends_fragment"
         android:name="com.example.musicfun.fragment.friends.List_of_friends_fragment"
         android:label="fragment_friends_shared_playlist"
         tools:layout="@layout/fragment_friends_shared_playlist" >
-        <action
-            android:id="@+id/action_list_of_friends_fragment_to_friends_sharedPlaylist4"
-            app:destination="@id/friends_sharedPlaylist" />
         <argument
             android:name="selected_shared_id_2"
             app:argType="string" />

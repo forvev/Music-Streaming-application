@@ -92,7 +92,7 @@ public class MyMusicFragment extends Fragment {
 
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
-        public void transferFragment(String selected_playlist_id, boolean isOwner) {
+        public void transferFragment(String selected_playlist_id, boolean isOwner, String playlist_name) {
             ((MainActivity)getActivity()).setPlaylistId(selected_playlist_id);
             NavDirections action = MyMusicFragmentDirections.actionMyMusicToMyPlaylistFragment(selected_playlist_id);
             Navigation.findNavController(getView()).navigate(action);

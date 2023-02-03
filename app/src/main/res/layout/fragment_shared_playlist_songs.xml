@@ -25,7 +25,7 @@
         android:layout_alignParentEnd="true"
         android:backgroundTint="@android:color/white"
         android:fontFamily="@font/merriweather_bold"
-        android:text="@string/participants"
+        android:text="@string/invitees"
         android:gravity="center_vertical"
         android:textColor="@color/theme_purple_dark"
         android:textSize="20sp" />

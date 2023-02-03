@@ -104,7 +104,7 @@ public class ChoosePlaylistFragment extends Fragment {
                                 navController.popBackStack();
                             }
                             else{
-                                Toast.makeText(getContext(), "Please choose a playlist!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getString(R.string.need_playlist), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

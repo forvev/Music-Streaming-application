@@ -43,11 +43,6 @@ public class NewReleaseFragment extends Fragment {
     public PassDataInterface mOnInputListner;
     SongListAdapter adapter;
     DiscoveryViewModel discoveryViewModel;
-    private String song_id;
-    private boolean isVisible = true;
-    private String added_PlaylistId = "";
-    private String added_SongId = "";
-    private boolean hasAdded = false;
 
     private SonglistMenuClick songlistMenuClick = new SonglistMenuClick() {
         @Override
@@ -57,14 +52,9 @@ public class NewReleaseFragment extends Fragment {
 
         @Override
         public void addToPlaylist(String songId) {
-            song_id = songId;
             NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
             Fragment parent = (Fragment) navHostFragment.getParentFragment();
-            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.GONE);
-            isVisible = false;
-            hasAdded = false;
-            NavDirections action = NewReleaseFragmentDirections.actionNewReleaseFragmentToChoosePlaylistFragment();
-            Navigation.findNavController(getView()).navigate(action);
+            ((DiscoveryFragment)parent).changeFragement(songId);
         }
 
         @Override
@@ -133,13 +123,6 @@ public class NewReleaseFragment extends Fragment {
             System.out.println("Network not connected!!!");
             return;
         }
-        if(!isVisible){
-            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
-            Fragment parent = (Fragment) navHostFragment.getParentFragment();
-            parent.getView().findViewById(R.id.DiscoveryNav).setVisibility(View.VISIBLE);
-            isVisible = true;
-        }
-
         discoveryViewModel.init("get/recentlyUploadedSongs");
 
         listView = (ListView)view.findViewById(R.id.lvdiscovery);
@@ -149,22 +132,6 @@ public class NewReleaseFragment extends Fragment {
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
                 adapter = new SongListAdapter(getActivity(), newName, songlistMenuClick);
                 listView.setAdapter(adapter);
-            }
-        });
-        NavController navController = NavHostFragment.findNavController(NewReleaseFragment.this);
-        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
-        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String playlist_position) {
-                if(playlist_position != null && song_id != null && (!playlist_position.equals(added_PlaylistId) || !song_id.equals(added_PlaylistId)) && !hasAdded){
-                    hasAdded = true;
-                    added_PlaylistId = playlist_position;
-                    added_SongId = song_id;
-                    discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
-                }
-                else if (playlist_position.equals(added_PlaylistId) && song_id.equals(added_PlaylistId) && hasAdded){
-                    Toast.makeText(getContext(), getString(R.string.already_in_playlist), Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

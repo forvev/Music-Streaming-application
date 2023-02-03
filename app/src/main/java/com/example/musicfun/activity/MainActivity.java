@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -37,6 +38,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -49,6 +51,8 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.friends.FriendsFragment;
+import com.example.musicfun.fragment.friends.FriendsFragmentDirections;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
@@ -82,6 +86,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
 
     protected @Nullable ExoPlayer player;
     protected PlayerControlView control;
+    private boolean reloadFriendsFragment;
 
 //    service related attributes
     private List<MediaItem> mediaItems = new ArrayList<>();
@@ -134,7 +139,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 onBackPressed();
             }
         });
-
 //       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);

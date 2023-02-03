@@ -183,7 +183,7 @@ public class SharedPlaylistAdapter  extends BaseAdapter {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransfer.transferFragment(playlist.get(position).getPlaylist_id(), playlist.get(position).getOwner().equals(username));
+                fragmentTransfer.transferFragment(playlist.get(position).getPlaylist_id(), playlist.get(position).getOwner().equals(username), playlist.get(position).getPlaylist_name());
             }
         });
         // set list view content

@@ -155,6 +155,7 @@ public class SettingFragment extends Fragment {
         sp.edit().putInt("startItemIndex", 0).apply();
         sp.edit().putLong("startPosition", 0).apply();
         sp.edit().putString("saved_playlist", "").apply();
+        sp.edit().putBoolean("initBound", true).apply();
 
         getActivity().getApplicationContext().stopService(new Intent(getContext(), MusicbannerService.class));
 

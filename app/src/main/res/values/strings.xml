@@ -99,7 +99,10 @@
     <string name="friends">Friends</string>
     <string name="no_lyrics">You\'ll have to guess the lyrics for this one.</string>
     <string name="sure_leave_room">Are you sure to leave the room?</string>
+    <string name="need_playlist">Please choose a playlist!</string>
     <string name="no_account"><u>No account?</u></string>
+    <string name="invitees">Invitees</string>
+    <string name="choose_playlist">Choose Playlist</string>
 
 
 </resources>
