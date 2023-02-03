@@ -61,6 +61,9 @@
         <argument
             android:name="selected_shared_id_3"
             app:argType="string" />
+        <argument
+            android:name="isOwner"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/choosePlaylistFragment3"

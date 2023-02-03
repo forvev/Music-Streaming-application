@@ -27,9 +27,10 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
     Friends_DBAccess dbAccess;
     SharedPreferences sp;
     FriendFragmentInterface fi;
+    boolean isOwner;
 
 
-    public ParticipantsSharedListAdapter(Context context, List<User> userList, FriendFragmentInterface fi){
+    public ParticipantsSharedListAdapter(Context context, List<User> userList, FriendFragmentInterface fi, boolean isOwner){
         mContext = context;
         this.userList = userList;
         inflater = LayoutInflater.from(mContext);
@@ -37,6 +38,7 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
         this.arrayList.addAll(userList);
         dbAccess = new Friends_DBAccess(mContext);
         this.fi = fi;
+        this.isOwner = isOwner;
     }
 
 
@@ -74,11 +76,17 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
     username.setText(userList.get(position).getUserName());
 
     final SharedPlaylistParticipantsHolder holder = new ParticipantsSharedListAdapter.SharedPlaylistParticipantsHolder();
-
-    //holder.listView = (ListView) view.findViewById(R.id.list_v_shared_playlist);
     holder.imageView_delete = (ImageView) view.findViewById(R.id.shared_playlist_friends_custom_delete);
 
-    holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
+    if(isOwner){
+        holder.imageView_delete.setVisibility(View.VISIBLE);
+        holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
+    }else{
+        holder.imageView_delete.setVisibility(View.GONE);
+    }
+
+
+
     view.setTag(holder);
 
     return view;

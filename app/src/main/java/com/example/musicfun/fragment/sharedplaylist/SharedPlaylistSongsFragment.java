@@ -149,7 +149,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String passed_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
-                NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id);
+                NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id, isOwner);
 
                 Navigation.findNavController(getView()).navigate(action);
 
