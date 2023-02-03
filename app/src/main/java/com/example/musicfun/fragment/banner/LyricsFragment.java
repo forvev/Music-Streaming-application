@@ -78,6 +78,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.SimpleTimeZone;
 
 /**
  * Displays the lyrics of a specific song
@@ -172,7 +173,7 @@ public class LyricsFragment extends Fragment {
         tv_title = getView().findViewById(R.id.styled_player_song_name);
         tv_artist = getView().findViewById(R.id.styled_player_artist);
         coverView = getView().findViewById(R.id.imageView2);
-        if(!Objects.equals(title, "")){
+        if(!title.equals("")){
             tv_title.setText(title);
             tv_artist.setText(artist);
         }
@@ -213,11 +214,9 @@ public class LyricsFragment extends Fragment {
         if (isSession) {
             btn_active_guests.setVisibility(View.VISIBLE);
             btn_active_guests.setOnClickListener(showActiveGuests);
-//            controlView.setShowShuffleButton(true);
         }
         else {
             btn_active_guests.setVisibility(View.GONE);
-//            controlView.setShowShuffleButton(true);
         }
 
 //        Service informs the media transfers
@@ -281,7 +280,6 @@ public class LyricsFragment extends Fragment {
             isBound = true;
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service = binder.getMusicbannerService();
-
             player = service.player;
             numberOfSongs = player.getMediaItemCount();
             player.addListener(new Player.Listener() {
@@ -336,11 +334,18 @@ public class LyricsFragment extends Fragment {
             controlView.setPlayer(player);
 
             if(player != null){
+                title = player.getCurrentMediaItem().mediaMetadata.title.toString();
+                artist = player.getCurrentMediaItem().mediaMetadata.artist.toString();
+                tv_title.setText(title);
+                tv_artist.setText(artist);
+                updateLyricsFile();
+
                 current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
                 initDefaultButton();
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
                 String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
+
                 if (title.equals("") && artist.equals("")){
                     ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
                         @Override

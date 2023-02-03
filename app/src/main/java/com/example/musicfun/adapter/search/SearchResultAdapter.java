@@ -82,25 +82,10 @@ public class SearchResultAdapter extends BaseAdapter {
         else{
             holder = (ViewHolder) view.getTag();
         }
-        holder.clickField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                playSong(position);
-                if (mContext instanceof MainActivity) {
-                    ((MainActivity)mContext).closeSearchView(view);
-                }
-            }
-        });
-
         holder.name.setText(songsList.get(position).getSongName());
         holder.artist.setText(songsList.get(position).getArtist());
         mOnInputListner = (PassDataInterface) mContext;
 
         return view;
-    }
-
-    private void playSong(int i) {
-        Songs s = songsList.get(i);
-        mOnInputListner.playSong(songsList.subList(i, songsList.size()), Player.REPEAT_MODE_ALL);
     }
 }

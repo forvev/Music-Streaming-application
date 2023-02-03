@@ -339,11 +339,8 @@ public class MusicbannerService extends LifecycleService {
     }
 
     public void setPlaylist(List<MediaItem> mediaItems, int startItemIndex, long startPosition, boolean startAutoPlay){
-        boolean haveStartPosition = startItemIndex != C.INDEX_UNSET;
-        if (haveStartPosition) {
-            player.seekTo(startItemIndex, startPosition);
-        }
-        player.setMediaItems(mediaItems, /* resetPosition= */ !haveStartPosition);
+        player.setMediaItems(mediaItems, /* resetPosition= */ true);
+        player.seekTo(startItemIndex, startPosition);
         player.prepare();
         last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
         player.setPlayWhenReady(startAutoPlay);

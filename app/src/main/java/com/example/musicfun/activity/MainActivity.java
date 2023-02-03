@@ -183,8 +183,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
             createMediaItems(null);
             startAutoPlay = false;
         }
-//        startAutoPlay = false;
-
 //        handel toolbar functions
         searchView = binding.actionSearch;
         initSearchHint(getString(R.string.search_hint_songs));
@@ -354,28 +352,32 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         discoveryViewModel.getSongNames().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName);
-                searchResult.setAdapter(adapter);
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        discoveryViewModel.filter(newText);
-                        return true;
-                    }
-                });
-                songInfo = newName;
-            }
-        });
-        searchResult.setOnTouchListener(touchListener);
-        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL);
-                closeSearchView(view);
+                if (!newName.isEmpty()){
+                    songInfo = newName;
+                    SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName);
+                    searchResult.setAdapter(adapter);
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            discoveryViewModel.filter(newText);
+                            return true;
+                        }
+                    });
+
+                    searchResult.setOnTouchListener(touchListener);
+                    searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            startItemIndex = i;
+                            playSongFromWhole(newName, Player.REPEAT_MODE_ALL, i);
+                            closeSearchView(view);
+                        }
+                    });
+                }
             }
         });
     }
@@ -641,6 +643,14 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         startAutoPlay = true;
         startPosition = 0;
         startItemIndex = 0;
+        createMediaItems(playlist);
+        player.setRepeatMode(repeatMode);
+    }
+
+    public void playSongFromWhole(List<Songs> playlist, int repeatMode, int startItemIndex) {
+        startAutoPlay = true;
+        startPosition = 0;
+        startItemIndex = startItemIndex;
         createMediaItems(playlist);
         player.setRepeatMode(repeatMode);
     }
