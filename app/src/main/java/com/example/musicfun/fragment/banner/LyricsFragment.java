@@ -288,7 +288,6 @@ public class LyricsFragment extends Fragment {
             service = binder.getMusicbannerService();
             player = service.player;
             if(player != null){
-                System.out.println("player is not null!!");
                 title = player.getCurrentMediaItem().mediaMetadata.title.toString();
                 artist = player.getCurrentMediaItem().mediaMetadata.artist.toString();
                 tv_title.setText(title);
