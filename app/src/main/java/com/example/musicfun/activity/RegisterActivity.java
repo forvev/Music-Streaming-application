@@ -49,6 +49,7 @@ public class RegisterActivity extends BaseActivity {
 
     public void goToMainActivity(){
 //        This indicates the user was already logged in, continue the playing from last time left.
+        sp.edit().putBoolean("initBound", true).apply();
         Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);
         RegisterActivity.this.startActivity(myIntent);
         finish();

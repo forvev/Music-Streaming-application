@@ -35,6 +35,7 @@ import com.example.musicfun.databinding.FragmentSharedPlaylistSongsBinding;
 import com.example.musicfun.databinding.FragmentSongsBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
+import com.example.musicfun.fragment.friends.FriendsFragment;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentArgs;
 import com.example.musicfun.fragment.mymusic.MyPlaylistFragmentDirections;
@@ -100,6 +101,9 @@ public class SharedPlaylistSongsFragment extends Fragment {
         tv_listenTogether = binding.listenTogether;
         selected_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
         isOwner = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getIsOwner();
+        NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+        FriendsFragment parent = (FriendsFragment) navHostFragment.getParentFragment();
+        parent.setSelectedPlaylistName(SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getPlaylistName());
 //        fetch songs from this specific playlist
         viewModel.getSongsFromPlaylist(selected_playlist_id);
         viewModel.getM_songlist().observe(getViewLifecycleOwner(), new Observer<ArrayList<Songs>>(){
@@ -149,7 +153,7 @@ public class SharedPlaylistSongsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String passed_playlist_id = SharedPlaylistSongsFragmentArgs.fromBundle(getArguments()).getSelectedSharedId();
-                NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id);
+                NavDirections action = SharedPlaylistSongsFragmentDirections.actionSharedPlaylistSongsFragmentToSharedPlaylistParticipants3(passed_playlist_id, isOwner);
 
                 Navigation.findNavController(getView()).navigate(action);
 

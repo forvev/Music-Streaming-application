@@ -182,8 +182,11 @@ public class List_of_friends_fragment extends Fragment {
                     friendsViewModel.add_user_to_shared_playlist("playlist/addUserToSharedPlaylist?auth_token=" + sp.getString("token", ""),selected_users_list.get(i), selected_shared_id_2);
                 }
 
-                NavDirections action = List_of_friends_fragmentDirections.actionListOfFriendsFragmentToFriendsSharedPlaylist4();
-                Navigation.findNavController(getView()).navigate(action);
+                NavController navController = NavHostFragment.findNavController(List_of_friends_fragment.this);
+                NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+                Fragment parent = (Fragment) navHostFragment.getParentFragment();
+                parent.getView().findViewById(R.id.FriendsNav).setVisibility(View.VISIBLE);
+                navController.popBackStack();
             }
         });
 
@@ -193,6 +196,9 @@ public class List_of_friends_fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController navController = NavHostFragment.findNavController(List_of_friends_fragment.this);
+                NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+                Fragment parent = (Fragment) navHostFragment.getParentFragment();
+                parent.getView().findViewById(R.id.FriendsNav).setVisibility(View.VISIBLE);
                 navController.popBackStack();
             }
         });

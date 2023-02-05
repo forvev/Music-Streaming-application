@@ -3,6 +3,7 @@ package com.example.musicfun.activity;
 import static com.example.musicfun.activity.MusicbannerService.COPA_RESULT;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -35,6 +38,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -47,6 +51,8 @@ import com.example.musicfun.databinding.ActivityMainBinding;
 import com.example.musicfun.datatype.Playlist;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.datatype.User;
+import com.example.musicfun.fragment.friends.FriendsFragment;
+import com.example.musicfun.fragment.friends.FriendsFragmentDirections;
 import com.example.musicfun.fragment.mymusic.MyMusicFragmentDirections;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.interfaces.CloseSearchViewInterface;
@@ -80,6 +86,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
 
     protected @Nullable ExoPlayer player;
     protected PlayerControlView control;
+    private boolean reloadFriendsFragment;
 
 //    service related attributes
     private List<MediaItem> mediaItems = new ArrayList<>();
@@ -91,7 +98,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     private TextView tv_title;
     private TextView tv_artist;
     private boolean isBound;
-    private boolean initBound = true;
     private MusicbannerService service;
     private BroadcastReceiver broadcastReceiver;
     private Intent intent;
@@ -133,7 +139,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 onBackPressed();
             }
         });
-
 //       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -161,19 +166,23 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 tv_artist.setText(artist);
             }
         };
+        if (sp.getBoolean("initBound", true)){
+            intent = new Intent(getApplicationContext(), MusicbannerService.class);
+            startService(intent);
+        }
         // check whether any songs were saved in the playlist
         String serializedObject = sp.getString("saved_playlist", null);
-        if (serializedObject != null) {
+        if (serializedObject != null && sp.getBoolean("initBound", true)) {
             Gson gson = new Gson();
             Type type = new TypeToken<List<Songs>>(){}.getType();
             songInfo = gson.fromJson(serializedObject, type);
             createMediaItems(songInfo);
+            startAutoPlay = false;
         }
-        else {
+        else if (sp.getBoolean("initBound", true)){
             createMediaItems(null);
+            startAutoPlay = false;
         }
-        startAutoPlay = false;
-
 //        handel toolbar functions
         searchView = binding.actionSearch;
         initSearchHint(getString(R.string.search_hint_songs));
@@ -197,6 +206,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
                 startActivity(i);
             }
         });
+
     }
 
     @Override
@@ -204,7 +214,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     {
 
     }
-
 
     public void listenNavController(){
 //        special care for the MyPlaylistFragment and ChooseOnePlaylistFragment
@@ -295,6 +304,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         public void onClick(View view) {
             if(sp.getInt("logged", 999) == 1){
                 Intent gotoSetting = new Intent(MainActivity.this, SettingActivity.class);
+//                startActivityForResult(gotoSetting, 123);
                 startActivity(gotoSetting);
             }
             else{
@@ -330,9 +340,6 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         else if(currentFragmentId == R.id.friends){
             searchFriend();
         }
-        else{
-            System.out.println("No Fragment is visible in Main activity!");
-        }
     }
 
     /*
@@ -345,28 +352,32 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         discoveryViewModel.getSongNames().observe(MainActivity.this, new Observer<ArrayList<Songs>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<Songs> newName) {
-                SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName);
-                searchResult.setAdapter(adapter);
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        discoveryViewModel.filter(newText);
-                        return true;
-                    }
-                });
-                songInfo = newName;
-            }
-        });
-        searchResult.setOnTouchListener(touchListener);
-        searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                playSong(songInfo.subList(i, songInfo.size()), Player.REPEAT_MODE_ALL);
-                closeSearchView(view);
+                if (!newName.isEmpty()){
+                    songInfo = newName;
+                    SearchResultAdapter adapter = new SearchResultAdapter(MainActivity.this, newName);
+                    searchResult.setAdapter(adapter);
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            discoveryViewModel.filter(newText);
+                            return true;
+                        }
+                    });
+
+                    searchResult.setOnTouchListener(touchListener);
+                    searchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            startItemIndex = i;
+                            playSongFromWhole(newName, Player.REPEAT_MODE_ALL, i);
+                            closeSearchView(view);
+                        }
+                    });
+                }
             }
         });
     }
@@ -514,6 +525,8 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(COPA_RESULT));
+        Intent MusicbannerServiceIntent = new Intent(this, MusicbannerService.class);
+        bindService(MusicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -589,14 +602,9 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
 
 //    initialize the player. If it is the initial bind, then fetch data from SharedPreferences.
     protected boolean initializePlayer() {
-        System.out.println("isBound? " + (isBound));
-        if(!isBound){
-            if(initBound){
-                startItemIndex = sp.getInt("startItemIndex", 0);
-                startPosition = sp.getLong("startPosition", 0);
-                initBound = false;
-            }
-            doBindService();
+        if(!isBound && sp.getBoolean("initBound", true)){
+            startItemIndex = sp.getInt("startItemIndex", 0);
+            startPosition = sp.getLong("startPosition", 0);
         }
         else{
             service.setSongInfo(songInfo);
@@ -605,30 +613,26 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         return true;
     }
 
-    private void doBindService(){
-        Intent MusicbannerServiceIntent = new Intent(this, MusicbannerService.class);
-        bindService(MusicbannerServiceIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
     ServiceConnection playerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service = binder.getMusicbannerService();
             player = service.player;
-
             isBound = true;
-            //Get the initialized player from service
-            intent = new Intent(getApplicationContext(), MusicbannerService.class);
-            startService(intent);
-            service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
-            service.setSongInfo(songInfo);
             control.setPlayer(player);
+            if(sp.getBoolean("initBound", true)){
+                service.setPlaylist(mediaItems, startItemIndex, startPosition, startAutoPlay);
+                service.setSongInfo(songInfo);
+            }
+            else{
+                tv_title.setText(player.getCurrentMediaItem().mediaMetadata.title);
+                tv_artist.setText(player.getCurrentMediaItem().mediaMetadata.artist);
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            System.out.println("the service was killed! ");
         }
     };
 
@@ -641,6 +645,14 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         startAutoPlay = true;
         startPosition = 0;
         startItemIndex = 0;
+        createMediaItems(playlist);
+        player.setRepeatMode(repeatMode);
+    }
+
+    public void playSongFromWhole(List<Songs> playlist, int repeatMode, int startItemIndex) {
+        startAutoPlay = true;
+        startPosition = 0;
+        startItemIndex = startItemIndex;
         createMediaItems(playlist);
         player.setRepeatMode(repeatMode);
     }

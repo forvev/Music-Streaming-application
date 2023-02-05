@@ -2,8 +2,6 @@ package com.example.musicfun.fragment.login;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +15,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,7 +32,6 @@ import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.login.SettingViewModel;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.gson.Gson;
-import com.zeugmasolutions.localehelper.Locales;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,6 +155,7 @@ public class SettingFragment extends Fragment {
         sp.edit().putInt("startItemIndex", 0).apply();
         sp.edit().putLong("startPosition", 0).apply();
         sp.edit().putString("saved_playlist", "").apply();
+        sp.edit().putBoolean("initBound", true).apply();
 
         getActivity().getApplicationContext().stopService(new Intent(getContext(), MusicbannerService.class));
 

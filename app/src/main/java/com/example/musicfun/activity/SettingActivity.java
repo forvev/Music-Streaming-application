@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.musicfun.R;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
@@ -58,6 +59,8 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
+        sp.edit().putBoolean("initBound", false).apply();
         finish();
     }
 

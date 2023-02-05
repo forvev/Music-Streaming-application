@@ -36,6 +36,7 @@ public class SharedPlaylistParticipants extends Fragment {
     ListView listView;
     ParticipantsSharedListAdapter adapter;
     String passed_playlist_id;
+    Boolean isOwner;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -127,7 +128,9 @@ public class SharedPlaylistParticipants extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         passed_playlist_id = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getSelectedSharedId3();
+        isOwner = SharedPlaylistParticipantsArgs.fromBundle(getArguments()).getIsOwner();
         Log.i("passed",passed_playlist_id);
+        Log.i("passed","isOwner: "+ isOwner);
         friendsViewModel.fetch_shared_friends("playlist/getUsersFromSharedPlaylist?auth_token=" + sp.getString("token", ""),passed_playlist_id);
 
         //user/allFriendsForSharedPlaylist
@@ -137,7 +140,7 @@ public class SharedPlaylistParticipants extends Fragment {
             @Override
             public void onChanged(ArrayList<User> users) {
                 Log.i("users:",String.valueOf(users));
-                adapter = new ParticipantsSharedListAdapter(getActivity(), users, friendFragmentInterface);
+                adapter = new ParticipantsSharedListAdapter(getActivity(), users, friendFragmentInterface, isOwner);
                 listView.setAdapter(adapter);
             }
         });

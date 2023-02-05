@@ -24,12 +24,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.musicfun.R;
 import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.adapter.SharedPlaylist.SharedPlaylistAdapter;
 import com.example.musicfun.databinding.FragmentMymusicBinding;
 import com.example.musicfun.datatype.Playlist;
+import com.example.musicfun.fragment.friends.FriendsFragment;
 import com.example.musicfun.interfaces.FragmentTransfer;
 import com.example.musicfun.interfaces.PlaylistMenuClick;
 import com.example.musicfun.viewmodel.mymusic.PlaylistViewModel;
@@ -73,6 +75,9 @@ public class SharedPlaylistFragment extends Fragment {
         @Override
         public void share(List<Playlist> my_playlists, String playlist_id) {
             //Using navigation approach move to another fragment
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            FriendsFragment parent = (FriendsFragment) navHostFragment.getParentFragment();
+            parent.setToolbar();
             NavDirections action = SharedPlaylistFragmentDirections.actionFriendsSharedPlaylistToListOfFriendsFragment(playlist_id);
             Navigation.findNavController(getView()).navigate(action);
         }
@@ -80,10 +85,13 @@ public class SharedPlaylistFragment extends Fragment {
     };
     private FragmentTransfer fragmentTransfer = new FragmentTransfer(){
         @Override
-        public void transferFragment(String selected_shared_id, boolean isOwner) {
+        public void transferFragment(String selected_shared_id, boolean isOwner, String playlist_name) {
             //selected_shared_id -> we pass by the id selected playlist to another fragment
+            NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+            FriendsFragment parent = (FriendsFragment) navHostFragment.getParentFragment();
+            parent.setToolbar();
             ((MainActivity)getActivity()).setPlaylistId(selected_shared_id);
-            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id, isOwner);
+            NavDirections action = SharedPlaylistFragmentDirections.actionSharedPlaylistFragmentToSharedPlaylistSongsFragment(selected_shared_id, isOwner, playlist_name);
             Navigation.findNavController(getView()).navigate(action);
         }
     };

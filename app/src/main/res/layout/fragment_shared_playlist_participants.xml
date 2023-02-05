@@ -8,6 +8,7 @@
     tools:context="fragment.sharedplaylist.SharedPlaylistParticipants"
     android:background="@color/cardview_light_background">
 
+
     <ListView
         android:id="@+id/list_v_shared_playlist_participants"
         android:layout_width="match_parent"

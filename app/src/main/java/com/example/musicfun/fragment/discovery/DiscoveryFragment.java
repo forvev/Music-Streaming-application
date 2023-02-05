@@ -32,6 +32,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -40,10 +42,12 @@ import com.example.musicfun.activity.MainActivity;
 import com.example.musicfun.activity.RegisterActivity;
 import com.example.musicfun.activity.SettingActivity;
 import com.example.musicfun.databinding.FragmentDiscoveryBinding;
+import com.example.musicfun.fragment.mymusic.MyPlaylistFragment;
 import com.example.musicfun.interfaces.PassDataInterface;
 import com.example.musicfun.adapter.search.SearchResultAdapter;
 import com.example.musicfun.datatype.Songs;
 import com.example.musicfun.viewmodel.discovery.DiscoveryViewModel;
+import com.example.musicfun.viewmodel.mymusic.SonglistViewModel;
 import com.google.android.exoplayer2.Player;
 
 import java.util.ArrayList;
@@ -59,6 +63,7 @@ public class DiscoveryFragment extends Fragment {
     private FragmentDiscoveryBinding binding;
     private static final String TAG = "DiscoveryFragment";
     DiscoveryViewModel discoveryViewModel;
+    private SonglistViewModel songlistViewModel;
     public PassDataInterface mOnInputListner;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -68,6 +73,12 @@ public class DiscoveryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String song_id;
+    private String added_PlaylistId = "";
+    private String added_SongId = "";
+    private boolean hasAdded = false;
+    private boolean forceAdd;
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -101,6 +112,7 @@ public class DiscoveryFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         discoveryViewModel = new ViewModelProvider(this).get(DiscoveryViewModel.class);
+        songlistViewModel = new ViewModelProvider(this).get(SonglistViewModel.class);
         binding = FragmentDiscoveryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
@@ -124,6 +136,19 @@ public class DiscoveryFragment extends Fragment {
         }
         NavigationUI.setupWithNavController(binding.DiscoveryNav, controller);
 
+        NavController navController = NavHostFragment.findNavController(DiscoveryFragment.this);
+        MutableLiveData<String> liveData = navController.getCurrentBackStackEntry().getSavedStateHandle().getLiveData("key");
+        liveData.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String playlist_position) {
+                if(playlist_position != null && song_id != null && (forceAdd || (!playlist_position.equals(added_PlaylistId) || !song_id.equals(added_SongId)))){
+                    forceAdd = false;
+                    added_PlaylistId = playlist_position;
+                    added_SongId = song_id;
+                    discoveryViewModel.addSongToPlaylist(playlist_position, song_id);
+                }
+            }
+        });
     }
 
     private Boolean isNetworkAvailable(Application application) {
@@ -153,6 +178,13 @@ public class DiscoveryFragment extends Fragment {
 
     public View getContainer(){
         return getView().findViewById(R.id.DiscoveryNav);
+    }
+
+    public void changeFragement(String song_id){
+        NavDirections action = DiscoveryFragmentDirections.actionDiscoveryToChooseOnePlaylist();
+        Navigation.findNavController(getView()).navigate(action);
+        this.song_id = song_id;
+        this.forceAdd = true;
     }
 
 }

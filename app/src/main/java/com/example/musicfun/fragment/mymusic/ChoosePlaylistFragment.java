@@ -99,13 +99,12 @@ public class ChoosePlaylistFragment extends Fragment {
                         public void onClick(View view) {
 //                            Limitation: Only one item can be transfered back to the previous fragment
                             if(hasChosen){
-                                Toast.makeText(getContext(), getString(R.string.added_to) + " " + finalPlaylists.get(selected_pos).getPlaylist_name(), Toast.LENGTH_SHORT).show();
                                 NavController navController = NavHostFragment.findNavController(ChoosePlaylistFragment.this);
                                 navController.getPreviousBackStackEntry().getSavedStateHandle().set("key", finalPlaylists.get(selected_pos).getPlaylist_id());
                                 navController.popBackStack();
                             }
                             else{
-                                Toast.makeText(getContext(), "Please choose a playlist!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getString(R.string.need_playlist), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
