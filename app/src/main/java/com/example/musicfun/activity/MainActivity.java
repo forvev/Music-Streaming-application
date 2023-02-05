@@ -133,12 +133,7 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
         toolbar = binding.toolbar;
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 //       Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.discovery, R.id.my_music, R.id.friends).build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -243,6 +238,9 @@ public class MainActivity extends BaseActivity implements PassDataInterface {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                setting.setVisibility(View.VISIBLE);
+                searchView.setVisibility(View.VISIBLE);
+                binding.invitees.setVisibility(View.GONE);
                 if (item.getItemId() == R.id.discovery) {
                     searchView.setQueryHint(getString(R.string.search_hint_songs));
                 }
