@@ -287,6 +287,102 @@ public class LyricsFragment extends Fragment {
             MusicbannerService.ServiceBinder binder = (MusicbannerService.ServiceBinder) iBinder;
             service = binder.getMusicbannerService();
             player = service.player;
+            if(player != null){
+                System.out.println("player is not null!!");
+                title = player.getCurrentMediaItem().mediaMetadata.title.toString();
+                artist = player.getCurrentMediaItem().mediaMetadata.artist.toString();
+                tv_title.setText(title);
+                tv_artist.setText(artist);
+                updateLyricsFile();
+
+                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
+                initDefaultButton();
+                String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
+                //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
+                String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
+                Picasso.get().load(coverUrl).into(coverView);
+
+                ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            tv_title.setText(s);
+                        }
+                    }
+                });
+                ((LyricsActivity)getActivity()).getSongArtist().observe(getViewLifecycleOwner(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            tv_artist.setText(s);
+                        }
+                    }
+                });
+                ((LyricsActivity)getActivity()).getSession().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean b) {
+                        isSession = b;
+                        if (isSession) {
+                            ((LyricsActivity)getActivity()).getPlaylistID().observe(getViewLifecycleOwner(), new Observer<String>() {
+                                @Override
+                                public void onChanged(String s) {
+                                    if (!s.isEmpty()){
+                                        service.setSession(true, s);
+                                        room = s;
+//                                            controlView.setShowShuffleButton(true);
+                                        connectToSocketIO();
+                                        JSONObject mess = new JSONObject();
+                                        try{
+                                            mess.put("msg", "send usernames");
+                                            mess.put("username", room);
+                                        }catch(JSONException e){
+                                            e.printStackTrace();
+                                        }
+                                        socketIOClient.mSocket.emit("activeUsers",  mess);
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                if (usernames.size() > 1) {
+                                                    String person2;
+                                                    if (usernames.get(0).equals(sp.getString("name", ""))) {
+                                                        person2 = usernames.get(1);
+                                                    }
+                                                    else {
+                                                        person2 = usernames.get(0);
+                                                    }
+                                                    JSONObject mess2 = new JSONObject();
+                                                    try{
+                                                        mess2.put("msg", "syncJoin");
+                                                        mess2.put("song", "");
+                                                        mess2.put("time", "");
+                                                        mess2.put("person", person2);
+                                                        mess2.put("person2", sp.getString("name", ""));
+                                                        mess2.put("username", room);
+                                                        mess2.put("playPlaying", false);
+                                                        mess2.put("repeat", "");
+                                                        mess2.put("shuffle", false);
+                                                    }catch(JSONException e){
+                                                        e.printStackTrace();
+                                                    }
+                                                    socketIOClient.mSocket.emit("syncOnJoin",  mess2);
+                                                }
+                                            }
+                                        }, 1000);
+                                    }
+                                }
+                            });
+                        }
+                        if(btn_active_guests != null && isSession){
+                            btn_active_guests.setVisibility(View.VISIBLE);
+                            btn_active_guests.setOnClickListener(showActiveGuests);
+                        }
+                        else if (btn_active_guests != null){
+                            btn_active_guests.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                updateLyricsFile();
+            }
             numberOfSongs = player.getMediaItemCount();
             player.addListener(new Player.Listener() {
                 @Override
@@ -339,103 +435,7 @@ public class LyricsFragment extends Fragment {
             });
             controlView.setPlayer(player);
 
-            if(player != null){
-                title = player.getCurrentMediaItem().mediaMetadata.title.toString();
-                artist = player.getCurrentMediaItem().mediaMetadata.artist.toString();
-                tv_title.setText(title);
-                tv_artist.setText(artist);
-                updateLyricsFile();
 
-                current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
-                initDefaultButton();
-                String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
-                //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
-                String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
-                Picasso.get().load(coverUrl).into(coverView);
-
-                if (title.equals("") && artist.equals("")){
-                    ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            if (!s.isEmpty()){
-                                tv_title.setText(s);
-                            }
-                        }
-                    });
-                    ((LyricsActivity)getActivity()).getSongArtist().observe(getViewLifecycleOwner(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            if (!s.isEmpty()){
-                                tv_artist.setText(s);
-                            }
-                        }
-                    });
-                    ((LyricsActivity)getActivity()).getSession().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(Boolean b) {
-                            isSession = b;
-                            if (isSession) {
-                                ((LyricsActivity)getActivity()).getPlaylistID().observe(getViewLifecycleOwner(), new Observer<String>() {
-                                    @Override
-                                    public void onChanged(String s) {
-                                        if (!s.isEmpty()){
-                                            service.setSession(true, s);
-                                            room = s;
-//                                            controlView.setShowShuffleButton(true);
-                                            connectToSocketIO();
-                                            JSONObject mess = new JSONObject();
-                                            try{
-                                                mess.put("msg", "send usernames");
-                                                mess.put("username", room);
-                                            }catch(JSONException e){
-                                                e.printStackTrace();
-                                            }
-                                            socketIOClient.mSocket.emit("activeUsers",  mess);
-                                            Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
-                                                public void run() {
-                                                    if (usernames.size() > 1) {
-                                                        String person2;
-                                                        if (usernames.get(0).equals(sp.getString("name", ""))) {
-                                                            person2 = usernames.get(1);
-                                                        }
-                                                        else {
-                                                            person2 = usernames.get(0);
-                                                        }
-                                                        JSONObject mess2 = new JSONObject();
-                                                        try{
-                                                            mess2.put("msg", "syncJoin");
-                                                            mess2.put("song", "");
-                                                            mess2.put("time", "");
-                                                            mess2.put("person", person2);
-                                                            mess2.put("person2", sp.getString("name", ""));
-                                                            mess2.put("username", room);
-                                                            mess2.put("playPlaying", false);
-                                                            mess2.put("repeat", "");
-                                                            mess2.put("shuffle", false);
-                                                        }catch(JSONException e){
-                                                            e.printStackTrace();
-                                                        }
-                                                        socketIOClient.mSocket.emit("syncOnJoin",  mess2);
-                                                    }
-                                                }
-                                            }, 1000);
-                                        }
-                                    }
-                                });
-                            }
-                            if(btn_active_guests != null && isSession){
-                                btn_active_guests.setVisibility(View.VISIBLE);
-                                btn_active_guests.setOnClickListener(showActiveGuests);
-                            }
-                            else if (btn_active_guests != null){
-                                btn_active_guests.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                }
-                updateLyricsFile();
-            }
         }
 
         @Override
