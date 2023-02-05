@@ -64,7 +64,7 @@ public class Friends_friend_Fragment extends Fragment {
         }
 
         @Override
-        public void deleteFirend(int position, String user_id, String playlist_id) {
+        public void deleteFriend(int position, String user_id, String playlist_id) {
 
         }
 

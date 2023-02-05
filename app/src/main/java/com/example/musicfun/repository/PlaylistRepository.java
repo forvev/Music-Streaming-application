@@ -18,23 +18,26 @@ import org.json.JSONObject;
  * The exceptions are add_friends_to_playlist and all_friends_to_shared_playlist in the database class.
  */
 public class PlaylistRepository {
-    private String getDefaultPlaylist = "http://10.0.2.2:3000/user/getDefaultPlaylist?auth_token=";
-    private String getAllPlaylists = "http://10.0.2.2:3000/playlist/getUsersPlaylists?auth_token=";
-    private String setAsDefault = "http://10.0.2.2:3000/user/setDefaultPlaylist?auth_token=";
-    private String renamePlaylist = "http://10.0.2.2:3000/playlist/changePlaylistName?auth_token=";
-    private String deletePlaylist = "http://10.0.2.2:3000/playlist/deletePlaylist?auth_token=";
-    private String searchPlaylistByName = "http://10.0.2.2:3000/playlist/getUsersPlaylistsByName?auth_token=";
-    private String getSongsFromPlaylist = "http://10.0.2.2:3000/playlist/getSongsFromPlaylist?auth_token=";
-    private String deleteSongsFromPlaylist = "http://10.0.2.2:3000/playlist/removeSong?auth_token=";
-    private String addSongToPlaylist = "http://10.0.2.2:3000/playlist/addSong?auth_token=";
-    private String searchSongListByName = "http://10.0.2.2:3000/playlist/getSongsFromPlaylistByName?auth_token=";
-    private String createPlaylist = "http://10.0.2.2:3000/playlist/createPlaylist?auth_token=";
-    private String getAllOwnedPlaylists = "http://10.0.2.2:3000/playlist/getAllUsersOwnedPlaylists?auth_token=";
+
+    // private String baseUrl = "https://10.0.2.2:3000/";
+    private String baseUrl = "https://100.110.104.112:3000/";
+    private String getDefaultPlaylist = baseUrl + "user/getDefaultPlaylist?auth_token=";
+    private String getAllPlaylists = baseUrl + "playlist/getUsersPlaylists?auth_token=";
+    private String setAsDefault = baseUrl + "user/setDefaultPlaylist?auth_token=";
+    private String renamePlaylist = baseUrl + "playlist/changePlaylistName?auth_token=";
+    private String deletePlaylist = baseUrl + "playlist/deletePlaylist?auth_token=";
+    private String searchPlaylistByName = baseUrl + "playlist/getUsersPlaylistsByName?auth_token=";
+    private String getSongsFromPlaylist = baseUrl + "playlist/getSongsFromPlaylist?auth_token=";
+    private String deleteSongsFromPlaylist = baseUrl + "playlist/removeSong?auth_token=";
+    private String addSongToPlaylist = baseUrl + "playlist/addSong?auth_token=";
+    private String searchSongListByName = baseUrl + "playlist/getSongsFromPlaylistByName?auth_token=";
+    private String createPlaylist = baseUrl + "playlist/createPlaylist?auth_token=";
+    private String getAllOwnedPlaylists = baseUrl + "playlist/getAllUsersOwnedPlaylists?auth_token=";
 
 //      shared playlists relevant urls
-     private String getSharedPlaylists = "http://10.0.2.2:3000/playlist/getUsersSharedPlaylists?auth_token=";
-     private String createSharedPlaylist = "http://10.0.2.2:3000/playlist/createSharedPlaylist?auth_token=";
-     private String setAsShare = "http://10.0.2.2:3000/playlist/convertPlaylistToSharedPlaylist?auth_token=";
+     private String getSharedPlaylists = baseUrl + "playlist/getUsersSharedPlaylists?auth_token=";
+     private String createSharedPlaylist = baseUrl + "playlist/createSharedPlaylist?auth_token=";
+     private String setAsShare = baseUrl + "playlist/convertPlaylistToSharedPlaylist?auth_token=";
     Context context;
 
     public PlaylistRepository(Context context){

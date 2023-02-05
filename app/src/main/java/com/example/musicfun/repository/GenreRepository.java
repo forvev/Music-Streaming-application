@@ -21,8 +21,11 @@ import java.util.Iterator;
  * This class is used to send changes to the user's genres to the database.
  */
 public class GenreRepository {
+
     private String url_receive_genre = "";
-    private String url_post_genre = "http://10.0.2.2:3000/account/sendgenres?auth_token=";
+    // private String baseUrl = "https://10.0.2.2:3000/";
+    private String baseUrl = "https://100.110.104.112:3000/";
+    private String url_post_genre = baseUrl + "account/sendgenres?auth_token=";
 
     private Context context;
 

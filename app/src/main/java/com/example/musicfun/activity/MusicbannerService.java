@@ -94,8 +94,10 @@ public class MusicbannerService extends LifecycleService {
     }
 
     public void setSongInfo (List<Songs> songInfo){
-        this.songInfo = songInfo;
-        this.numberOfSongs = songInfo.size();
+        if (songInfo != null){
+            this.songInfo = songInfo;
+            this.numberOfSongs = songInfo.size();
+        }
     }
 
     public List<Songs> getSongInfo(){
@@ -242,7 +244,8 @@ public class MusicbannerService extends LifecycleService {
             }
             new_song_id = mediaItem.mediaMetadata.description.toString();
             String id = mediaItem.mediaMetadata.description.toString();
-            String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+            //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
+            String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
             String title = mediaItem.mediaMetadata.title.toString();
             String artist = mediaItem.mediaMetadata.artist.toString();
             sendSongInfo(title, artist, coverUrl);
@@ -324,7 +327,8 @@ public class MusicbannerService extends LifecycleService {
                     .setArtist(s.getArtist())
                     .setDescription(s.getSongId())
                     .build();
-            MediaItem mediaItem = new MediaItem.Builder().setUri("http://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+            //MediaItem mediaItem = new MediaItem.Builder().setUri("https://10.0.2.2:3000/songs/" + s.getSongId() + "/output.m3u8")
+            MediaItem mediaItem = new MediaItem.Builder().setUri("https://100.110.104.112:3000/songs/" + s.getSongId() + "/output.m3u8")
                     .setMediaId(Integer.toString(i))
                     .setMediaMetadata(m)
                     .build();
@@ -342,7 +346,9 @@ public class MusicbannerService extends LifecycleService {
         player.setMediaItems(mediaItems, /* resetPosition= */ true);
         player.seekTo(startItemIndex, startPosition);
         player.prepare();
-        last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
+        if (mediaItems.size() > 1 && (sp.getInt("logged", 999) == 1)){
+            last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
+        }
         player.setPlayWhenReady(startAutoPlay);
     }
 

@@ -75,7 +75,7 @@ public class SharedPlaylistParticipants extends Fragment {
         }
 
         @Override
-        public void deleteFirend(int position, String user_id, String playlist_id) {
+        public void deleteFriend(int position, String user_id, String playlist_id) {
             playlist_id = passed_playlist_id;
             friendsViewModel.delete_user_from_shared_playlist("playlist/deleteUserFromSharedPlaylist?auth_token=" + sp.getString("token", ""), user_id, playlist_id, position);
             Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();

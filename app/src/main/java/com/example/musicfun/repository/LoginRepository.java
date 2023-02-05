@@ -22,11 +22,13 @@ import org.json.JSONObject;
  */
 public class LoginRepository {
 
-    private final String url_login = "http://10.0.2.2:3000/account/login";
-    private final String url_register = "http://10.0.2.2:3000/account/signup";
-    private final String url_reset = "http://10.0.2.2:3000/account/change-password?auth_token=";
-    private final String url_saveListenStatus = "http://10.0.2.2:3000/user/saveData?auth_token=";
-    private final String url_getListenStatus = "http://10.0.2.2:3000/user/getData?auth_token=";
+    // private String baseUrl = "https://10.0.2.2:3000/";
+    private String baseUrl = "https://100.110.104.112:3000/";
+    private final String url_login = baseUrl + "account/login";
+    private final String url_register = baseUrl + "account/signup";
+    private final String url_reset = baseUrl + "account/change-password?auth_token=";
+    private final String url_saveListenStatus = baseUrl + "user/saveData?auth_token=";
+    private final String url_getListenStatus = baseUrl + "user/getData?auth_token=";
     SharedPreferences sp;
 
     private Context context;
@@ -134,6 +136,12 @@ public class LoginRepository {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url_getListenStatus + token, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                try {
+                    response.remove("startPosition");
+                    response.put("startPosition", 0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 callBack.onSuccess(response);
             }
         }, new Response.ErrorListener() {

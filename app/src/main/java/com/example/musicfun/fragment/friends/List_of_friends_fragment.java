@@ -29,6 +29,7 @@ import com.example.musicfun.datatype.User;
 import com.example.musicfun.interfaces.FriendFragmentInterface;
 import com.example.musicfun.viewmodel.FriendsViewModel;
 
+
 import java.util.ArrayList;
 
 /**
@@ -97,9 +98,14 @@ public class List_of_friends_fragment extends Fragment {
         }
 
         @Override
-        public void deleteFirend(int position, String user_id, String playlist_id) {
+        public void deleteFriend(int position, String user_id, String playlist_id) {
 
         }
+
+        //@Override
+        //public void deleteFriend(int position, String user_id, String playlist_id) {
+
+        //}
 
         @Override
         public void addFriend(String name, int i) {

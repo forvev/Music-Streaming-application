@@ -304,7 +304,7 @@ public class LyricsFragment extends Fragment {
                                     }
                                     playerpause = false;
                                 }
-                            }, 500);
+                            }, 1000);
                         }
                     }
                     playerseek = false;
@@ -349,7 +349,8 @@ public class LyricsFragment extends Fragment {
                 current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
                 initDefaultButton();
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
-                String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+                //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
+                String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
 
                 if (title.equals("") && artist.equals("")){
@@ -718,6 +719,7 @@ public class LyricsFragment extends Fragment {
                 });
             }
             if (message.equals("syncTime") && !info.equals(lastTimestamp)) {
+                Log.d("syncTime", "SYNCTIME");
                 lastTimestamp = info;
                 long finalInfo = Long.parseLong(info);
                 getActivity().runOnUiThread(new Runnable() {
