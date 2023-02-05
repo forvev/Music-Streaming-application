@@ -344,7 +344,9 @@ public class MusicbannerService extends LifecycleService {
         player.setMediaItems(mediaItems, /* resetPosition= */ true);
         player.seekTo(startItemIndex, startPosition);
         player.prepare();
-        last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
+        if (mediaItems.size() > 1 && (sp.getInt("logged", 999) == 1)){
+            last_song_id = mediaItems.get(0).mediaMetadata.description.toString();
+        }
         player.setPlayWhenReady(startAutoPlay);
     }
 

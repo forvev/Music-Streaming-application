@@ -80,7 +80,7 @@ public class ParticipantsSharedListAdapter extends BaseAdapter {
 
     if(isOwner){
         holder.imageView_delete.setVisibility(View.VISIBLE);
-        holder.imageView_delete.setOnClickListener(click ->fi.deleteFirend(position, userList.get(position).getUser_id(),""));
+        holder.imageView_delete.setOnClickListener(click ->fi.deleteFriend(position, userList.get(position).getUser_id(),""));
     }else{
         holder.imageView_delete.setVisibility(View.GONE);
     }
