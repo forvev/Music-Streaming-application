@@ -94,8 +94,10 @@ public class MusicbannerService extends LifecycleService {
     }
 
     public void setSongInfo (List<Songs> songInfo){
-        this.songInfo = songInfo;
-        this.numberOfSongs = songInfo.size();
+        if (songInfo != null){
+            this.songInfo = songInfo;
+            this.numberOfSongs = songInfo.size();
+        }
     }
 
     public List<Songs> getSongInfo(){
