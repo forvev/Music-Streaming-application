@@ -211,13 +211,19 @@ public class LyricsFragment extends Fragment {
         ImageView btn_currentPlaylist = getView().findViewById(R.id.current_playlist);
         btn_currentPlaylist.setOnClickListener(showCurrentPlaylist);
         btn_active_guests = binding.activeListeners;
-        if (isSession) {
-            btn_active_guests.setVisibility(View.VISIBLE);
-            btn_active_guests.setOnClickListener(showActiveGuests);
-        }
-        else {
-            btn_active_guests.setVisibility(View.GONE);
-        }
+        ((LyricsActivity)getActivity()).getSession().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean b) {
+                isSession = b;
+                if (isSession) {
+                    btn_active_guests.setVisibility(View.VISIBLE);
+                    btn_active_guests.setOnClickListener(showActiveGuests);
+                }
+                else {
+                    btn_active_guests.setVisibility(View.GONE);
+                }
+            }
+        });
 
 //        Service informs the media transfers
         broadcastReceiver = new BroadcastReceiver() {
