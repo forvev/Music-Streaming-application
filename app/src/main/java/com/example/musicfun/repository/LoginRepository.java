@@ -22,8 +22,8 @@ import org.json.JSONObject;
  */
 public class LoginRepository {
 
-    // private String baseUrl = "https://10.0.2.2:3000/";
-    private String baseUrl = "https://100.110.104.112:3000/";
+     private String baseUrl = "http://10.0.2.2:3000/";
+//    private String baseUrl = "https://100.110.104.112:3000/";
     private final String url_login = baseUrl + "account/login";
     private final String url_register = baseUrl + "account/signup";
     private final String url_reset = baseUrl + "account/change-password?auth_token=";

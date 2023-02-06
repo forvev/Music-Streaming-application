@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class Database {
 
-    // private String baseUrl = "https://10.0.2.2:3000/";
-    private String baseUrl = "https://100.110.104.112:3000/";
+     private String baseUrl = "http://10.0.2.2:3000/";
+//    private String baseUrl = "https://100.110.104.112:3000/";
     private String searchUrl =  baseUrl + "get/titleStartsWith?string=";
     private String searchUserUrl = baseUrl + "get/userStartsWith?auth_token=";
     private String urlListenHistory = baseUrl + "account/addListenHistory?auth_token=";

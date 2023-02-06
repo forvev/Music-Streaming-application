@@ -297,8 +297,8 @@ public class LyricsFragment extends Fragment {
                 current_song_id = player.getCurrentMediaItem().mediaMetadata.description.toString();
                 initDefaultButton();
                 String id = Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.description.toString();
-                //String coverUrl = "https://10.0.2.2:3000/images/" + id + ".jpg";
-                String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
+                String coverUrl = "http://10.0.2.2:3000/images/" + id + ".jpg";
+//                String coverUrl = "https://100.110.104.112:3000/images/" + id + ".jpg";
                 Picasso.get().load(coverUrl).into(coverView);
 
                 ((LyricsActivity)getActivity()).getSongTitle().observe(getViewLifecycleOwner(), new Observer<String>() {

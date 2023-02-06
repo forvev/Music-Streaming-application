@@ -19,8 +19,8 @@ import org.json.JSONObject;
  */
 public class PlaylistRepository {
 
-    // private String baseUrl = "https://10.0.2.2:3000/";
-    private String baseUrl = "https://100.110.104.112:3000/";
+     private String baseUrl = "http://10.0.2.2:3000/";
+//    private String baseUrl = "https://100.110.104.112:3000/";
     private String getDefaultPlaylist = baseUrl + "user/getDefaultPlaylist?auth_token=";
     private String getAllPlaylists = baseUrl + "playlist/getUsersPlaylists?auth_token=";
     private String setAsDefault = baseUrl + "user/setDefaultPlaylist?auth_token=";
