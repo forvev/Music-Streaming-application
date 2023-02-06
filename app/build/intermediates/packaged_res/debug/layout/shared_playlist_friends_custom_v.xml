@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/friends_shared_playlist_custom_view_username"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/merriweather"
+        android:textColor="@color/purple_900"
+        android:textSize="16sp"
+        android:layout_marginEnd="4dp"
+        tools:text="Username" />
+
+    <RadioButton
+        android:id="@+id/btn_select_shared_friends"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+
+        />
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>

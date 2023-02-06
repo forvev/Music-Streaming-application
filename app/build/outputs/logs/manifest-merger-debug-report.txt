@@ -1,0 +1,437 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+MERGED from [androidx.databinding:viewbinding:7.3.1] C:\Users\felixo\.gradle\caches\transforms-3\416295167e18ef12fa599a82d23526e4\transformed\viewbinding-7.3.1\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.navigation:navigation-ui:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\b389ded8e9f2f28cb713090520b9d4a0\transformed\navigation-ui-2.5.3\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.material:material:1.7.0] C:\Users\felixo\.gradle\caches\transforms-3\cf29077631201364a2be7d00c12c5d4b\transformed\material-1.7.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\felixo\.gradle\caches\transforms-3\055c74c0761569afc358dbec0742bc5b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
+MERGED from [com.zeugmasolutions.localehelper:locale-helper-android:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\12295b47ba889493bb45f59cae9f20b7\transformed\locale-helper-android-1.5.1\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8c874c78e6d0429822cedf7750c3865e\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4299376f4e5d03c0d5bf6c4d6d4b5067\transformed\appcompat-1.5.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\80478e3f4dbf295ee0bdc5f86a86dbbc\transformed\lifecycle-livedata-ktx-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-fragment:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7007773b95c3d1de735aebcb1dd9dc4f\transformed\navigation-fragment-2.5.3\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment-ktx:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\39af56a58f2d57d75bcefecf7dc756c4\transformed\fragment-ktx-1.5.4\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-runtime:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7ed0aeab092340948245c17a5f28582e\transformed\navigation-runtime-2.5.3\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity-ktx:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\459716af73aa6881de0360b3421d1503\transformed\activity-ktx-1.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-common:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\77e8419156d92b0c4801b10e45afeab0\transformed\navigation-common-2.5.3\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8d3780de41944a575a7a349cea38947a\transformed\lifecycle-viewmodel-ktx-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.volley:volley:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\17ed3a66f5494e44f5dcc6b49925acad\transformed\volley-1.2.1\AndroidManifest.xml:2:1-7:12
+MERGED from [com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\851231f5d5465142e9c20fa5a02c4fee\transformed\fadingedgelayout-1.0.0\AndroidManifest.xml:2:1-10:12
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c9b5413edbde4b7358f38907b2b03024\transformed\lifecycle-extensions-2.0.0\AndroidManifest.xml:17:1-25:12
+MERGED from [com.google.android.exoplayer:exoplayer:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fdc914e783630cfda6a5da7cf063982b\transformed\exoplayer-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\131b7d6d4a66c47f5b0d5dcb06d246c2\transformed\exoplayer-dash-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\678eeefa3ee2015a784131940e329042\transformed\exoplayer-hls-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-rtsp:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\d4085b531927cc08dad5ca27a6811185\transformed\exoplayer-rtsp-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\f53c22efb14ad6511f7f4c08b3abce49\transformed\exoplayer-smoothstreaming-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\7fdd7ce3528d7ec0b1216a5cda77399f\transformed\exoplayer-core-2.18.0\AndroidManifest.xml:17:1-26:12
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\0a3809d9dd21ee9a44087a4122c60d66\transformed\exoplayer-ui-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b4dcbd3d36251bbb18fb7452851b7fba\transformed\viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\4194fdf9deee6c8bc1d7be6434d14f91\transformed\fragment-1.5.4\AndroidManifest.xml:17:1-24:12
+MERGED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:2:1-14:12
+MERGED from [androidx.activity:activity:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4938537b6b29f2d0f13055358025e633\transformed\activity-1.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f6a91b176b6132d814c5160d7858a9e1\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\2f28bfe5ceb401435d8ddff4603599a4\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\34e4fa9a6321ae07e8b19425f72330f4\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\d76948f40dec9e80e12749952c23cc3b\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\dc97ca16eebf6cec4d1757c2c7837e82\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\873f2467bcbe882fed6b4edb89512d10\transformed\core-ktx-1.8.0\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\8e1fc973c55c44269d35da22cfccb85e\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\89d8b2a99726bede48318936086cf2ed\transformed\drawerlayout-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\d3f3419424e6ed98d658c6d387ddcf41\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cc0d3abddf1fa30f2956cc48e8ddf460\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cebf2be9a8419b6702e8666f6b270b8f\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\d8948f21965d385d0d94d351c2b5189f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\97523f48c681adfcbfdf5ac17205ac6e\transformed\recyclerview-1.2.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f7df816ba15b70554fb52135163c0ed8\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\38da69b5c12426c397cffa931a63f37f\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media:media:1.4.3] C:\Users\felixo\.gradle\caches\transforms-3\c512d05d656afb1da061819a813fb96e\transformed\media-1.4.3\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\felixo\.gradle\caches\transforms-3\0adbcb1fc2cd53b4c6749ef065158cfd\transformed\transition-1.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\d5ddd9ba31d32ca6cada046daa83237e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-service:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\1743d8ca6b67806db85fa4d84216a648\transformed\lifecycle-service-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\787292652561d9448fa2aff670808fab\transformed\lifecycle-runtime-ktx-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\3659d286826532e8d4ae9b4139b61390\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4007b3ceba1bba70f42db5ff0db7197b\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4113a4c20163164594cab80eb9a74741\transformed\savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\183c402bd857ac237aa13347d464699b\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.exoplayer:exoplayer-datasource:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\23601c8c5f2c67fd87b7b4c7345c0935\transformed\exoplayer-datasource-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-database:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\e7e2abc66b1be0f623dc0cf8a140887d\transformed\exoplayer-database-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\13c49305470dbd8e55345bd67c67b630\transformed\exoplayer-extractor-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-decoder:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fe1e08c81ab94d6a1b3c0db72b84f711\transformed\exoplayer-decoder-2.18.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-common:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\a993dc0712e3bfcaa40f5112c91eb720\transformed\exoplayer-common-2.18.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\2200648cfbff70a25bfdfb73b242ecac\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b1de9accbde4d27a490e2fe1bf156aa8\transformed\exifinterface-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\eb74f86ea53282cb77528028461e04ee\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\fdc1ebf2a3932a95b1c642aac4b7f17d\transformed\lifecycle-livedata-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\15f5652aaf0163cdd39f61a5cd2c1bfa\transformed\lifecycle-livedata-core-ktx-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4a1f092988c885cb5e471949ff2ae615\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\felixo\.gradle\caches\transforms-3\3c79fbc2bf462f69e33dea4f85b838c2\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\8b772400b24ae77aca5104b9827b5660\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\cbe994759e88c8b7f26d6432612e4416\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c39b31092f8805444d55fa9a6a1f6a57\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\7c13f54fb42ac3160f725e021f6f2bb4\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\bee61eaf9a1eff65b71d8859e61c96f7\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+	package
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:1-64:12
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:4:22-64
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:5:5-77
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:5:22-74
+application
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:7:5-62:19
+MERGED from [com.google.android.material:material:1.7.0] C:\Users\felixo\.gradle\caches\transforms-3\cf29077631201364a2be7d00c12c5d4b\transformed\material-1.7.0\AndroidManifest.xml:24:5-20
+MERGED from [com.google.android.material:material:1.7.0] C:\Users\felixo\.gradle\caches\transforms-3\cf29077631201364a2be7d00c12c5d4b\transformed\material-1.7.0\AndroidManifest.xml:24:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\felixo\.gradle\caches\transforms-3\055c74c0761569afc358dbec0742bc5b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\felixo\.gradle\caches\transforms-3\055c74c0761569afc358dbec0742bc5b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\851231f5d5465142e9c20fa5a02c4fee\transformed\fadingedgelayout-1.0.0\AndroidManifest.xml:8:5-20
+MERGED from [com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\851231f5d5465142e9c20fa5a02c4fee\transformed\fadingedgelayout-1.0.0\AndroidManifest.xml:8:5-20
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c9b5413edbde4b7358f38907b2b03024\transformed\lifecycle-extensions-2.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c9b5413edbde4b7358f38907b2b03024\transformed\lifecycle-extensions-2.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:7:5-12:19
+MERGED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:7:5-12:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\2200648cfbff70a25bfdfb73b242ecac\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\2200648cfbff70a25bfdfb73b242ecac\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:14:9-35
+	android:label
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:12:9-41
+	android:fullBackupContent
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:10:9-54
+	android:roundIcon
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:13:9-54
+	tools:targetApi
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:18:9-29
+	android:icon
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:11:9-43
+	android:allowBackup
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:8:9-35
+	android:theme
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:15:9-46
+	android:networkSecurityConfig
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:17:9-69
+	android:dataExtractionRules
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:9:9-65
+	android:usesCleartextTraffic
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:16:9-44
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:19:9-47
+service#com.example.musicfun.activity.MusicbannerService
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:20:9-24:48
+	android:enabled
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:22:13-35
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:24:13-37
+	android:stopWithTask
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:23:13-40
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:21:13-56
+activity#com.example.musicfun.activity.RegisterActivity
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:26:9-35:20
+	android:label
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:29:13-45
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:28:13-36
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:27:13-54
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:30:13-34:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:31:17-69
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:31:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:33:17-77
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:33:27-74
+activity#com.example.musicfun.activity.MessageListActivity
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:36:9-42:20
+	android:parentActivityName
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:40:13-71
+	android:label
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:39:13-33
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:38:13-36
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:37:13-57
+activity#com.example.musicfun.activity.MainActivity
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:43:9-47:20
+	android:launchMode
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:46:13-43
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:45:13-36
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:44:13-50
+activity#com.example.musicfun.activity.LyricsActivity
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:49:9-52:20
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:51:13-36
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:50:13-52
+activity#com.example.musicfun.activity.SettingActivity
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:54:9-57:39
+	android:label
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:57:13-36
+	android:exported
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:56:13-36
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:55:13-53
+meta-data#preloaded_fonts
+ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:59:9-61:57
+	android:resource
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:61:13-54
+	android:name
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml:60:13-43
+uses-sdk
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+MERGED from [androidx.databinding:viewbinding:7.3.1] C:\Users\felixo\.gradle\caches\transforms-3\416295167e18ef12fa599a82d23526e4\transformed\viewbinding-7.3.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.databinding:viewbinding:7.3.1] C:\Users\felixo\.gradle\caches\transforms-3\416295167e18ef12fa599a82d23526e4\transformed\viewbinding-7.3.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.navigation:navigation-ui:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\b389ded8e9f2f28cb713090520b9d4a0\transformed\navigation-ui-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\b389ded8e9f2f28cb713090520b9d4a0\transformed\navigation-ui-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.7.0] C:\Users\felixo\.gradle\caches\transforms-3\cf29077631201364a2be7d00c12c5d4b\transformed\material-1.7.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.7.0] C:\Users\felixo\.gradle\caches\transforms-3\cf29077631201364a2be7d00c12c5d4b\transformed\material-1.7.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\felixo\.gradle\caches\transforms-3\055c74c0761569afc358dbec0742bc5b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\felixo\.gradle\caches\transforms-3\055c74c0761569afc358dbec0742bc5b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.zeugmasolutions.localehelper:locale-helper-android:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\12295b47ba889493bb45f59cae9f20b7\transformed\locale-helper-android-1.5.1\AndroidManifest.xml:5:5-7:41
+MERGED from [com.zeugmasolutions.localehelper:locale-helper-android:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\12295b47ba889493bb45f59cae9f20b7\transformed\locale-helper-android-1.5.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8c874c78e6d0429822cedf7750c3865e\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8c874c78e6d0429822cedf7750c3865e\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4299376f4e5d03c0d5bf6c4d6d4b5067\transformed\appcompat-1.5.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4299376f4e5d03c0d5bf6c4d6d4b5067\transformed\appcompat-1.5.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\80478e3f4dbf295ee0bdc5f86a86dbbc\transformed\lifecycle-livedata-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\80478e3f4dbf295ee0bdc5f86a86dbbc\transformed\lifecycle-livedata-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7007773b95c3d1de735aebcb1dd9dc4f\transformed\navigation-fragment-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7007773b95c3d1de735aebcb1dd9dc4f\transformed\navigation-fragment-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\39af56a58f2d57d75bcefecf7dc756c4\transformed\fragment-ktx-1.5.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\39af56a58f2d57d75bcefecf7dc756c4\transformed\fragment-ktx-1.5.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7ed0aeab092340948245c17a5f28582e\transformed\navigation-runtime-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-runtime:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\7ed0aeab092340948245c17a5f28582e\transformed\navigation-runtime-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity-ktx:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\459716af73aa6881de0360b3421d1503\transformed\activity-ktx-1.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity-ktx:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\459716af73aa6881de0360b3421d1503\transformed\activity-ktx-1.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\77e8419156d92b0c4801b10e45afeab0\transformed\navigation-common-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-common:2.5.3] C:\Users\felixo\.gradle\caches\transforms-3\77e8419156d92b0c4801b10e45afeab0\transformed\navigation-common-2.5.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8d3780de41944a575a7a349cea38947a\transformed\lifecycle-viewmodel-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\8d3780de41944a575a7a349cea38947a\transformed\lifecycle-viewmodel-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.android.volley:volley:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\17ed3a66f5494e44f5dcc6b49925acad\transformed\volley-1.2.1\AndroidManifest.xml:5:5-43
+MERGED from [com.android.volley:volley:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\17ed3a66f5494e44f5dcc6b49925acad\transformed\volley-1.2.1\AndroidManifest.xml:5:5-43
+MERGED from [com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\851231f5d5465142e9c20fa5a02c4fee\transformed\fadingedgelayout-1.0.0\AndroidManifest.xml:6:5-43
+MERGED from [com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\851231f5d5465142e9c20fa5a02c4fee\transformed\fadingedgelayout-1.0.0\AndroidManifest.xml:6:5-43
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c9b5413edbde4b7358f38907b2b03024\transformed\lifecycle-extensions-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c9b5413edbde4b7358f38907b2b03024\transformed\lifecycle-extensions-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.exoplayer:exoplayer:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fdc914e783630cfda6a5da7cf063982b\transformed\exoplayer-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fdc914e783630cfda6a5da7cf063982b\transformed\exoplayer-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\131b7d6d4a66c47f5b0d5dcb06d246c2\transformed\exoplayer-dash-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\131b7d6d4a66c47f5b0d5dcb06d246c2\transformed\exoplayer-dash-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\678eeefa3ee2015a784131940e329042\transformed\exoplayer-hls-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\678eeefa3ee2015a784131940e329042\transformed\exoplayer-hls-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-rtsp:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\d4085b531927cc08dad5ca27a6811185\transformed\exoplayer-rtsp-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-rtsp:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\d4085b531927cc08dad5ca27a6811185\transformed\exoplayer-rtsp-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\f53c22efb14ad6511f7f4c08b3abce49\transformed\exoplayer-smoothstreaming-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\f53c22efb14ad6511f7f4c08b3abce49\transformed\exoplayer-smoothstreaming-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\7fdd7ce3528d7ec0b1216a5cda77399f\transformed\exoplayer-core-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\7fdd7ce3528d7ec0b1216a5cda77399f\transformed\exoplayer-core-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\0a3809d9dd21ee9a44087a4122c60d66\transformed\exoplayer-ui-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\0a3809d9dd21ee9a44087a4122c60d66\transformed\exoplayer-ui-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b4dcbd3d36251bbb18fb7452851b7fba\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b4dcbd3d36251bbb18fb7452851b7fba\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\4194fdf9deee6c8bc1d7be6434d14f91\transformed\fragment-1.5.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\felixo\.gradle\caches\transforms-3\4194fdf9deee6c8bc1d7be6434d14f91\transformed\fragment-1.5.4\AndroidManifest.xml:20:5-22:41
+MERGED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:5:5-44
+MERGED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4938537b6b29f2d0f13055358025e633\transformed\activity-1.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4938537b6b29f2d0f13055358025e633\transformed\activity-1.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f6a91b176b6132d814c5160d7858a9e1\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f6a91b176b6132d814c5160d7858a9e1\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\2f28bfe5ceb401435d8ddff4603599a4\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\2f28bfe5ceb401435d8ddff4603599a4\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\34e4fa9a6321ae07e8b19425f72330f4\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\34e4fa9a6321ae07e8b19425f72330f4\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\d76948f40dec9e80e12749952c23cc3b\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\d76948f40dec9e80e12749952c23cc3b\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\dc97ca16eebf6cec4d1757c2c7837e82\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\dc97ca16eebf6cec4d1757c2c7837e82\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\873f2467bcbe882fed6b4edb89512d10\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\873f2467bcbe882fed6b4edb89512d10\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\8e1fc973c55c44269d35da22cfccb85e\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\8e1fc973c55c44269d35da22cfccb85e\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\89d8b2a99726bede48318936086cf2ed\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\89d8b2a99726bede48318936086cf2ed\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\d3f3419424e6ed98d658c6d387ddcf41\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\d3f3419424e6ed98d658c6d387ddcf41\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cc0d3abddf1fa30f2956cc48e8ddf460\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cc0d3abddf1fa30f2956cc48e8ddf460\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cebf2be9a8419b6702e8666f6b270b8f\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\cebf2be9a8419b6702e8666f6b270b8f\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\d8948f21965d385d0d94d351c2b5189f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\d8948f21965d385d0d94d351c2b5189f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\97523f48c681adfcbfdf5ac17205ac6e\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\felixo\.gradle\caches\transforms-3\97523f48c681adfcbfdf5ac17205ac6e\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f7df816ba15b70554fb52135163c0ed8\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\f7df816ba15b70554fb52135163c0ed8\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\38da69b5c12426c397cffa931a63f37f\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\38da69b5c12426c397cffa931a63f37f\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.4.3] C:\Users\felixo\.gradle\caches\transforms-3\c512d05d656afb1da061819a813fb96e\transformed\media-1.4.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.4.3] C:\Users\felixo\.gradle\caches\transforms-3\c512d05d656afb1da061819a813fb96e\transformed\media-1.4.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\felixo\.gradle\caches\transforms-3\0adbcb1fc2cd53b4c6749ef065158cfd\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\felixo\.gradle\caches\transforms-3\0adbcb1fc2cd53b4c6749ef065158cfd\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] C:\Users\felixo\.gradle\caches\transforms-3\13372966b58968152c3d01be692226ae\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\d5ddd9ba31d32ca6cada046daa83237e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\d5ddd9ba31d32ca6cada046daa83237e\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\1743d8ca6b67806db85fa4d84216a648\transformed\lifecycle-service-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.0.0] C:\Users\felixo\.gradle\caches\transforms-3\1743d8ca6b67806db85fa4d84216a648\transformed\lifecycle-service-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\787292652561d9448fa2aff670808fab\transformed\lifecycle-runtime-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\787292652561d9448fa2aff670808fab\transformed\lifecycle-runtime-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\3659d286826532e8d4ae9b4139b61390\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\3659d286826532e8d4ae9b4139b61390\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4007b3ceba1bba70f42db5ff0db7197b\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4007b3ceba1bba70f42db5ff0db7197b\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4113a4c20163164594cab80eb9a74741\transformed\savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\4113a4c20163164594cab80eb9a74741\transformed\savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\183c402bd857ac237aa13347d464699b\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\183c402bd857ac237aa13347d464699b\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.exoplayer:exoplayer-datasource:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\23601c8c5f2c67fd87b7b4c7345c0935\transformed\exoplayer-datasource-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-datasource:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\23601c8c5f2c67fd87b7b4c7345c0935\transformed\exoplayer-datasource-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-database:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\e7e2abc66b1be0f623dc0cf8a140887d\transformed\exoplayer-database-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-database:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\e7e2abc66b1be0f623dc0cf8a140887d\transformed\exoplayer-database-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\13c49305470dbd8e55345bd67c67b630\transformed\exoplayer-extractor-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\13c49305470dbd8e55345bd67c67b630\transformed\exoplayer-extractor-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-decoder:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fe1e08c81ab94d6a1b3c0db72b84f711\transformed\exoplayer-decoder-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-decoder:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\fe1e08c81ab94d6a1b3c0db72b84f711\transformed\exoplayer-decoder-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-common:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\a993dc0712e3bfcaa40f5112c91eb720\transformed\exoplayer-common-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-common:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\a993dc0712e3bfcaa40f5112c91eb720\transformed\exoplayer-common-2.18.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\2200648cfbff70a25bfdfb73b242ecac\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\2200648cfbff70a25bfdfb73b242ecac\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b1de9accbde4d27a490e2fe1bf156aa8\transformed\exifinterface-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\b1de9accbde4d27a490e2fe1bf156aa8\transformed\exifinterface-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\eb74f86ea53282cb77528028461e04ee\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\eb74f86ea53282cb77528028461e04ee\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\fdc1ebf2a3932a95b1c642aac4b7f17d\transformed\lifecycle-livedata-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\fdc1ebf2a3932a95b1c642aac4b7f17d\transformed\lifecycle-livedata-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\15f5652aaf0163cdd39f61a5cd2c1bfa\transformed\lifecycle-livedata-core-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\15f5652aaf0163cdd39f61a5cd2c1bfa\transformed\lifecycle-livedata-core-ktx-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4a1f092988c885cb5e471949ff2ae615\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\felixo\.gradle\caches\transforms-3\4a1f092988c885cb5e471949ff2ae615\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\felixo\.gradle\caches\transforms-3\3c79fbc2bf462f69e33dea4f85b838c2\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\felixo\.gradle\caches\transforms-3\3c79fbc2bf462f69e33dea4f85b838c2\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\8b772400b24ae77aca5104b9827b5660\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\8b772400b24ae77aca5104b9827b5660\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\cbe994759e88c8b7f26d6432612e4416\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\cbe994759e88c8b7f26d6432612e4416\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c39b31092f8805444d55fa9a6a1f6a57\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\c39b31092f8805444d55fa9a6a1f6a57\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\7c13f54fb42ac3160f725e021f6f2bb4\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\7c13f54fb42ac3160f725e021f6f2bb4\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\bee61eaf9a1eff65b71d8859e61c96f7\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\felixo\.gradle\caches\transforms-3\bee61eaf9a1eff65b71d8859e61c96f7\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\felixo\IptkPraktikumGitLab\musicfun\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [com.google.android.exoplayer:exoplayer-core:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\7fdd7ce3528d7ec0b1216a5cda77399f\transformed\exoplayer-core-2.18.0\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.exoplayer:exoplayer-common:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\a993dc0712e3bfcaa40f5112c91eb720\transformed\exoplayer-common-2.18.0\AndroidManifest.xml:24:5-79
+MERGED from [com.google.android.exoplayer:exoplayer-common:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\a993dc0712e3bfcaa40f5112c91eb720\transformed\exoplayer-common-2.18.0\AndroidManifest.xml:24:5-79
+	android:name
+		ADDED from [com.google.android.exoplayer:exoplayer-core:2.18.0] C:\Users\felixo\.gradle\caches\transforms-3\7fdd7ce3528d7ec0b1216a5cda77399f\transformed\exoplayer-core-2.18.0\AndroidManifest.xml:24:22-76
+provider#com.squareup.picasso.PicassoProvider
+ADDED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:8:9-11:40
+	android:authorities
+		ADDED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:10:13-72
+	android:exported
+		ADDED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:11:13-37
+	android:name
+		ADDED from [com.squareup.picasso:picasso:2.8] C:\Users\felixo\.gradle\caches\transforms-3\9a518330ec1b1664af9796ffb602e87d\transformed\picasso-2.8\AndroidManifest.xml:9:13-64
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\felixo\.gradle\caches\transforms-3\375a555ce3933bce72a48a9ca364c887\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\felixo\.gradle\caches\transforms-3\434675d82118599e92178f3f12d7dfb0\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\felixo\.gradle\caches\transforms-3\3142127135724462cd3bb76a4d579f63\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\felixo\.gradle\caches\transforms-3\9d7dd09705e1798864ab5391db39c07e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78

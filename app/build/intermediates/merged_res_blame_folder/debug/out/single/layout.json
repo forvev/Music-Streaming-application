@@ -1,0 +1,206 @@
+[
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\chat_view_my_message.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\chat_view_my_message.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_lyrics.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_lyrics.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\activity_register.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_participants_shared_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_participants_shared_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\music_banner.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\music_banner.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\friends_custom_request_received.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\friends_custom_request_received.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_songlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_songlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_songs.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_songs.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_shared_playlist_songs.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_shared_playlist_songs.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\friends_custom_request_sent.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\friends_custom_request_sent.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\exo_player_control_view.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\exo_player_control_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\chat_view_other_message.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\chat_view_other_message.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_simple_discovery.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_simple_discovery.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_discovery_charts.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_discovery_charts.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_discovery.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_discovery.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\activity_chat.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\activity_chat.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_login.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\activity_lyrics.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\activity_lyrics.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\songs_custom_view.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\songs_custom_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_active_listeners.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_active_listeners.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_song_search.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_song_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_choose_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_choose_playlist.xml"
+    },
+    {
+        "merged": "com.example.musicfun.app-mergeDebugResources-46:/layout/fragment_chat.xml",
+        "source": "com.example.musicfun.app-main-49:/layout/fragment_chat.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\friends_custom_view.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\friends_custom_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_setting.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_register.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_discovery_new_releases.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_discovery_new_releases.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_username.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_username.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_genre.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_genre.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_friends_shared_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_friends_shared_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\dialog_leave_room.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\dialog_leave_room.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_mymusic.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_mymusic.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\activity_setting.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\activity_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\shared_playlist_friends_custom_v.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\shared_playlist_friends_custom_v.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_discovery_may_like.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_discovery_may_like.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\dialog_rename_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\dialog_rename_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\exo_styled_player_control_view.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\exo_styled_player_control_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_friends.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_friends.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_discovery_most_heard.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_discovery_most_heard.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_genre.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_genre.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\dialog_create_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\dialog_create_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_chat.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_chat.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\user_search_result_lv.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\user_search_result_lv.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_shared_playlist_participants.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_shared_playlist_participants.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_shared_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_shared_playlist.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_friends_friend.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_friends_friend.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\row_setting.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\row_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_active_listener_item.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_active_listener_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-mergeDebugResources-46:\\layout\\fragment_current_playlist.xml",
+        "source": "C:\\Users\\felixo\\.gradle\\daemon\\7.4\\com.example.musicfun.app-main-49:\\layout\\fragment_current_playlist.xml"
+    }
+]

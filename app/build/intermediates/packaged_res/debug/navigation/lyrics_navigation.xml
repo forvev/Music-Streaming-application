@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lyrics_navigation"
+    app:startDestination="@id/lyricsFragment">
+
+    <fragment
+        android:id="@+id/lyricsFragment"
+        android:name="com.example.musicfun.fragment.banner.LyricsFragment"
+        android:label="LyricsFragment"
+        tools:layout="@layout/fragment_lyrics">
+        <action
+            android:id="@+id/action_lyricsFragment_to_currentPlaylistFragment"
+            app:destination="@id/currentPlaylistFragment" />
+        <action
+            android:id="@+id/action_lyricsFragment_to_activeListenerFragment"
+            app:destination="@id/activeListenerFragment" />
+        <action
+            android:id="@+id/action_lyricsFragment_to_choosePlaylistFragment2"
+            app:destination="@id/choosePlaylistFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/currentPlaylistFragment"
+        android:name="com.example.musicfun.fragment.banner.CurrentPlaylistFragment"
+        android:label="CurrentPlaylistFragment"
+        tools:layout="@layout/fragment_current_playlist">
+        <argument
+            android:name="playlist"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/activeListenerFragment"
+        android:name="com.example.musicfun.fragment.banner.ActiveListenerFragment"
+        android:label="ActiveListenerFragment" >
+        <argument
+            android:name="usernames"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/choosePlaylistFragment2"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="ChoosePlaylistFragment" />
+</navigation>

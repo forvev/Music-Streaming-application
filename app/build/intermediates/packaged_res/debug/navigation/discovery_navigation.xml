@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/discovery_navigation"
+    app:startDestination="@id/new_releases">
+    <fragment
+        android:id="@+id/new_releases"
+        android:name="com.example.musicfun.fragment.discovery.NewReleaseFragment"
+        android:label="fragment_discovery_new_releases"
+        tools:layout="@layout/fragment_discovery_new_releases" >
+        <action
+            android:id="@+id/action_newReleaseFragment_to_choosePlaylistFragment"
+            app:destination="@id/choosePlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/charts"
+        android:name="com.example.musicfun.fragment.discovery.ChartsFragment"
+        android:label="fragment_discovery_charts"
+        tools:layout="@layout/fragment_discovery_charts" >
+        <action
+            android:id="@+id/action_chartsFragment2_to_choosePlaylistFragment"
+            app:destination="@id/choosePlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/may_like"
+        android:name="com.example.musicfun.fragment.discovery.MayLikeFragment"
+        android:label="fragment_discovery_may_like"
+        tools:layout="@layout/fragment_discovery_may_like" >
+        <action
+            android:id="@+id/action_mayLikeFragment_to_choosePlaylistFragment"
+            app:destination="@id/choosePlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/most_heard"
+        android:name="com.example.musicfun.fragment.discovery.MostHeardFragment"
+        android:label="fragment_discovery_most_heard"
+        tools:layout="@layout/fragment_discovery_most_heard" >
+        <action
+            android:id="@+id/action_mostHeardFragment_to_choosePlaylistFragment"
+            app:destination="@id/choosePlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/choosePlaylistFragment"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="ChoosePlaylistFragment" />
+</navigation>

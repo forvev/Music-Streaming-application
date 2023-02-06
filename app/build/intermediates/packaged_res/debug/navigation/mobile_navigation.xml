@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/discovery">
+
+    <fragment
+        android:id="@+id/discovery"
+        android:name="com.example.musicfun.fragment.discovery.DiscoveryFragment"
+        tools:layout="@layout/fragment_discovery" />
+
+    <fragment
+        android:id="@+id/my_music"
+        android:name="com.example.musicfun.fragment.mymusic.MyMusicFragment"
+        tools:layout="@layout/fragment_mymusic" >
+        <action
+            android:id="@+id/action_my_music_to_myPlaylistFragment"
+            app:destination="@id/myPlaylistFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myPlaylistFragment"
+        android:name="com.example.musicfun.fragment.mymusic.MyPlaylistFragment"
+        android:label="MyPlaylistFragment" >
+        <action
+            android:id="@+id/action_myPlaylistFragment_to_choose_one_playlist"
+            app:destination="@id/choose_one_playlist" />
+        <argument
+            android:name="selected_playlist_id"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/choose_one_playlist"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="MyPlaylistFragment" >
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/friends"
+        android:name="com.example.musicfun.fragment.friends.FriendsFragment"
+        tools:layout="@layout/fragment_friends" />
+
+</navigation>

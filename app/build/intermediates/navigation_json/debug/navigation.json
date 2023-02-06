@@ -1,0 +1,32 @@
+[
+  {
+    "name": "discovery_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  },
+  {
+    "name": "login_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  },
+  {
+    "name": "lyrics_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  },
+  {
+    "name": "mobile_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  },
+  {
+    "name": "setting_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  },
+  {
+    "name": "shared_playlist_navigation",
+    "navigationXmlIds": [],
+    "deepLinks": []
+  }
+]

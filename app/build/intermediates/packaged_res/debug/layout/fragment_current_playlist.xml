@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_lyrics"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_current_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_title"
+        android:textSize="20sp"
+        android:fontFamily="@font/merriweather_bold"
+        android:textColor="@color/theme_purple_dark"
+        android:layout_marginTop="8dp"/>
+
+   <ListView
+       android:id="@+id/lv_current_title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="4dp"
+       android:divider="@color/deep_purple_900"
+       android:dividerHeight="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_next_titles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/coming_next"
+        android:textSize="20sp"
+        android:fontFamily="@font/merriweather_bold"
+        android:textColor="@color/theme_purple_dark"
+        android:layout_marginTop="20dp"/>
+
+    <ListView
+        android:id="@+id/lv_next_titles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@color/deep_purple_900"
+        android:layout_marginTop="4dp"
+        android:dividerHeight="2dp"/>
+
+
+</LinearLayout>

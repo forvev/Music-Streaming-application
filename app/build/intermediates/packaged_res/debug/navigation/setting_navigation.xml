@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setting_navigation"
+    app:startDestination="@id/settingFragment">
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.musicfun.fragment.login.SettingFragment"
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_resetFragment"
+            app:destination="@id/resetFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_genreFragment2"
+            app:destination="@id/genreFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetFragment"
+        android:name="com.example.musicfun.fragment.login.ResetFragment"
+        android:label="ResetFragment" />
+    <fragment
+        android:id="@+id/genreFragment2"
+        android:name="com.example.musicfun.fragment.login.GenreFragment"
+        android:label="GenreFragment" >
+        <argument
+            android:name="fromSetting"
+            app:argType="boolean" />
+    </fragment>
+</navigation>
