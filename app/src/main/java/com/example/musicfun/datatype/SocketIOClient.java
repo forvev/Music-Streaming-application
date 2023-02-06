@@ -12,7 +12,7 @@ public class SocketIOClient {
 
     {
         try{
-            mSocket = IO.socket("http://10.0.2.2:3000");
+            mSocket = IO.socket("http://10.0.2.2:3001");
 //            mSocket = IO.socket("https://100.110.104.112:3000");
         }catch(URISyntaxException e){
             throw new RuntimeException(e);
