@@ -366,7 +366,7 @@ public class LyricsFragment extends Fragment {
                                                     socketIOClient.mSocket.emit("syncOnJoin",  mess2);
                                                 }
                                             }
-                                        }, 1000);
+                                        }, 2000);// CAUTION!!!! If the remote server still has bad performance with 2 seconds, change it to a longer delay.
                                     }
                                 }
                             });
@@ -718,7 +718,7 @@ public class LyricsFragment extends Fragment {
                 });
             }
             if (message.equals("syncTime") && !info.equals(lastTimestamp)) {
-                Log.d("syncTime", "SYNCTIME");
+//                Log.d("syncTime", "SYNCTIME");
                 lastTimestamp = info;
                 long finalInfo = Long.parseLong(info);
                 getActivity().runOnUiThread(new Runnable() {
