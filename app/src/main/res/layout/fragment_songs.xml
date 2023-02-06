@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_search"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ListView
+        android:id="@+id/search_songlist_result"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@color/theme_purple_dark"
+        android:background="@color/theme_purple_light"
+        android:dividerHeight="2dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/play_all_songs"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_baseline_play_circle_24"
+        android:backgroundTint="@android:color/transparent"/>
+
+    <ImageView
+        android:id="@+id/shuffle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toStartOf="@+id/play_all_songs"
+        android:src="@drawable/ic_baseline_shuffle_24"
+        android:backgroundTint="@android:color/transparent"/>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_centerInParent="true"
+        android:text="@string/empty_playlist"
+        android:visibility="visible"
+        />
+
+    <ListView
+        android:id="@+id/songlist"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/play_all_songs"
+        android:layout_marginTop="8dp"
+        android:divider="@color/theme_purple_light"
+        android:dividerHeight="2dp" />
+</RelativeLayout>

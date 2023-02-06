@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_dialog_box"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/merriweather_bold"
+        android:text="@string/new_playlist"
+        android:textColor="@color/theme_purple_dark"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/name_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview"
+        android:fontFamily="@font/merriweather"
+        android:hint="@string/playlist_name"
+        android:textSize="16sp"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textColorHint="@color/purple_200"
+        app:backgroundTint="@color/purple_400" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/create"
+        android:textSize="14sp"
+        android:id="@+id/submit_button"
+        android:layout_below="@id/name_et"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

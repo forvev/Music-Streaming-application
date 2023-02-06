@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shared_playlist_navigation"
+    app:startDestination="@id/friends_friend">
+
+    <fragment
+        android:id="@+id/friends_friend"
+        android:name="com.example.musicfun.fragment.friends.Friends_friend_Fragment"
+        android:label="Friends_friend_Fragment"
+        tools:layout="@layout/fragment_friends_friend"/>
+
+    <fragment
+        android:id="@+id/friends_sharedPlaylist"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistFragment"
+        android:label="SharedPlaylistFragment"
+        tools:layout="@layout/fragment_mymusic">
+        <action
+            android:id="@+id/action_sharedPlaylistFragment_to_sharedPlaylistSongsFragment"
+            app:destination="@id/sharedPlaylistSongsFragment" />
+        <action
+            android:id="@+id/action_friends_sharedPlaylist_to_list_of_friends_fragment"
+            app:destination="@id/list_of_friends_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sharedPlaylistSongsFragment"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistSongsFragment"
+        android:label="SharedPlaylistSongsFragment"
+        tools:layout="@layout/fragment_songs">
+        <argument
+            android:name="selected_shared_id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_sharedPlaylistSongsFragment_to_sharedPlaylistParticipants3"
+            app:destination="@id/sharedPlaylistParticipants3" />
+        <action
+            android:id="@+id/action_sharedPlaylistSongsFragment_to_choosePlaylistFragment3"
+            app:destination="@id/choosePlaylistFragment3" />
+        <argument
+            android:name="isOwner"
+            app:argType="boolean" />
+        <argument
+            android:name="playlist_name"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/list_of_friends_fragment"
+        android:name="com.example.musicfun.fragment.friends.List_of_friends_fragment"
+        android:label="fragment_friends_shared_playlist"
+        tools:layout="@layout/fragment_friends_shared_playlist" >
+        <argument
+            android:name="selected_shared_id_2"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/sharedPlaylistParticipants3"
+        android:name="com.example.musicfun.fragment.sharedplaylist.SharedPlaylistParticipants"
+        android:label="SharedPlaylistParticipants" >
+        <argument
+            android:name="selected_shared_id_3"
+            app:argType="string" />
+        <argument
+            android:name="isOwner"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/choosePlaylistFragment3"
+        android:name="com.example.musicfun.fragment.mymusic.ChoosePlaylistFragment"
+        android:label="ChoosePlaylistFragment" />
+
+
+</navigation>
